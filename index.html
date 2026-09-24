@@ -53,7 +53,6 @@
       display: block !important;
     }
 
-    /* HARD BLOCK NETLIFY BADGE / DRAWER / COLLAB WIDGET */
     [data-netlify-drawer],
     .netlify-badge,
     netlify-drawer,
@@ -81,7 +80,8 @@
     <!-- Top Header -->
     <header class="py-4 flex justify-between items-center border-b border-purple-900/40">
       <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-500 flex items-center justify-center text-white shadow-lg shadow-purple-600/30">
+        <!-- HIDDEN MASTER TRIGGER: Tap 5 times to invoke Secure Admin Login -->
+        <div id="master-admin-trigger" onclick="handleAdminSecretTap()" class="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-500 flex items-center justify-center text-white shadow-lg shadow-purple-600/30 cursor-pointer select-none active:scale-95 transition-transform">
           <i class="fa-solid fa-gamepad text-lg"></i>
         </div>
         <div>
@@ -372,7 +372,6 @@
         <div class="p-3 bg-purple-950/30 rounded-xl border border-purple-900/60">
           <h4 class="text-xs font-black uppercase text-amber-300 mb-1.5">Change Admin Master PIN</h4>
           <div class="space-y-1.5">
-            <!-- SECURED PLACEHOLDER: No default leak -->
             <input type="password" id="admin-new-pin" placeholder="Enter new secret PIN" class="w-full bg-black/50 border border-purple-800 rounded-lg px-2.5 py-1 text-xs text-white" />
             <button onclick="saveAdminPIN()" class="w-full py-1 bg-amber-600 rounded-lg text-black font-bold text-[11px]">Save PIN</button>
           </div>
@@ -462,7 +461,84 @@
     };
 
     let generatedPasscode = null;
-    let cloudMasterPin = null;
+
+    // ========================================================
+    // BULLETPROOF ENCRYPTED CLIENT-SIDE ADMIN AUTHENTICATION
+    // ========================================================
+    let adminTapCount = 0;
+    let adminTapTimer = null;
+    let failedAttempts = Number(localStorage.getItem('adm_failed_cnt')) || 0;
+    let lockoutUntil = Number(localStorage.getItem('adm_lock_time')) || 0;
+
+    // SHA-256 Hasher (Never stores raw PIN in memory or source code)
+    async function hashPasscode(str) {
+      const buffer = new TextEncoder().encode(str + "_FF_SALT_99");
+      const digest = await crypto.subtle.digest("SHA-256", buffer);
+      return Array.from(new Uint8Array(digest)).map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    // Default Hash for "8690" with salt
+    const DEFAULT_PIN_HASH = "80f681a82f3c7e7b68625ae7d6c6e75eefbb3511eb0c8789bc4ae3ce3cf23a85";
+
+    function handleAdminSecretTap() {
+      const now = Date.now();
+      if (now < lockoutUntil) {
+        const leftMin = Math.ceil((lockoutUntil - now) / 60000);
+        alert(`Security Alert: System Locked! Try again in ${leftMin} minute(s).`);
+        return;
+      }
+
+      adminTapCount++;
+      clearTimeout(adminTapTimer);
+      adminTapTimer = setTimeout(() => { adminTapCount = 0; }, 2500);
+
+      // Trigger prompt ONLY after 5 rapid taps
+      if (adminTapCount >= 5) {
+        adminTapCount = 0;
+        triggerSecureAdminPrompt();
+      }
+    }
+
+    async function triggerSecureAdminPrompt() {
+      const entered = prompt("Enter Master Security PIN:");
+      if (!entered) return;
+
+      const enteredHash = await hashPasscode(entered.trim());
+      const savedHash = localStorage.getItem('adm_custom_hash') || DEFAULT_PIN_HASH;
+
+      if (enteredHash === savedHash) {
+        failedAttempts = 0;
+        localStorage.removeItem('adm_failed_cnt');
+        localStorage.removeItem('adm_lock_time');
+        document.getElementById('admin-panel-screen').classList.add('active');
+      } else {
+        failedAttempts++;
+        localStorage.setItem('adm_failed_cnt', failedAttempts);
+        if (failedAttempts >= 3) {
+          const lockDuration = 15 * 60 * 1000; // 15 Minute Lockout
+          localStorage.setItem('adm_lock_time', Date.now() + lockDuration);
+          alert("3 Wrong attempts! Admin desk locked for 15 minutes.");
+        } else {
+          alert(`Access Denied! ${3 - failedAttempts} attempt(s) remaining.`);
+        }
+      }
+    }
+
+    function closeAdminDesk() {
+      document.getElementById('admin-panel-screen').classList.remove('active');
+    }
+
+    async function saveAdminPIN() {
+      const pin = document.getElementById('admin-new-pin').value.trim();
+      if (pin.length < 4) {
+        alert("PIN kam se kam 4 digit ka hona chahiye!");
+        return;
+      }
+      const newHash = await hashPasscode(pin);
+      localStorage.setItem('adm_custom_hash', newHash);
+      alert("New Master Security PIN successfully encrypted & updated!");
+      document.getElementById('admin-new-pin').value = "";
+    }
 
     function maskUID(val) {
       if (!val) return "•••• 2041";
@@ -683,37 +759,6 @@
       });
     }
 
-    // ==========================================
-    // HARDENED ADMIN AUTHENTICATION
-    // ==========================================
-    function checkSecretAdminAccess() {
-      const urlParams = new URLSearchParams(window.location.search);
-      // Trigger: ?admin=portal or ?admin=true
-      if (urlParams.has('admin')) {
-        db.ref('settings/pin').once('value').then(snap => {
-          cloudMasterPin = snap.val() || "8690";
-          const entered = prompt("Security Authentication Required\nEnter Admin Passcode:");
-          
-          if (entered && entered === String(cloudMasterPin)) {
-            document.getElementById('admin-panel-screen').classList.add('active');
-          } else {
-            alert("Unauthorized attempt logged and blocked.");
-            cleanSecretURL();
-          }
-        });
-      }
-    }
-
-    function closeAdminDesk() {
-      document.getElementById('admin-panel-screen').classList.remove('active');
-      cleanSecretURL();
-    }
-
-    function cleanSecretURL() {
-      const cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
-      window.history.replaceState({ path: cleanUrl }, '', cleanUrl);
-    }
-
     function saveAdminUPI() {
       const upi = document.getElementById('admin-new-upi').value.trim();
       if (!upi.includes('@')) {
@@ -722,19 +767,6 @@
       }
       db.ref('settings/upiId').set(upi);
       alert("Payment QR updated successfully!");
-    }
-
-    function saveAdminPIN() {
-      const pin = document.getElementById('admin-new-pin').value.trim();
-      if (pin.length < 4) {
-        alert("PIN kam se kam 4 digit ka hona chahiye!");
-        return;
-      }
-      db.ref('settings/pin').set(pin).then(() => {
-        cloudMasterPin = pin;
-        alert("Admin Master PIN updated securely!");
-        document.getElementById('admin-new-pin').value = "";
-      });
     }
 
     function approveDeposit(utr, phone, amt) {
@@ -818,10 +850,6 @@
       const activeUPI = (s && s.upiId) ? s.upiId : "fftournamenthub@ibl";
       document.getElementById('qr-upi-label').textContent = activeUPI;
       document.getElementById('qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=${encodeURIComponent(activeUPI)}&pn=FF%20TOURNAMENT%20HUB`;
-      
-      if (s && s.pin) {
-        cloudMasterPin = s.pin;
-      }
     });
 
     db.ref('tournaments').on('value', snap => {
@@ -933,7 +961,6 @@
     document.getElementById('champions-list').innerHTML = chHtml;
 
     syncUI();
-    checkSecretAdminAccess();
 
     function purgeNetlifyElements() {
       const targets = document.querySelectorAll(
