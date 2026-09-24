@@ -216,31 +216,25 @@
       <footer class="pt-6 pb-2 border-t border-purple-900/40 text-center space-y-3">
         <div class="inline-flex items-center gap-2 px-3 py-1 bg-purple-950/70 border border-purple-800/50 rounded-full text-[11px] text-purple-300">
           <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-          <span>12Hr Active Customer Support</span>
+          <span>12Hr Active Community & Support</span>
         </div>
 
-        <!-- Social Buttons -->
+        <!-- Social Buttons (WhatsApp & Instagram) -->
         <div class="flex items-center justify-center gap-3 pt-1">
-          <!-- Telegram -->
-          <a href="https://t.me/your_telegram_channel" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 px-4 py-2 bg-[#229ED9]/15 border border-[#229ED9]/40 hover:bg-[#229ED9]/25 rounded-xl text-xs font-bold text-[#229ED9] transition-all">
-            <i class="fa-brands fa-telegram text-base"></i>
-            <span>Telegram Support</span>
+          <!-- WhatsApp Channel -->
+          <a href="https://whatsapp.com/channel/0029VbE18dqBqbr1gccn4928" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 px-4 py-2 bg-emerald-500/15 border border-emerald-500/40 hover:bg-emerald-500/25 rounded-xl text-xs font-bold text-emerald-300 transition-all">
+            <i class="fa-brands fa-whatsapp text-base text-emerald-400"></i>
+            <span>WhatsApp Channel</span>
           </a>
 
           <!-- Instagram -->
-          <a href="https://instagram.com/your_insta_id" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 px-4 py-2 bg-gradient-to-tr from-amber-500/10 via-pink-500/15 to-purple-500/15 border border-pink-500/40 hover:opacity-90 rounded-xl text-xs font-bold text-pink-300 transition-all">
+          <a href="https://instagram.com/ffmtournamenthub" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 px-4 py-2 bg-gradient-to-tr from-amber-500/10 via-pink-500/15 to-purple-500/15 border border-pink-500/40 hover:opacity-90 rounded-xl text-xs font-bold text-pink-300 transition-all">
             <i class="fa-brands fa-instagram text-base text-pink-400"></i>
-            <span>Instagram</span>
+            <span>@ffmtournamenthub</span>
           </a>
         </div>
 
-        <!-- WhatsApp Later Ready Placeholder -->
-        <div class="hidden items-center justify-center gap-2 text-[11px] text-emerald-400/80" id="whatsapp-support-badge">
-          <i class="fa-brands fa-whatsapp text-sm"></i>
-          <span>WhatsApp Helpline: Available Soon</span>
-        </div>
-
-        <p class="text-[10px] text-slate-500">© 2026 FF TOURNAMENT HUB • Fair Play & Secure</p>
+        <p class="text-[10px] text-slate-500">© 2026 FF TOURNAMENT HUB • Fair Play & Secure Arena</p>
       </footer>
 
     </main>
@@ -271,7 +265,7 @@
 
   </div>
 
-  <!-- Registration Popup (Solution 1: In-App Instant Code Generator) -->
+  <!-- Registration Popup -->
   <div id="auth-popup" class="modal-box">
     <div class="bg-[#0f0728] border border-purple-600/50 rounded-2xl w-full max-w-sm p-5 relative shadow-2xl">
       <button onclick="closeModal('auth-popup')" class="absolute top-4 right-4 text-slate-400 hover:text-white">
@@ -318,8 +312,9 @@
       <p class="text-xs text-slate-400 mt-0.5">Pay via PhonePe/GPay/Paytm & enter 12-digit UTR</p>
       
       <div class="mt-4 p-3 bg-black/50 rounded-xl border border-purple-900/60 flex flex-col items-center">
-        <img id="qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=esportsking@okaxis&pn=ApexEsports" class="w-36 h-36 rounded bg-white p-1" />
-        <p class="text-xs text-purple-300 font-mono mt-2 font-bold" id="qr-upi-label">esportsking@okaxis</p>
+        <!-- Default set to fftournamenthub@ibl -->
+        <img id="qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=fftournamenthub@ibl&pn=FF%20TOURNAMENT%20HUB" class="w-36 h-36 rounded bg-white p-1" />
+        <p class="text-xs text-purple-300 font-mono mt-2 font-bold" id="qr-upi-label">fftournamenthub@ibl</p>
       </div>
       <div class="mt-4 space-y-2 text-left">
         <input type="number" id="deposit-amt" placeholder="Amount Paid (₹)" class="w-full bg-black/50 border border-purple-900 rounded-xl px-3 py-2 text-xs text-white" />
@@ -370,7 +365,7 @@
         <div class="p-3 bg-purple-950/30 rounded-xl border border-purple-900/60">
           <h4 class="text-xs font-black uppercase text-purple-300 mb-1.5">Organizer UPI ID</h4>
           <div class="space-y-1.5">
-            <input type="text" id="admin-new-upi" placeholder="yourname@okaxis" class="w-full bg-black/50 border border-purple-800 rounded-lg px-2.5 py-1 text-xs text-white" />
+            <input type="text" id="admin-new-upi" placeholder="fftournamenthub@ibl" class="w-full bg-black/50 border border-purple-800 rounded-lg px-2.5 py-1 text-xs text-white" />
             <button onclick="saveAdminUPI()" class="w-full py-1 bg-purple-600 rounded-lg text-white font-bold text-[11px]">Update Scanner QR</button>
           </div>
         </div>
@@ -589,7 +584,6 @@
       alert("Match successfully joined! Room details Room Pass tab me milengi.");
     }
 
-    // Solution 1: Instant In-App Secure Token (Zero Billing dependency)
     function generateSecureToken() {
       const ign = document.getElementById('input-ign').value.trim();
       const uid = document.getElementById('input-ff-uid').value.trim();
@@ -600,7 +594,6 @@
         return;
       }
 
-      // Generate random 6 digit numeric code
       generatedPasscode = Math.floor(100000 + Math.random() * 900000).toString();
       document.getElementById('disp-gen-token').textContent = generatedPasscode;
       
@@ -619,7 +612,6 @@
       const uid = document.getElementById('input-ff-uid').value.trim();
       const phone = document.getElementById('input-phone').value.trim();
 
-      // Cloud registration
       db.ref('players/' + phone).set({
         ign: ign,
         uid: uid,
@@ -635,7 +627,6 @@
       alert("Registration Successful! Welcome to FF TOURNAMENT HUB.");
     }
 
-    // Submit Deposit UTR
     function sendDepositUTR() {
       const amt = document.getElementById('deposit-amt').value;
       const utr = document.getElementById('deposit-utr-code').value.trim();
@@ -658,7 +649,6 @@
       });
     }
 
-    // Submit Withdrawal
     function submitWithdrawRequest() {
       const amt = Number(document.getElementById('withdraw-amt').value);
       const upi = document.getElementById('withdraw-upi-input').value.trim();
@@ -694,7 +684,6 @@
       });
     }
 
-    // Solution 1: URL Secret Parameter Mode
     function checkSecretAdminAccess() {
       const urlParams = new URLSearchParams(window.location.search);
       const hash = window.location.hash;
@@ -721,7 +710,6 @@
       window.history.replaceState({ path: cleanUrl }, '', cleanUrl);
     }
 
-    // Admin Operations
     function saveAdminUPI() {
       const upi = document.getElementById('admin-new-upi').value.trim();
       if (!upi.includes('@')) {
@@ -822,10 +810,10 @@
     // CLOUD DATABASE LISTENERS
     db.ref('settings').on('value', snap => {
       const s = snap.val();
-      if (s && s.upiId) {
-        document.getElementById('qr-upi-label').textContent = s.upiId;
-        document.getElementById('qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=${encodeURIComponent(s.upiId)}&pn=ApexEsports`;
-      }
+      const activeUPI = (s && s.upiId) ? s.upiId : "fftournamenthub@ibl";
+      document.getElementById('qr-upi-label').textContent = activeUPI;
+      document.getElementById('qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=${encodeURIComponent(activeUPI)}&pn=FF%20TOURNAMENT%20HUB`;
+      
       if (s && s.pin) {
         masterPin = s.pin;
       }
@@ -854,7 +842,6 @@
       box.innerHTML = h;
     });
 
-    // Real-time Deposits
     db.ref('deposits').on('value', snap => {
       const data = snap.val();
       const box = document.getElementById('admin-deposits-box');
@@ -888,7 +875,6 @@
       label.textContent = count + " Pending";
     });
 
-    // Real-time Withdrawals
     db.ref('withdrawals').on('value', snap => {
       const data = snap.val();
       const box = document.getElementById('admin-withdrawals-box');
@@ -922,7 +908,6 @@
       label.textContent = count + " Pending";
     });
 
-    // Masked Champions
     const champions = [
       { ign: "꧁H1TMAN꧂", uid: "82941031", won: "₹38,400" },
       { ign: "亗DEVIL亗", uid: "91823712", won: "₹31,250" },
@@ -945,9 +930,6 @@
     syncUI();
     checkSecretAdminAccess();
 
-    // ========================================================
-    // DYNAMIC REMOVER FOR NETLIFY DRAWER & BADGE WIDGETS
-    // ========================================================
     function purgeNetlifyElements() {
       const targets = document.querySelectorAll(
         'netlify-drawer, [data-netlify-drawer], iframe[src*="netlify"], div[class*="netlify"], div[id*="netlify"], #netlify-drawer-container'
