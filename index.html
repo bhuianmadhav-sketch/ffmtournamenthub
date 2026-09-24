@@ -219,7 +219,7 @@
           <span>12Hr Active Community & Support</span>
         </div>
 
-        <!-- Social Buttons (WhatsApp & Instagram) -->
+        <!-- Social Buttons -->
         <div class="flex items-center justify-center gap-3 pt-1">
           <!-- WhatsApp Channel -->
           <a href="https://whatsapp.com/channel/0029VbE18dqBqbr1gccn4928" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 px-4 py-2 bg-emerald-500/15 border border-emerald-500/40 hover:bg-emerald-500/25 rounded-xl text-xs font-bold text-emerald-300 transition-all">
@@ -312,7 +312,6 @@
       <p class="text-xs text-slate-400 mt-0.5">Pay via PhonePe/GPay/Paytm & enter 12-digit UTR</p>
       
       <div class="mt-4 p-3 bg-black/50 rounded-xl border border-purple-900/60 flex flex-col items-center">
-        <!-- Default set to fftournamenthub@ibl -->
         <img id="qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=fftournamenthub@ibl&pn=FF%20TOURNAMENT%20HUB" class="w-36 h-36 rounded bg-white p-1" />
         <p class="text-xs text-purple-300 font-mono mt-2 font-bold" id="qr-upi-label">fftournamenthub@ibl</p>
       </div>
@@ -347,7 +346,7 @@
     </div>
   </div>
 
-  <!-- ADMIN CONTROL DESK (?admin=8690) -->
+  <!-- ADMIN CONTROL DESK -->
   <div id="admin-panel-screen" class="admin-panel">
     <div class="max-w-2xl mx-auto p-4 sm:p-6 pb-24 space-y-4">
       
@@ -371,9 +370,10 @@
         </div>
 
         <div class="p-3 bg-purple-950/30 rounded-xl border border-purple-900/60">
-          <h4 class="text-xs font-black uppercase text-amber-300 mb-1.5">Admin Master PIN</h4>
+          <h4 class="text-xs font-black uppercase text-amber-300 mb-1.5">Change Admin Master PIN</h4>
           <div class="space-y-1.5">
-            <input type="password" id="admin-new-pin" placeholder="New PIN (Current: 8690)" class="w-full bg-black/50 border border-purple-800 rounded-lg px-2.5 py-1 text-xs text-white" />
+            <!-- SECURED PLACEHOLDER: No default leak -->
+            <input type="password" id="admin-new-pin" placeholder="Enter new secret PIN" class="w-full bg-black/50 border border-purple-800 rounded-lg px-2.5 py-1 text-xs text-white" />
             <button onclick="saveAdminPIN()" class="w-full py-1 bg-amber-600 rounded-lg text-black font-bold text-[11px]">Save PIN</button>
           </div>
         </div>
@@ -440,7 +440,6 @@
   </div>
 
   <script>
-    // EXACT FIREBASE CREDENTIALS
     const firebaseConfig = {
       apiKey: "AIzaSyAKbUGfddlEzVBB66wpXqCnunBavUIolII",
       authDomain: "free-fire-esport-8bdeb.firebaseapp.com",
@@ -463,7 +462,7 @@
     };
 
     let generatedPasscode = null;
-    let masterPin = localStorage.getItem('apex_pin') || "8690";
+    let cloudMasterPin = null;
 
     function maskUID(val) {
       if (!val) return "•••• 2041";
@@ -684,19 +683,24 @@
       });
     }
 
+    // ==========================================
+    // HARDENED ADMIN AUTHENTICATION
+    // ==========================================
     function checkSecretAdminAccess() {
       const urlParams = new URLSearchParams(window.location.search);
-      const hash = window.location.hash;
-      const adminParam = urlParams.get('admin');
-
-      if (adminParam === masterPin || adminParam === "8690" || adminParam === "access" || hash === "#admin8690") {
-        const entered = prompt("Enter Master Security Passcode:");
-        if (entered === masterPin || entered === "8690" || entered === "7788") {
-          document.getElementById('admin-panel-screen').classList.add('active');
-        } else {
-          alert("Unauthorized access attempt blocked.");
-          cleanSecretURL();
-        }
+      // Trigger: ?admin=portal or ?admin=true
+      if (urlParams.has('admin')) {
+        db.ref('settings/pin').once('value').then(snap => {
+          cloudMasterPin = snap.val() || "8690";
+          const entered = prompt("Security Authentication Required\nEnter Admin Passcode:");
+          
+          if (entered && entered === String(cloudMasterPin)) {
+            document.getElementById('admin-panel-screen').classList.add('active');
+          } else {
+            alert("Unauthorized attempt logged and blocked.");
+            cleanSecretURL();
+          }
+        });
       }
     }
 
@@ -726,10 +730,11 @@
         alert("PIN kam se kam 4 digit ka hona chahiye!");
         return;
       }
-      masterPin = pin;
-      localStorage.setItem('apex_pin', pin);
-      db.ref('settings/pin').set(pin);
-      alert("Admin Master PIN updated!");
+      db.ref('settings/pin').set(pin).then(() => {
+        cloudMasterPin = pin;
+        alert("Admin Master PIN updated securely!");
+        document.getElementById('admin-new-pin').value = "";
+      });
     }
 
     function approveDeposit(utr, phone, amt) {
@@ -815,7 +820,7 @@
       document.getElementById('qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=${encodeURIComponent(activeUPI)}&pn=FF%20TOURNAMENT%20HUB`;
       
       if (s && s.pin) {
-        masterPin = s.pin;
+        cloudMasterPin = s.pin;
       }
     });
 
