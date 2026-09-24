@@ -82,14 +82,30 @@
       from { transform: translateY(100%); }
       to { transform: translateY(0); }
     }
-    .esports-card {
-      transition: transform 0.2s ease;
+
+    /* 3D FLIP CARD ANIMATION */
+    .card-flip-container {
+      perspective: 1000px;
     }
-    .esports-card:active {
-      transform: scale(0.98);
+    .card-flipper {
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      transform-style: preserve-3d;
+      position: relative;
     }
-    .slot-item {
-      transition: all 0.15s ease;
+    .card-flipper.flipped {
+      transform: rotateY(180deg);
+    }
+    .card-front, .card-back {
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      width: 100%;
+    }
+    .card-back {
+      transform: rotateY(180deg);
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
     }
 
     /* HARD BLOCK NETLIFY BADGE */
@@ -130,8 +146,13 @@
         </div>
       </div>
       <div class="flex items-center gap-2">
-        <button onclick="openModal('wallet-popup')" class="bg-purple-950/80 border border-purple-700/60 rounded-xl px-3.5 py-1.5 flex items-center gap-2 text-xs font-bold text-amber-300 active:scale-95 transition-all shadow">
-          <i class="fa-solid fa-wallet text-amber-400"></i>
+        <button onclick="openModal('notif-popup')" class="relative w-9 h-9 rounded-xl bg-purple-950/80 border border-purple-700/60 flex items-center justify-center text-slate-300 active:scale-95 transition-all">
+          <i class="fa-solid fa-bell text-sm"></i>
+          <span id="notif-badge" class="hidden absolute -top-1 -right-1 w-3.5 h-3.5 bg-rose-500 text-white rounded-full text-[9px] font-black items-center justify-center animate-bounce">1</span>
+        </button>
+
+        <button onclick="openModal('wallet-popup')" class="bg-purple-950/80 border border-purple-700/60 rounded-xl px-3 py-1.5 flex items-center gap-1.5 text-xs font-bold text-amber-300 active:scale-95 transition-all shadow">
+          <i class="fa-solid fa-wallet text-amber-400 text-xs"></i>
           <span>₹<span id="top-wallet-val">0</span></span>
         </button>
       </div>
@@ -142,7 +163,7 @@
       <div class="p-3 bg-gradient-to-r from-purple-950/70 via-slate-900/90 to-purple-950/70 rounded-2xl border border-purple-800/50 flex justify-between items-center shadow-lg shadow-purple-950/40">
         <div class="flex items-center gap-3">
           <div class="w-11 h-11 rounded-full border-2 border-purple-400 bg-purple-900 flex items-center justify-center font-bold text-white text-base shadow-inner">
-            <span id="avatar-initial">P</span>
+            <span id="avatar-initial">D</span>
           </div>
           <div>
             <div class="flex items-center gap-1.5">
@@ -163,7 +184,7 @@
           <span class="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse"></span> LIVE
         </span>
         <div class="truncate text-[11px] font-medium text-slate-300" id="live-ticker-text">
-          🔥 Select Match, pick your favorite slot (1-48) & compete for cash prizes!
+          🔥 Tap match card to view custom rules & choose your 1-48 slot number!
         </div>
       </div>
 
@@ -173,12 +194,12 @@
           <p class="text-[9px] uppercase tracking-wider text-slate-400">Fair Play</p>
         </div>
         <div class="p-2 rounded-xl bg-slate-900/80 border border-purple-950/80 backdrop-blur-sm">
-          <p class="text-xs font-black text-amber-300">Live Slots</p>
-          <p class="text-[9px] uppercase tracking-wider text-slate-400">1 to 48</p>
+          <p class="text-xs font-black text-amber-300">Rules Set</p>
+          <p class="text-[9px] uppercase tracking-wider text-slate-400">Flip Cards</p>
         </div>
         <div class="p-2 rounded-xl bg-slate-900/80 border border-purple-950/80 backdrop-blur-sm">
           <p class="text-xs font-black text-emerald-400">Verified</p>
-          <p class="text-[9px] uppercase tracking-wider text-slate-400">UPI Payout</p>
+          <p class="text-[9px] uppercase tracking-wider text-slate-400">Auto SMS/Alert</p>
         </div>
       </div>
 
@@ -305,6 +326,22 @@
 
   </div>
 
+  <div id="notif-popup" class="modal-box">
+    <div class="bg-[#0f0728] border border-purple-600/50 rounded-2xl w-full max-w-sm p-4 relative shadow-2xl flex flex-col max-h-[80vh]">
+      <button onclick="closeModal('notif-popup')" class="absolute top-3 right-3 text-slate-400 hover:text-white">
+        <i class="fa-solid fa-xmark text-lg"></i>
+      </button>
+      <h3 class="text-sm font-black text-white flex items-center gap-2">
+        <i class="fa-solid fa-bell text-amber-400"></i> Account Status & Alerts
+      </h3>
+      <p class="text-[10px] text-slate-400 mt-0.5">Live updates regarding deposits, cashouts & matches</p>
+
+      <div id="notif-list-box" class="space-y-2.5 mt-3 overflow-y-auto pr-1">
+        <p class="text-xs text-slate-500 italic text-center py-6">No new notifications.</p>
+      </div>
+    </div>
+  </div>
+
   <div id="slot-modal" class="modal-box">
     <div class="bg-[#0f0728] border border-purple-600/50 rounded-2xl w-full max-w-sm p-4 relative shadow-2xl flex flex-col max-h-[85vh]">
       <button onclick="closeModal('slot-modal')" class="absolute top-3 right-3 text-slate-400 hover:text-white">
@@ -369,7 +406,7 @@
           </div>
         </div>
 
-        <button onclick="sendDepositUTR()" class="w-full mt-2 py-2.5 rounded-xl bg-purple-600 font-bold text-xs text-white hover:bg-purple-500 shadow-lg shadow-purple-600/30">
+        <button onclick="sendDepositUTR()" id="deposit-submit-btn" class="w-full mt-2 py-2.5 rounded-xl bg-purple-600 font-bold text-xs text-white hover:bg-purple-500 shadow-lg shadow-purple-600/30 active:scale-95 transition-all">
           Submit Deposit Request
         </button>
       </div>
@@ -472,7 +509,7 @@
       <div class="flex justify-between items-center border-b border-purple-900 pb-3">
         <div>
           <h2 class="text-base font-black text-amber-300 tracking-wide uppercase">ADMIN CONTROL DESK</h2>
-          <p class="text-[11px] text-slate-400">Esports Operations, Real Users & Complaints</p>
+          <p class="text-[11px] text-slate-400">Esports Operations, Real Users & Rules Engine</p>
         </div>
         <button onclick="closeAdminDesk()" class="px-3 py-1 bg-red-600/30 border border-red-500/50 rounded-xl text-red-200 text-xs font-bold">
           Close Desk
@@ -522,17 +559,35 @@
       </div>
 
       <div class="p-3 bg-slate-900 rounded-xl border border-purple-900">
-        <h4 class="text-xs font-black text-purple-300 uppercase mb-2">Publish Real Match to Cloud</h4>
+        <h4 class="text-xs font-black text-purple-300 uppercase mb-2">Publish Match (With Custom Rules)</h4>
         <div class="grid grid-cols-2 gap-2 text-xs">
           <input type="text" id="new-match-title" placeholder="Title (e.g. BERMUDA CASH WAR)" class="col-span-2 bg-black/50 border border-purple-900 rounded-xl px-2 py-1.5 text-white" />
-          <input type="text" id="new-match-mode" placeholder="Mode (SOLO / SQUAD / DUO)" class="bg-black/50 border border-purple-900 rounded-xl px-2 py-1.5 text-white" />
-          <input type="text" id="new-match-map" placeholder="Map (Bermuda / Purgatory)" class="bg-black/50 border border-purple-900 rounded-xl px-2 py-1.5 text-white" />
+          
+          <select id="new-match-game" class="bg-black/50 border border-purple-900 rounded-xl px-2 py-1.5 text-white">
+            <option value="Free Fire MAX">Free Fire MAX</option>
+            <option value="Free Fire Normal">Free Fire Normal</option>
+            <option value="BGMI">BGMI</option>
+          </select>
+
+          <select id="new-match-mode" class="bg-black/50 border border-purple-900 rounded-xl px-2 py-1.5 text-white">
+            <option value="SOLO Battle Royale">SOLO Battle Royale</option>
+            <option value="SQUAD Battle Royale">SQUAD Battle Royale</option>
+            <option value="DUO Battle Royale">DUO Battle Royale</option>
+            <option value="CS 4v4 Clash Squad">CS 4v4 Clash Squad</option>
+            <option value="Sniper Only Match">Sniper Only Match</option>
+          </select>
+
+          <input type="text" id="new-match-map" placeholder="Map (Bermuda / Purgatory / Kalahari)" class="bg-black/50 border border-purple-900 rounded-xl px-2 py-1.5 text-white" />
           <input type="number" id="new-match-fee" placeholder="Entry Fee (₹)" class="bg-black/50 border border-purple-900 rounded-xl px-2 py-1.5 text-white" />
           <input type="number" id="new-match-prize" placeholder="Prize Pool (₹)" class="bg-black/50 border border-purple-900 rounded-xl px-2 py-1.5 text-white" />
-          <input type="number" id="new-match-perkill" placeholder="Per Kill (₹)" class="bg-black/50 border border-purple-900 rounded-xl px-2 py-1.5 text-white" />
+          <input type="number" id="new-match-perkill" placeholder="Per Kill Reward (₹)" class="bg-black/50 border border-purple-900 rounded-xl px-2 py-1.5 text-white" />
           <input type="text" id="new-match-time" placeholder="Date & Time (e.g. 26 Sept, 08:30 PM)" class="col-span-2 bg-black/50 border border-purple-900 rounded-xl px-2 py-1.5 text-white" />
+          
+          <textarea id="new-match-rules" rows="3" placeholder="Rules & Regulations (e.g. No Hack, Emotes allowed/banned, Grenades banned, Roof camping off)..." class="col-span-2 bg-black/50 border border-purple-900 rounded-xl px-2 py-1.5 text-white"></textarea>
         </div>
-        <button onclick="createLiveMatch()" class="w-full mt-2 py-2 bg-indigo-600 font-bold text-xs rounded-xl text-white hover:bg-indigo-500">Publish Match</button>
+        <button onclick="createLiveMatch()" class="w-full mt-2.5 py-2 bg-indigo-600 font-bold text-xs rounded-xl text-white hover:bg-indigo-500 shadow-lg shadow-indigo-600/30">
+          Publish Real Match with Rules
+        </button>
       </div>
 
       <div class="p-3 bg-slate-900 rounded-xl border border-purple-900">
@@ -686,8 +741,16 @@
       });
     }
 
+    // FLIP CARD LOGIC
+    function toggleCardFlip(matchKey) {
+      const flipper = document.getElementById(`flipper-${matchKey}`);
+      if (flipper) {
+        flipper.classList.toggle('flipped');
+      }
+    }
+
     // ==========================================
-    // RENDER MATCHES & PREVENT DOUBLE JOINING
+    // RENDER MATCHES WITH 3D FLIP & RULES
     // ==========================================
     function renderTournaments(data) {
       allTournaments = data || {};
@@ -715,17 +778,19 @@
         const m = allTournaments[k];
         const entryFee = m.entry || 20;
         const prizePool = m.prize || 1000;
-        const perKill = m.perKill || 25;
+        const perKill = m.perKill || 0;
         const matchTitle = m.title || "Free Fire Battle";
+        const gameName = m.game || "Free Fire MAX";
         const matchMode = m.mode || "SOLO";
         const matchMap = m.map || "Bermuda";
         const matchTime = m.time || "Scheduled Soon";
+        const rulesText = m.rules || "Standard fair-play esports rules apply. No third-party hacks, no bugs exploitation. Emotes/guns as per host instructions.";
         const max = m.maxSlots || 48;
         
         const booked = m.bookedSlots || {};
         const filled = Object.keys(booked).length;
 
-        // Check if user is already registered in this match
+        // Check if user is already joined
         let isUserAlreadyJoined = false;
         let userSlotAssigned = null;
 
@@ -739,7 +804,7 @@
         let joinBtnHtml = "";
         if (isUserAlreadyJoined) {
           joinBtnHtml = `
-            <button disabled class="w-full mt-3 py-2.5 bg-emerald-950 border border-emerald-500/80 rounded-xl text-emerald-300 font-extrabold text-xs flex items-center justify-center gap-1.5 cursor-not-allowed">
+            <button disabled class="w-full mt-3 py-2 bg-emerald-950 border border-emerald-500/80 rounded-xl text-emerald-300 font-extrabold text-xs flex items-center justify-center gap-1.5 cursor-not-allowed">
               <i class="fa-solid fa-circle-check text-emerald-400"></i> Already Joined (Slot #${userSlotAssigned})
             </button>
           `;
@@ -750,7 +815,8 @@
               <div class="flex justify-between items-start">
                 <div>
                   <h4 class="font-extrabold text-white text-xs">${matchTitle}</h4>
-                  <p class="text-[10px] text-purple-300 font-mono">${matchMode} • ${matchMap} | ${matchTime}</p>
+                  <p class="text-[10px] text-purple-300 font-mono">${gameName} • ${matchMode} • ${matchMap}</p>
+                  <p class="text-[10px] text-slate-400 font-mono mt-0.5"><i class="fa-regular fa-clock text-purple-400 mr-1"></i>${matchTime}</p>
                 </div>
                 <span class="px-2 py-0.5 bg-purple-900 border border-purple-500 rounded text-[10px] font-black text-amber-300">
                   SLOT #${userSlotAssigned}
@@ -759,54 +825,88 @@
               <div class="p-2 bg-purple-950/40 rounded-lg flex justify-between items-center text-xs">
                 <div>
                   <span class="text-[9px] text-slate-400 uppercase">Room Credentials</span>
-                  <p class="font-mono text-emerald-400 font-bold">
-                    ${m.roomId ? `ID: ${m.roomId} \vert{} PASS:${m.roomPass}` : '<span class="text-amber-400 italic">Match shuru hone se 15 min pehle aayega</span>'}
+                  <p class="font-mono text-emerald-400 font-bold" id="pass-txt-${k}">
+                    ${m.roomId ? `ID: ${m.roomId} \vert{} PASS:${m.roomPass}` : '<span class="text-amber-400 italic">Match se 15 min pehle aayega</span>'}
                   </p>
                 </div>
-                <span class="text-[9px] px-2 py-0.5 bg-emerald-500/20 text-emerald-300 rounded font-bold">CONFIRMED</span>
+                ${m.roomId ? `<button onclick="copyRoomPass('${m.roomId}', '${m.roomPass}')" class="px-2 py-1 bg-purple-600 rounded text-[10px] font-bold text-white"><i class="fa-solid fa-copy"></i> Copy</button>` : ''}
               </div>
             </div>
           `;
         } else if (filled >= max) {
           joinBtnHtml = `
-            <button disabled class="w-full mt-3 py-2.5 bg-red-950/60 border border-red-800 rounded-xl text-red-300 font-bold text-xs cursor-not-allowed">
+            <button disabled class="w-full mt-3 py-2 bg-red-950/60 border border-red-800 rounded-xl text-red-300 font-bold text-xs cursor-not-allowed">
               Match Full (Slots 48/48)
             </button>
           `;
         } else {
           joinBtnHtml = `
-            <button onclick="openSlotPicker('${k}', ${entryFee})" class="w-full mt-3 py-2.5 bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-600 hover:opacity-90 rounded-xl text-white font-extrabold text-xs shadow-md active:scale-95 transition-all">
+            <button onclick="openSlotPicker('${k}', ${entryFee})" class="w-full mt-3 py-2 bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-600 hover:opacity-90 rounded-xl text-white font-extrabold text-xs shadow-md active:scale-95 transition-all">
               Choose Slot & Join (₹${entryFee})
             </button>
           `;
         }
 
+        // 3D FLIP CARD HTML
         h += `
-          <div class="esports-card p-4 rounded-2xl bg-gradient-to-r from-purple-950/50 via-slate-900/80 to-purple-950/40 border border-purple-800/40 shadow-lg shadow-purple-950/20">
-            <div class="flex justify-between items-center text-xs">
-              <span class="px-2 py-0.5 rounded bg-purple-900/80 border border-purple-700/50 text-purple-300 font-extrabold uppercase">${matchMode} • ${matchMap}</span>
-              <span class="text-slate-400 font-mono text-[11px]"><i class="fa-regular fa-clock text-purple-400 mr-1"></i>${matchTime}</span>
-            </div>
-            <h3 class="font-extrabold text-sm text-white mt-2">${matchTitle}</h3>
-            <div class="grid grid-cols-3 gap-2 mt-3 pt-3 border-t border-purple-950/80 text-xs">
-              <div>
-                <span class="text-[9px] text-slate-400 uppercase">Prize Pool</span>
-                <p class="font-black text-amber-300">₹${prizePool}</p>
+          <div class="card-flip-container w-full min-h-[205px]">
+            <div id="flipper-${k}" class="card-flipper w-full h-full">
+              
+              <div class="card-front p-4 rounded-2xl bg-gradient-to-r from-purple-950/50 via-slate-900/80 to-purple-950/40 border border-purple-800/40 shadow-lg shadow-purple-950/20">
+                <div class="flex justify-between items-center text-xs">
+                  <span class="px-2 py-0.5 rounded bg-purple-900/80 border border-purple-700/50 text-purple-300 font-extrabold uppercase">${gameName} • ${matchMode}</span>
+                  <button onclick="toggleCardFlip('${k}')" class="text-[10px] text-amber-300 hover:underline font-bold flex items-center gap-1">
+                    <i class="fa-solid fa-scroll text-amber-400"></i> Rules & Info ↷
+                  </button>
+                </div>
+                <h3 class="font-extrabold text-sm text-white mt-1.5">${matchTitle}</h3>
+                <p class="text-[11px] text-slate-400 font-mono"><i class="fa-solid fa-map-location-dot text-purple-400 mr-1"></i>${matchMap} | <i class="fa-regular fa-clock text-purple-400 mr-1"></i>${matchTime}</p>
+
+                <div class="grid grid-cols-3 gap-2 mt-2 pt-2 border-t border-purple-950/80 text-xs text-center">
+                  <div>
+                    <span class="text-[9px] text-slate-400 uppercase">Prize Pool</span>
+                    <p class="font-black text-amber-300">₹${prizePool}</p>
+                  </div>
+                  <div>
+                    <span class="text-[9px] text-slate-400 uppercase">Per Kill</span>
+                    <p class="font-black text-cyan-300">${perKill > 0 ? '₹' + perKill : 'N/A'}</p>
+                  </div>
+                  <div>
+                    <span class="text-[9px] text-slate-400 uppercase">Entry Fee</span>
+                    <p class="font-black text-white">₹${entryFee}</p>
+                  </div>
+                </div>
+
+                <div class="mt-2 text-[10px] text-slate-400 flex justify-between">
+                  <span>Slots: <strong class="text-purple-300">${filled}/${max}</strong> filled</span>
+                  <span class="font-mono text-purple-400 font-bold">Key: ${k}</span>
+                </div>
+                ${joinBtnHtml}
               </div>
-              <div>
-                <span class="text-[9px] text-slate-400 uppercase">Per Kill</span>
-                <p class="font-black text-cyan-300">₹${perKill}</p>
+
+              <div class="card-back p-4 rounded-2xl bg-[#0e0724] border border-amber-600/50 shadow-xl flex flex-col justify-between">
+                <div>
+                  <div class="flex justify-between items-center border-b border-purple-900/60 pb-1.5 mb-2">
+                    <span class="text-xs font-black text-amber-300 uppercase flex items-center gap-1">
+                      <i class="fa-solid fa-gavel"></i> Tournament Rules
+                    </span>
+                    <button onclick="toggleCardFlip('${k}')" class="text-[10px] text-purple-300 font-bold hover:underline">
+                      ↶ Back to Match
+                    </button>
+                  </div>
+                  <div class="text-[11px] text-slate-300 space-y-1 overflow-y-auto max-h-28 pr-1 font-mono leading-relaxed whitespace-pre-line">
+                    ${rulesText}
+                  </div>
+                </div>
+                <div class="pt-2 border-t border-purple-950 text-[10px] text-slate-400 flex justify-between items-center">
+                  <span>Map: <strong class="text-white">${matchMap}</strong></span>
+                  <button onclick="toggleCardFlip('${k}')" class="px-3 py-1 bg-purple-700/80 rounded-lg text-white font-bold text-[10px]">
+                    Understood
+                  </button>
+                </div>
               </div>
-              <div>
-                <span class="text-[9px] text-slate-400 uppercase">Entry Fee</span>
-                <p class="font-black text-white">₹${entryFee}</p>
-              </div>
+
             </div>
-            <div class="mt-2 text-[10px] text-slate-400 flex justify-between">
-              <span>Slots: <strong class="text-purple-300">${filled}/${max}</strong> filled</span>
-              <span class="font-mono text-purple-400 font-bold">Key: ${k}</span>
-            </div>
-            ${joinBtnHtml}
           </div>
         `;
       });
@@ -817,6 +917,11 @@
       } else {
         roomBox.innerHTML = `<p class="text-xs text-slate-400 text-center py-6">Aapne abhi koi match join nahi kiya hai.</p>`;
       }
+    }
+
+    function copyRoomPass(rId, rPass) {
+      navigator.clipboard.writeText(`Room ID: ${rId} | Password: ${rPass}`);
+      alert("Credentials Copied to Clipboard!");
     }
 
     // ==========================================
@@ -923,6 +1028,9 @@
           booked_at: new Date().toLocaleTimeString()
         });
 
+        // Push in-app alert
+        pushUserNotification("Match Joined!", `Aapne ${allTournaments[activeSelectingMatchId]?.title} me Slot #${selectedSlotNumber} successfully book kiya hai.`);
+
         syncUI();
         closeModal('slot-modal');
         alert(`Match Confirmed! Aapka Slot #${selectedSlotNumber} book ho chuka hai. Room details Room Pass tab me milengi!`);
@@ -930,9 +1038,9 @@
       });
     }
 
-    // ==========================================
-    // DEPOSIT WITH MANDATORY SCREENSHOT
-    // ==========================================
+    // ========================================================
+    // DEPOSIT WITH STRICT DUPLICATE UTR BLOCK + SCREENSHOT
+    // ========================================================
     function previewDepositImage(event) {
       const file = event.target.files[0];
       if (!file) return;
@@ -949,6 +1057,7 @@
     function sendDepositUTR() {
       const amt = document.getElementById('deposit-amt').value;
       const utr = document.getElementById('deposit-utr-code').value.trim();
+      const submitBtn = document.getElementById('deposit-submit-btn');
 
       if (!amt || Number(amt) <= 0) {
         alert("Kripya valid deposit amount enter karein!");
@@ -960,34 +1069,70 @@
         return;
       }
 
-      // STRICT SCREENSHOT CHECK
       if (!depositBase64Image) {
         alert("CANNOT DEPOSIT! Payment Screenshot attach karna compulsory (zaroori) hai. Kripya payment ka screenshot upload karein tabhi request submit hogi.");
         return;
       }
 
-      db.ref('deposits/' + utr).set({
-        phone: currentUser.phone || "Not Verified",
-        ign: currentUser.ign,
-        amount: Number(amt),
-        utr: utr,
-        screenshot: depositBase64Image,
-        status: "pending",
-        time: new Date().toLocaleString()
-      }).then(() => {
-        alert("Deposit request submitted with screenshot! Admin verify karke jald balance credit karega.");
-        depositBase64Image = null;
-        document.getElementById('deposit-screenshot-file').value = "";
-        document.getElementById('deposit-img-preview-box').classList.add('hidden');
-        document.getElementById('deposit-amt').value = "";
-        document.getElementById('deposit-utr-code').value = "";
-        closeModal('wallet-popup');
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Verifying UTR...";
+
+      // 1. STRICT CHECK: Check if this UTR already exists in Firebase
+      db.ref('deposits/' + utr).once('value').then(snap => {
+        if (snap.exists()) {
+          alert("❌ DUPLICATE UTR ERROR!\nYeh UTR Number pehle se hi submit ho chuka hai. Ek UTR sirf ek hi baar use ho sakta hai. Fraud deposit request rejected!");
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Submit Deposit Request";
+          return;
+        }
+
+        // 2. Fresh UTR: Save request
+        db.ref('deposits/' + utr).set({
+          phone: currentUser.phone || "Not Verified",
+          ign: currentUser.ign,
+          amount: Number(amt),
+          utr: utr,
+          screenshot: depositBase64Image,
+          status: "pending",
+          time: new Date().toLocaleString()
+        }).then(() => {
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Submit Deposit Request";
+          alert("✅ Deposit Request Submitted!\nAdmin aapka UTR & screenshot check karke balance add karega. Aapko alert notification mil jayega.");
+          
+          pushUserNotification("Deposit Submitted", `₹${amt} (UTR: ${utr}) verification ke liye bhej diya gaya hai.`);
+          
+          depositBase64Image = null;
+          document.getElementById('deposit-screenshot-file').value = "";
+          document.getElementById('deposit-img-preview-box').classList.add('hidden');
+          document.getElementById('deposit-amt').value = "";
+          document.getElementById('deposit-utr-code').value = "";
+          closeModal('wallet-popup');
+        }).catch(err => {
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Submit Deposit Request";
+          alert("Error: " + err.message);
+        });
       });
     }
 
     // ==========================================
-    // USER COMPLAINT SUBMISSION
+    // NOTIFICATION & USER SMS SYSTEM
     // ==========================================
+    function pushUserNotification(title, msg, type = 'info') {
+      if (!currentUser.phone) return;
+      const nId = "N" + Date.now().toString().slice(-4);
+      db.ref(`notifications/${currentUser.phone}/${nId}`).set({
+        id: nId,
+        title: title,
+        msg: msg,
+        type: type,
+        time: new Date().toLocaleTimeString(),
+        read: false
+      });
+    }
+
+    // User Complaints
     function submitUserComplaint() {
       const topic = document.getElementById('complaint-type').value;
       const desc = document.getElementById('complaint-text').value.trim();
@@ -1019,12 +1164,14 @@
     // ==========================================
     function createLiveMatch() {
       const title = document.getElementById('new-match-title').value.trim();
-      const mode = document.getElementById('new-match-mode').value.trim().toUpperCase() || "SOLO";
+      const game = document.getElementById('new-match-game').value;
+      const mode = document.getElementById('new-match-mode').value;
       const map = document.getElementById('new-match-map').value.trim() || "Bermuda";
       const entry = Number(document.getElementById('new-match-fee').value);
       const prize = Number(document.getElementById('new-match-prize').value);
       const perkill = Number(document.getElementById('new-match-perkill').value) || 0;
       const time = document.getElementById('new-match-time').value.trim();
+      const rules = document.getElementById('new-match-rules').value.trim() || "Fair play rules apply. No hacks.";
 
       if (!title || !entry || !prize || !time) {
         alert("Title, Entry Fee, Prize Pool aur Date & Time bharna zaroori hai!");
@@ -1034,17 +1181,19 @@
       const newKey = "M" + Date.now().toString().slice(-4);
       db.ref('tournaments/' + newKey).set({
         id: newKey,
-        title, mode, map, entry, prize,
+        title, game, mode, map, entry, prize,
         perKill: perkill,
         time,
+        rules: rules,
         maxSlots: 48,
         roomId: "",
         roomPass: "",
         bookedSlots: {}
       }).then(() => {
-        alert("Real Match live publish ho gaya!");
+        alert("Real Match live publish ho gaya with custom rules!");
         document.getElementById('new-match-title').value = "";
         document.getElementById('new-match-time').value = "";
+        document.getElementById('new-match-rules').value = "";
         renderAdminMatches();
       });
     }
@@ -1064,7 +1213,7 @@
           <div class="p-2 bg-black/40 rounded border border-purple-900/60 flex justify-between items-center">
             <div>
               <p class="font-bold text-white">${m.title} <span class="text-amber-300 font-mono">(${k})</span></p>
-              <p class="text-[10px] text-purple-300 font-mono">Time: ${m.time} • Booked: ${bookedCount}/48</p>
+              <p class="text-[10px] text-purple-300 font-mono">${m.game || 'FF'} • ${m.mode || 'SOLO'} • Booked: ${bookedCount}/48</p>
             </div>
             <button onclick="deleteMatch('${k}')" class="px-2 py-1 bg-rose-600/80 hover:bg-rose-600 rounded text-[10px] font-bold text-white">
               Delete
@@ -1131,6 +1280,7 @@
           db.ref('players/' + currentUser.phone + '/balance').set(currentUser.balance);
         }
         syncUI();
+        pushUserNotification("Withdrawal Requested", `₹${amt} transfer request to ${upi} submitted.`);
         alert("Withdrawal request sent to admin! Amount transfer to " + upi);
         closeModal('withdraw-popup');
       });
@@ -1146,26 +1296,57 @@
       alert("Payment QR updated successfully!");
     }
 
+    // APPROVE DEPOSIT & SEND AUTO-NOTIFICATION
     function approveDeposit(utr, phone, amt) {
       db.ref('deposits/' + utr + '/status').set('approved');
       if (phone && phone !== "Not Verified") {
         db.ref('players/' + phone + '/balance').transaction(curr => (curr || 0) + amt);
+        // Push notification to user
+        const nId = "N" + Date.now().toString().slice(-4);
+        db.ref(`notifications/${phone}/${nId}`).set({
+          id: nId,
+          title: "Payment Approved! ✅",
+          msg: `Aapka ₹${amt} deposit (UTR: ${utr}) successfully verify ho gaya hai aur wallet me add ho gaya hai!`,
+          type: "success",
+          time: new Date().toLocaleTimeString()
+        });
       }
       if (currentUser.phone === phone) {
         currentUser.balance = (currentUser.balance || 0) + amt;
         localStorage.setItem('apex_user', JSON.stringify(currentUser));
         syncUI();
       }
-      alert("Deposit approved & ₹" + amt + " balance credited!");
+      alert("Deposit approved & ₹" + amt + " balance credited to player!");
     }
 
-    function rejectDeposit(utr) {
+    // REJECT DEPOSIT & SEND REJECTION ALERT
+    function rejectDeposit(utr, phone, amt) {
       db.ref('deposits/' + utr + '/status').set('rejected');
-      alert("Deposit rejected!");
+      if (phone && phone !== "Not Verified") {
+        const nId = "N" + Date.now().toString().slice(-4);
+        db.ref(`notifications/${phone}/${nId}`).set({
+          id: nId,
+          title: "Deposit Rejected ❌",
+          msg: `Aapka ₹${amt} ka deposit (UTR: ${utr}) reject ho gaya hai. Ya toh payment verify nahi hui ya screenshot galat tha. Kripya complaint box me contact karein.`,
+          type: "error",
+          time: new Date().toLocaleTimeString()
+        });
+      }
+      alert("Deposit rejected and alert sent to user!");
     }
 
-    function approveWithdraw(id) {
+    function approveWithdraw(id, phone, amt, upi) {
       db.ref('withdrawals/' + id + '/status').set('paid');
+      if (phone && phone !== "Not Verified") {
+        const nId = "N" + Date.now().toString().slice(-4);
+        db.ref(`notifications/${phone}/${nId}`).set({
+          id: nId,
+          title: "Withdrawal Sent! 💸",
+          msg: `Aapka ₹${amt} cashout aapke UPI (${upi}) par bhej diya gaya hai!`,
+          type: "success",
+          time: new Date().toLocaleTimeString()
+        });
+      }
       alert("Withdrawal marked as Paid!");
     }
 
@@ -1173,6 +1354,14 @@
       db.ref('withdrawals/' + id + '/status').set('rejected');
       if (phone && phone !== "Not Verified") {
         db.ref('players/' + phone + '/balance').transaction(curr => (curr || 0) + amt);
+        const nId = "N" + Date.now().toString().slice(-4);
+        db.ref(`notifications/${phone}/${nId}`).set({
+          id: nId,
+          title: "Withdrawal Refunded ↩️",
+          msg: `Aapka ₹${amt} withdrawal reject hua aur balance wallet me refund kar diya gaya hai.`,
+          type: "info",
+          time: new Date().toLocaleTimeString()
+        });
       }
       alert("Withdrawal rejected & amount refunded to player!");
     }
@@ -1227,13 +1416,14 @@
       currentUser = { ign, uid, phone, balance: currentUser.balance || 0 };
       localStorage.setItem('apex_user', JSON.stringify(currentUser));
       syncUI();
+      listenUserNotifications();
       closeModal('auth-popup');
       alert("Registration Successful! Welcome to FF TOURNAMENT HUB.");
       if (allTournaments) renderTournaments(allTournaments);
     }
 
     // ==========================================
-    // CLOUD DATABASE LISTENERS
+    // REALTIME LISTENERS
     // ==========================================
     db.ref('settings').on('value', snap => {
       const s = snap.val();
@@ -1246,6 +1436,42 @@
       const data = snap.val();
       renderTournaments(data || {});
     });
+
+    // LISTEN TO USER NOTIFICATIONS
+    function listenUserNotifications() {
+      if (!currentUser.phone || currentUser.phone === "Not Verified") return;
+      db.ref(`notifications/${currentUser.phone}`).on('value', snap => {
+        const notifs = snap.val();
+        const box = document.getElementById('notif-list-box');
+        const badge = document.getElementById('notif-badge');
+
+        if (!notifs) {
+          box.innerHTML = `<p class="text-xs text-slate-500 italic text-center py-6">No new notifications.</p>`;
+          badge.classList.add('hidden');
+          return;
+        }
+
+        let h = "";
+        let count = 0;
+        Object.keys(notifs).reverse().forEach(id => {
+          count++;
+          const n = notifs[id];
+          const colorClass = n.type === 'success' ? 'border-emerald-500 bg-emerald-950/30' : n.type === 'error' ? 'border-rose-500 bg-rose-950/30' : 'border-purple-500 bg-purple-950/30';
+          h += `
+            <div class="p-2.5 rounded-xl border ${colorClass} space-y-1">
+              <div class="flex justify-between items-center text-xs">
+                <span class="font-extrabold text-white">${n.title}</span>
+                <span class="text-[9px] text-slate-400">${n.time}</span>
+              </div>
+              <p class="text-[11px] text-slate-300 leading-snug">${n.msg}</p>
+            </div>
+          `;
+        });
+        box.innerHTML = h;
+        badge.textContent = count;
+        badge.classList.remove('hidden');
+      });
+    }
 
     // REAL USERS LISTENER FOR ADMIN
     db.ref('players').on('value', snap => {
@@ -1350,7 +1576,7 @@
                 <div class="flex gap-1.5 items-center">
                   ${screenShotBtn}
                   <button onclick="approveDeposit('${d.utr}', '${d.phone}', ${d.amount})" class="px-2 py-1 bg-emerald-600 rounded text-[10px] font-bold text-white active:scale-95">Approve</button>
-                  <button onclick="rejectDeposit('${d.utr}')" class="px-2 py-1 bg-red-600 rounded text-[10px] font-bold text-white active:scale-95">Reject</button>
+                  <button onclick="rejectDeposit('${d.utr}', '${d.phone}', ${d.amount})" class="px-2 py-1 bg-red-600 rounded text-[10px] font-bold text-white active:scale-95">Reject</button>
                 </div>
               </div>
             </div>
@@ -1383,7 +1609,7 @@
                 <p class="text-[10px] text-emerald-300 font-mono">Pay ₹${w.amount} to: ${w.upi}</p>
               </div>
               <div class="flex gap-1.5">
-                <button onclick="approveWithdraw('${w.id}')" class="px-2 py-1 bg-emerald-600 rounded text-[10px] font-bold text-white active:scale-95">Paid</button>
+                <button onclick="approveWithdraw('${w.id}', '${w.phone}', ${w.amount}, '${w.upi}')" class="px-2 py-1 bg-emerald-600 rounded text-[10px] font-bold text-white active:scale-95">Paid</button>
                 <button onclick="rejectWithdraw('${w.id}', '${w.phone}', ${w.amount})" class="px-2 py-1 bg-red-600 rounded text-[10px] font-bold text-white active:scale-95">Reject</button>
               </div>
             </div>
@@ -1414,6 +1640,7 @@
     document.getElementById('champions-list').innerHTML = chHtml;
 
     syncUI();
+    listenUserNotifications();
 
     function purgeNetlifyElements() {
       const targets = document.querySelectorAll(
