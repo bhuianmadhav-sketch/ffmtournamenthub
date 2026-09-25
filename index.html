@@ -131,6 +131,16 @@
       transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99);
     }
 
+    /* CYBORG LASER SCANNER */
+    @keyframes scanMove {
+      0% { top: 0%; opacity: 0.8; }
+      50% { top: 95%; opacity: 1; }
+      100% { top: 0%; opacity: 0.8; }
+    }
+    .cyborg-scanner {
+      animation: scanMove 2.2s infinite ease-in-out;
+    }
+
     /* NETLIFY BLOCK */
     [data-netlify-drawer],
     .netlify-badge,
@@ -165,36 +175,49 @@
     </div>
   </div>
 
-  <!-- ROBOT KELLY VOICE WELCOME POPUP -->
+  <!-- 2. CYBORG ROBOT KELLY AI MODAL -->
   <div id="kelly-welcome-modal" class="modal-box">
-    <div class="bg-[#0f0624] border-2 border-yellow-500/80 rounded-3xl w-full max-w-sm p-5 relative shadow-2xl text-center overflow-hidden">
-      <!-- Kelly Character Image -->
-      <div class="relative w-36 h-48 mx-auto overflow-hidden rounded-2xl border-2 border-yellow-400 shadow-xl shadow-yellow-500/30 bg-black/60 flex items-center justify-center">
-        <img id="kelly-img" src="https://i.ibb.co/3sXf9YQ/59527.webp" onerror="this.src='https://images.alphacoders.com/100/1004169.jpg'" class="object-cover h-full w-full" alt="Kelly Character" />
-        <div class="absolute bottom-1 bg-yellow-500 text-black font-black text-[9px] px-2 py-0.5 rounded-full uppercase">AI HOST KELLY</div>
+    <div class="bg-[#08021c] border-2 border-cyan-400 rounded-3xl w-full max-w-sm p-5 relative shadow-[0_0_40px_rgba(34,211,238,0.45)] text-center overflow-hidden">
+      <!-- HUD Top Status -->
+      <div class="flex justify-between items-center text-[10px] font-mono text-cyan-400 mb-2 border-b border-cyan-900 pb-1.5">
+        <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span> SYSTEM: ONLINE</span>
+        <span class="tracking-widest">CYBORG PROTOCOL v2.6</span>
       </div>
 
-      <h3 class="text-base font-black text-yellow-400 mt-3 flex items-center justify-center gap-2">
-        <i class="fa-solid fa-robot"></i> Welcome, <span id="kelly-user-name">Warrior</span>!
+      <!-- Robot Character Visor Box -->
+      <div class="relative w-44 h-52 mx-auto rounded-2xl border-2 border-cyan-400/80 p-1 bg-black/80 shadow-inner overflow-hidden">
+        <!-- Laser Scanner Bar -->
+        <div class="cyborg-scanner absolute inset-x-0 h-1 bg-gradient-to-r from-transparent via-cyan-300 to-transparent shadow-[0_0_12px_#22d3ee] z-20"></div>
+        
+        <img id="kelly-img" src="59527.webp" onerror="this.src='https://images.alphacoders.com/100/1004169.jpg'" class="object-cover h-full w-full rounded-xl filter contrast-110 drop-shadow-[0_0_10px_rgba(34,211,238,0.7)]" alt="Cyborg Kelly" />
+        
+        <span class="absolute bottom-1.5 inset-x-2 bg-black/90 border border-cyan-500 text-cyan-300 font-mono font-black text-[9px] py-0.5 rounded uppercase tracking-wider z-30">
+          ⚙️ AI ROBOT KELLY
+        </span>
+      </div>
+
+      <h3 class="text-base font-black text-cyan-300 mt-3 flex items-center justify-center gap-1.5 tracking-wide">
+        <i class="fa-solid fa-microchip text-cyan-400 animate-spin" style="animation-duration: 4s;"></i>
+        <span>WARRIOR IDENTIFIED:</span> <span id="kelly-user-name" class="text-amber-300">Warrior</span>
       </h3>
 
-      <!-- Dynamic Typewriter Caption Box -->
-      <div class="mt-2.5 p-3 rounded-xl bg-black/60 border border-yellow-500/40 text-left min-h-[70px]">
-        <p class="text-xs text-yellow-200 font-mono leading-relaxed" id="kelly-caption-text">
-          "Connecting AI Host..."
+      <!-- Terminal Typewriter Subtitle Box -->
+      <div class="mt-2.5 p-3 rounded-xl bg-black/90 border border-cyan-500/40 text-left min-h-[75px] shadow-inner">
+        <p class="text-xs text-cyan-200 font-mono leading-relaxed" id="kelly-caption-text">
+          Initializing voice synthesizer...
         </p>
       </div>
 
-      <button onclick="closeModal('kelly-welcome-modal')" class="w-full mt-3.5 py-2.5 bg-gradient-to-r from-yellow-500 to-amber-600 text-black font-black text-xs rounded-xl shadow-lg shadow-yellow-500/30 active:scale-95 transition-transform">
-        ENTER ARENA & PLAY!
+      <button onclick="closeModal('kelly-welcome-modal')" class="w-full mt-3.5 py-2.5 bg-gradient-to-r from-cyan-500 via-indigo-600 to-purple-600 text-white font-black text-xs rounded-xl shadow-lg shadow-cyan-500/30 active:scale-95 transition-transform tracking-wider">
+        READY TO FIGHT • ENTER ARENA
       </button>
     </div>
   </div>
 
-  <!-- MAIN APP CONTAINER -->
+  <!-- MAIN PHONE WRAPPER -->
   <div class="w-full max-w-md h-full relative flex flex-col backdrop-blur-[2px]">
     
-    <!-- TOP HEADER -->
+    <!-- FROZEN TOP HEADER -->
     <header class="fixed top-0 left-0 right-0 max-w-md mx-auto h-16 bg-[#070216]/95 backdrop-blur-md px-4 flex justify-between items-center border-b border-purple-900/50 z-40 shadow-md">
       <div class="flex items-center gap-2.5">
         <div id="master-admin-trigger" onclick="handleAdminSecretTap()" class="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 via-indigo-600 to-purple-500 flex items-center justify-center text-white shadow-lg shadow-purple-600/30 cursor-pointer active:scale-90 transition-transform">
@@ -258,7 +281,7 @@
         </div>
       </div>
 
-      <!-- REWARDS ROW: SPIN WHEEL & DAILY CHECKIN -->
+      <!-- REWARDS ROW: 24H SPIN WHEEL & DAILY CHECKIN -->
       <div class="grid grid-cols-2 gap-2.5">
         <div onclick="playSFX('click'); openModal('spin-popup')" class="p-3 bg-gradient-to-r from-purple-900/40 to-indigo-950/60 border border-purple-700/50 rounded-2xl flex items-center gap-2.5 cursor-pointer active:scale-95 transition-all">
           <div class="w-9 h-9 rounded-xl bg-purple-600/30 border border-purple-400/40 flex items-center justify-center text-purple-300 text-lg">
@@ -266,7 +289,7 @@
           </div>
           <div>
             <h4 class="text-xs font-black text-purple-200 uppercase">Lucky Spin</h4>
-            <p class="text-[9px] text-amber-300 font-bold">Win Free Cash</p>
+            <p class="text-[9px] text-amber-300 font-bold" id="spin-badge-status">Free Spin 24H</p>
           </div>
         </div>
 
@@ -281,7 +304,7 @@
         </div>
       </div>
 
-      <!-- REFER & EARN BANNER -->
+      <!-- REFER & EARN BANNER (#20) -->
       <div onclick="playSFX('click'); openModal('refer-popup')" class="p-3 rounded-2xl bg-gradient-to-r from-amber-600/20 via-purple-950/60 to-emerald-600/20 border border-amber-500/40 flex justify-between items-center cursor-pointer active:scale-98 transition-all">
         <div class="flex items-center gap-2.5">
           <div class="w-9 h-9 rounded-xl bg-amber-500/20 border border-amber-500/50 flex items-center justify-center text-amber-400 text-lg">
@@ -433,7 +456,7 @@
 
   </div>
 
-  <!-- LUCKY SPIN WHEEL POPUP -->
+  <!-- LUCKY SPIN WHEEL POPUP (WITH STRICT 24-HOUR COUNTDOWN) -->
   <div id="spin-popup" class="modal-box">
     <div class="bg-[#0f0624] border border-purple-600/60 rounded-3xl w-full max-w-sm p-5 relative shadow-2xl text-center">
       <button onclick="closeModal('spin-popup')" class="absolute top-3 right-3 text-slate-400 hover:text-white">
@@ -442,16 +465,16 @@
       <h3 class="text-base font-black text-amber-300 flex items-center justify-center gap-2">
         <i class="fa-solid fa-dharmachakra"></i> Lucky Spin Arena
       </h3>
-      <p class="text-xs text-slate-400 mt-0.5">Spin daily & win instant wallet balance!</p>
+      <p class="text-xs text-slate-400 mt-0.5">Spin daily (1 time per 24 hours) & win rewards!</p>
 
       <div class="relative w-56 h-56 mx-auto my-4 flex items-center justify-center">
-        <!-- Pin pointer -->
+        <!-- Pointer -->
         <div class="absolute -top-2 z-10 w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[18px] border-t-amber-400 drop-shadow"></div>
         <canvas id="wheel-canvas" width="220" height="220" class="rounded-full shadow-2xl border-4 border-purple-700/60"></canvas>
       </div>
 
       <button id="spin-btn" onclick="spinWheel()" class="w-full py-2.5 bg-gradient-to-r from-purple-600 to-amber-500 font-black text-xs text-white rounded-xl shadow-lg active:scale-95 transition-all">
-        SPIN NOW (FREE)
+        SPIN NOW (FREE 24H REWARD)
       </button>
     </div>
   </div>
@@ -467,9 +490,7 @@
       </h3>
       <p class="text-xs text-slate-400 mt-0.5">Roz login karein aur free cash collect karein</p>
 
-      <div class="grid grid-cols-4 gap-2 my-4 text-xs font-bold" id="checkin-days-grid">
-        <!-- JS rendered 7 days -->
-      </div>
+      <div class="grid grid-cols-4 gap-2 my-4 text-xs font-bold" id="checkin-days-grid"></div>
 
       <button id="claim-checkin-btn" onclick="claimDailyReward()" class="w-full py-2.5 bg-gradient-to-r from-emerald-600 to-teal-500 font-black text-xs text-white rounded-xl shadow-lg active:scale-95 transition-all">
         CLAIM TODAY'S REWARD
@@ -762,7 +783,7 @@
         </div>
       </div>
 
-      <!-- MATCH RESULT PROOF VERIFICATION SECTION (Admin approves kills) -->
+      <!-- MATCH RESULT PROOF VERIFICATION SECTION -->
       <div class="p-3 bg-slate-900 rounded-xl border border-cyan-800">
         <div class="flex justify-between items-center mb-2">
           <h4 class="text-xs font-black text-cyan-400 uppercase flex items-center gap-1.5">
@@ -942,7 +963,6 @@
 
       const speechLine = `Hey ${userName}, welcome to Free Fire Max Tournament Hub. Now you are ready to play and please win all challenges.`;
       
-      // Typewriter caption effect
       const captionEl = document.getElementById('kelly-caption-text');
       captionEl.textContent = "";
       let charIdx = 0;
@@ -953,24 +973,23 @@
         } else {
           clearInterval(typeTimer);
         }
-      }, 40);
+      }, 35);
 
-      // Web Speech API Voice Execution (Female Robot Tone)
       if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
         const utterance = new SpeechSynthesisUtterance(speechLine);
-        utterance.rate = 0.95;
-        utterance.pitch = 1.25; // Youthful female gamer pitch
+        utterance.rate = 0.88;
+        utterance.pitch = 1.35; // Tuned high pitch for female cyborg
         
         const voices = window.speechSynthesis.getVoices();
-        const femaleVoice = voices.find(v => v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('google uk english female') || v.name.toLowerCase().includes('samantha'));
-        if (femaleVoice) utterance.voice = femaleVoice;
+        const robotVoice = voices.find(v => v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('google uk english female') || v.name.toLowerCase().includes('samantha'));
+        if (robotVoice) utterance.voice = robotVoice;
 
         window.speechSynthesis.speak(utterance);
       }
     }
 
-    // INTRO SPLASH SCREEN DISMISSAL
+    // INTRO SPLASH SCREEN
     window.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => {
         const splash = document.getElementById('splash-screen');
@@ -979,6 +998,7 @@
       }, 2200);
       drawSpinWheel();
       renderCheckinGrid();
+      checkSpinLockStatus();
     });
 
     // DIRECT ADMIN ACCESS (PIN: 8690)
@@ -1094,9 +1114,9 @@
       }, 1500);
     }
 
-    // ==========================================
-    // LUCKY SPIN WHEEL SYSTEM
-    // ==========================================
+    // ========================================================
+    // LUCKY SPIN WHEEL (STRICT 24-HOUR COUNTDOWN LOCK)
+    // ========================================================
     const wheelSegments = ["₹5", "1 Star", "₹10", "Better Luck", "₹20", "2 Stars", "₹2", "Booyah Pass"];
     const wheelColors = ["#7c3aed", "#eab308", "#2563eb", "#dc2626", "#059669", "#d97706", "#9333ea", "#0891b2"];
     let currentWheelRotation = 0;
@@ -1133,7 +1153,45 @@
       }
     }
 
+    function checkSpinLockStatus() {
+      const lastSpin = Number(localStorage.getItem('apex_last_spin')) || 0;
+      const now = Date.now();
+      const spinBtn = document.getElementById('spin-btn');
+      const badgeStatus = document.getElementById('spin-badge-status');
+      const oneDay = 24 * 60 * 60 * 1000;
+
+      if (!spinBtn) return;
+
+      if (now - lastSpin < oneDay) {
+        const remainingMs = oneDay - (now - lastSpin);
+        const hours = Math.floor(remainingMs / (1000 * 60 * 60));
+        const mins = Math.floor((remainingMs % (1000 * 60 * 60)) / (1000 * 60));
+        const secs = Math.floor((remainingMs % (1000 * 60)) / 1000);
+
+        spinBtn.disabled = true;
+        spinBtn.className = "w-full py-2.5 bg-slate-800 text-slate-400 font-black text-xs rounded-xl cursor-not-allowed border border-slate-700 font-mono";
+        spinBtn.textContent = `LOCKED (${hours}h : ${mins}m : ${secs}s)`;
+        if (badgeStatus) badgeStatus.textContent = `Wait ${hours}h`;
+      } else {
+        spinBtn.disabled = false;
+        spinBtn.className = "w-full py-2.5 bg-gradient-to-r from-purple-600 to-amber-500 font-black text-xs text-white rounded-xl shadow-lg active:scale-95 transition-all cursor-pointer";
+        spinBtn.textContent = "SPIN NOW (FREE 24H REWARD)";
+        if (badgeStatus) badgeStatus.textContent = "Spin Ready ✅";
+      }
+    }
+
+    setInterval(checkSpinLockStatus, 1000);
+
     function spinWheel() {
+      const lastSpin = Number(localStorage.getItem('apex_last_spin')) || 0;
+      const now = Date.now();
+      const oneDay = 24 * 60 * 60 * 1000;
+
+      if (now - lastSpin < oneDay) {
+        alert("24 Ghante me sirf 1 hi Free Spin allow hai! Timer khatam hone ka intezar karein.");
+        return;
+      }
+
       if (isSpinning) return;
       isSpinning = true;
       playSFX('booyah');
@@ -1142,6 +1200,9 @@
       const randomRot = 1440 + Math.floor(Math.random() * 360);
       currentWheelRotation += randomRot;
       canvas.style.transform = `rotate(${currentWheelRotation}deg)`;
+
+      localStorage.setItem('apex_last_spin', now);
+      checkSpinLockStatus();
 
       setTimeout(() => {
         isSpinning = false;
@@ -1227,7 +1288,7 @@
     }
 
     // ==========================================
-    // RENDER MATCHES WITH SCREENSHOT PROOF PROMPT
+    // RENDER MATCHES & REVERSE COUNTDOWN
     // ==========================================
     function renderTournaments(data) {
       allTournaments = data || {};
@@ -1310,7 +1371,6 @@
                   <button onclick="openFreeFireApp()" class="px-2 py-1 bg-amber-600 rounded text-[10px] font-bold text-black"><i class="fa-solid fa-play"></i> Launch FF</button>
                 </div>
               </div>
-              <!-- SUBMIT SCOREBOARD SCREENSHOT BUTTON -->
               <button onclick="openResultProofModal('${k}', '${matchTitle}')" class="w-full py-1.5 bg-gradient-to-r from-cyan-600 to-blue-600 rounded-lg text-white font-extrabold text-xs active:scale-95 transition-all">
                 <i class="fa-solid fa-cloud-arrow-up mr-1"></i> Submit Kill Proof / Scoreboard Screenshot
               </button>
@@ -1489,7 +1549,7 @@
         time: new Date().toLocaleString()
       }).then(() => {
         playSFX('booyah');
-        alert("Match Proof Submitted! Admin scoreboard verify karke aapka per-kill prize wallet me credit karega.");
+        alert("Match Proof Submitted! Admin scoreboard verify karke aapka prize credit karega.");
         closeModal('result-proof-modal');
       });
     }
@@ -2102,7 +2162,7 @@
       listenUserNotifications();
       closeModal('auth-popup');
 
-      // TRIGGER ROBOT KELLY VOICE & SUBTITLE POPUP
+      // TRIGGER CYBORG ROBOT KELLY VOICE & SUBTITLE POPUP
       triggerKellyWelcomeSpeech(ign);
       if (allTournaments) renderTournaments(allTournaments);
     }
@@ -2193,7 +2253,6 @@
       countLabel.textContent = count + " Players";
     });
 
-    // LISTEN MATCH SCOREBOARD PROOFS (FOR ADMIN)
     db.ref('matchProofs').on('value', snap => {
       const allMProofs = snap.val();
       const box = document.getElementById('admin-proofs-box');
