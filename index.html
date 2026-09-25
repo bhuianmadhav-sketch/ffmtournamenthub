@@ -94,11 +94,12 @@
     <i class="fa-solid fa-money-bill-wave text-white"></i> <span id="toast-msg">Rahul just withdrew ₹250</span>
   </div>
 
-  <!-- IMAGE ZOOM MODAL -->
+  <!-- IMAGE ZOOM MODAL (FIXED) -->
   <div id="image-preview-modal" class="modal-box z-[9999]" onclick="closeModal('image-preview-modal')">
-    <div class="relative w-full max-w-md p-2 bg-[#060214] rounded-2xl border-2 border-purple-600 shadow-2xl text-center">
-      <button class="absolute -top-4 -right-4 w-8 h-8 bg-rose-600 rounded-full text-white font-black border-2 border-white shadow-lg"><i class="fa-solid fa-xmark"></i></button>
-      <img id="enlarged-img" src="" class="w-full max-h-[80vh] object-contain rounded-xl bg-black" />
+    <div class="relative w-full max-w-md p-2 bg-[#060214] rounded-2xl border-2 border-purple-600 shadow-2xl text-center flex flex-col items-center justify-center max-h-screen overflow-auto">
+      <button class="absolute top-2 right-2 w-8 h-8 bg-rose-600 rounded-full text-white font-black border-2 border-white shadow-lg z-50"><i class="fa-solid fa-xmark"></i></button>
+      <img id="enlarged-img" src="" class="w-full object-contain rounded-xl bg-black" style="min-height: 50vh;" />
+      <p class="text-xs text-amber-300 mt-2">Pinch to zoom in your browser if needed</p>
     </div>
   </div>
 
@@ -163,13 +164,13 @@
       <!-- PROFILE STRIP -->
       <div class="p-3.5 bg-gradient-to-r from-purple-950/70 via-slate-900/90 to-purple-950/70 rounded-2xl border border-purple-800/50 flex justify-between items-center shadow-lg">
         <div class="flex items-center gap-3">
-          <div class="relative cursor-pointer" onclick="document.getElementById('profile-img-upload').click()">
-            <div class="w-12 h-12 rounded-full border-2 border-amber-400 bg-gradient-to-tr from-purple-900 to-indigo-800 flex items-center justify-center font-black text-white text-lg shadow-inner overflow-hidden">
-              <img id="user-avatar-img" src="" class="hidden w-full h-full object-cover" />
+          <div class="relative cursor-pointer" onclick="goTab('profile')">
+            <!-- Glowing Tier Setup -->
+            <div class="w-12 h-12 rounded-full border-2 border-amber-400 bg-gradient-to-tr from-purple-900 to-indigo-800 flex items-center justify-center font-black text-white text-lg shadow-[0_0_15px_#fbbf24] overflow-hidden">
+              <img id="header-avatar-img" src="" class="hidden w-full h-full object-cover" />
               <span id="avatar-initial">U</span>
             </div>
             <span class="absolute -bottom-1 -right-1 w-5 h-5 bg-amber-500 text-black font-black text-[9px] rounded-full flex items-center justify-center border border-black shadow">★</span>
-            <input type="file" id="profile-img-upload" accept="image/*" onchange="uploadProfileImage(event)" class="hidden" />
           </div>
           <div>
             <div class="flex items-center gap-1.5">
@@ -179,8 +180,8 @@
             <p class="text-[10px] font-mono text-purple-300 mt-0.5">UID: <span id="player-uid-txt">•••• 0000</span> | <span id="player-total-stars" class="text-amber-300 font-bold">0 Stars</span></p>
           </div>
         </div>
-        <button onclick="playSFX('click'); goTab('profile')" class="text-xs bg-purple-600/40 border border-purple-500/50 px-3 py-1.5 rounded-xl font-bold text-purple-200 active:scale-95 flex items-center gap-1.5">
-          <i class="fa-solid fa-user-gear"></i> Profile
+        <button onclick="playSFX('click'); openModal('auth-popup')" class="text-xs bg-purple-600/40 border border-purple-500/50 px-3 py-1.5 rounded-xl font-bold text-purple-200 active:scale-95 flex items-center gap-1.5">
+          <i class="fa-solid fa-user-gear"></i> Account
         </button>
       </div>
 
@@ -268,10 +269,12 @@
           <div class="flex justify-between items-center">
             <h2 class="text-sm font-black uppercase tracking-wider text-slate-200 border-l-4 border-emerald-500 pl-2">Apex Champions</h2>
           </div>
-          <div class="space-y-2" id="champions-list"></div>
+          <div class="space-y-2" id="champions-list">
+            <p class="text-xs text-slate-400 text-center py-4">Loading real-time leaderboard...</p>
+          </div>
         </section>
 
-        <!-- SPECIAL PROFILE TAB (NEW) -->
+        <!-- SPECIAL PROFILE TAB (WITH PHOTO UPLOAD) -->
         <section id="screen-profile" class="hidden space-y-4">
           <div class="p-6 rounded-2xl bg-gradient-to-b from-[#11062b] to-[#070216] border border-purple-900/60 shadow-2xl relative overflow-hidden">
             <!-- Background Glow -->
@@ -279,17 +282,29 @@
             <div class="absolute bottom-0 left-0 w-32 h-32 bg-purple-600/10 rounded-full blur-3xl"></div>
             
             <div class="flex flex-col items-center text-center relative z-10">
-               <div class="relative mb-3 cursor-pointer" onclick="document.getElementById('profile-img-upload').click()">
-                  <div class="w-20 h-20 rounded-full border-4 border-amber-400 bg-black flex items-center justify-center text-2xl font-black text-white shadow-[0_0_20px_#fbbf24] overflow-hidden">
+               <div class="relative mb-3 cursor-pointer group" onclick="document.getElementById('profile-img-upload').click()">
+                  <div class="w-24 h-24 rounded-full border-4 border-amber-400 bg-black flex items-center justify-center text-3xl font-black text-white shadow-[0_0_20px_#fbbf24] overflow-hidden">
                      <img id="prof-main-avatar" src="" class="hidden w-full h-full object-cover" />
                      <span id="prof-initial">U</span>
                   </div>
+                  <div class="absolute inset-0 bg-black/50 rounded-full flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                     <i class="fa-solid fa-camera text-white"></i>
+                     <span class="text-[8px] text-white font-bold">Edit</span>
+                  </div>
                </div>
+               <input type="file" id="profile-img-upload" accept="image/*" onchange="uploadProfileImage(event)" class="hidden" />
+
                <h3 class="font-black text-2xl text-white tracking-wider flex items-center justify-center gap-2" id="prof-ign-main">Player</h3>
                <div class="mt-1.5 flex items-center justify-center gap-2">
                  <span class="px-2 py-0.5 bg-amber-500/20 border border-amber-500 rounded text-[10px] font-black text-amber-300 shadow-[0_0_10px_rgba(245,158,11,0.5)]" id="prof-tier-main">BRONZE</span>
                </div>
                <p class="text-xs text-slate-400 font-mono mt-2 bg-black/40 px-3 py-1 rounded-lg">Phone: <span id="prof-phone-main" class="text-cyan-300">Not Verified</span></p>
+            </div>
+
+            <!-- Notifications Area -->
+            <div id="user-notifications-box" class="mt-4 hidden p-3 bg-red-950/40 border border-red-800/50 rounded-xl relative z-10">
+               <h4 class="text-[10px] font-black text-rose-400 uppercase mb-1 flex items-center gap-1"><i class="fa-solid fa-bell"></i> Alerts</h4>
+               <div id="user-notifications-list" class="space-y-1"></div>
             </div>
 
             <div class="mt-6 grid grid-cols-2 gap-3 text-center relative z-10">
@@ -310,10 +325,6 @@
                </button>
                <button onclick="playSFX('click'); openModal('feedback-popup')" class="w-full py-3 px-4 rounded-xl bg-blue-900/40 border border-blue-700/50 font-bold text-xs flex justify-between items-center text-white active:scale-95 transition-all">
                  <span class="flex items-center gap-2"><i class="fa-solid fa-star text-amber-400 drop-shadow"></i> Rate App & Ideas</span>
-                 <i class="fa-solid fa-chevron-right text-slate-500"></i>
-               </button>
-               <button onclick="playSFX('click'); openModal('complaint-popup')" class="w-full py-3 px-4 rounded-xl bg-rose-900/40 border border-rose-700/50 font-bold text-xs flex justify-between items-center text-white active:scale-95 transition-all">
-                 <span class="flex items-center gap-2"><i class="fa-solid fa-headset text-rose-400"></i> Helpdesk Support</span>
                  <i class="fa-solid fa-chevron-right text-slate-500"></i>
                </button>
             </div>
@@ -378,7 +389,7 @@
     </div>
   </div>
 
-  <!-- DEPOSIT POPUP (FIXED UPI & IMAGE BUG) -->
+  <!-- DEPOSIT POPUP -->
   <div id="deposit-popup" class="modal-box">
     <div class="bg-[#0f0728] border border-emerald-600/50 rounded-2xl w-full max-w-sm p-4 relative text-center shadow-2xl max-h-[90vh] overflow-y-auto">
       <button onclick="closeModal('deposit-popup')" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
@@ -388,13 +399,13 @@
       <div class="mt-3 text-left">
         <label class="text-[10px] font-bold text-slate-400 uppercase">Select UPI to Pay</label>
         <select id="upi-selector" onchange="updateWalletQR()" class="w-full mt-1 bg-black/50 border border-purple-900 rounded-xl px-2 py-2 text-xs text-white">
-          <option value="">Loading UPI...</option>
+          <!-- Populated by JS -->
         </select>
       </div>
 
       <div class="mt-3 p-2 bg-black/50 rounded-xl border border-purple-900/60 flex flex-col items-center">
-        <img id="qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=fftournamenthub@ibl&pn=FF%20HUB" class="w-32 h-32 rounded bg-white p-1" />
-        <p class="text-[11px] text-purple-300 font-mono mt-1.5 font-bold" id="qr-upi-label">fftournamenthub@ibl</p>
+        <img id="qr-img" src="" class="w-32 h-32 rounded bg-white p-1" />
+        <p class="text-[11px] text-purple-300 font-mono mt-1.5 font-bold" id="qr-upi-label">Loading...</p>
       </div>
 
       <div class="mt-3 space-y-2 text-left">
@@ -404,7 +415,7 @@
         
         <div>
           <label class="text-[10px] font-bold text-amber-300 uppercase flex items-center gap-1">Payment Screenshot *</label>
-          <input type="file" id="deposit-screenshot-file" accept="image/*" onchange="compressAndPreviewImage(event, 'deposit-img-preview')" class="w-full mt-0.5 bg-black/50 border border-purple-900 rounded-xl px-3 py-1.5 text-xs text-slate-300 file:bg-emerald-600 file:text-white file:border-0 file:rounded" />
+          <input type="file" id="deposit-screenshot-file" accept="image/*" onchange="captureOriginalImage(event, 'deposit-img-preview')" class="w-full mt-0.5 bg-black/50 border border-purple-900 rounded-xl px-3 py-1.5 text-xs text-slate-300 file:bg-emerald-600 file:text-white file:border-0 file:rounded" />
           <img id="deposit-img-preview" src="" class="hidden h-20 mx-auto mt-2 rounded border border-purple-500 object-contain bg-black" />
         </div>
         <button onclick="sendDepositUTR()" class="w-full mt-2 py-2.5 rounded-xl bg-emerald-600 font-bold text-xs text-white shadow-lg active:scale-95 transition-all">Submit Request</button>
@@ -457,7 +468,7 @@
       <h3 class="text-sm font-black text-cyan-300">Submit Kill Screenshot</h3>
       <div class="mt-3 text-left space-y-2 text-xs">
         <input type="number" id="proof-kills-count" placeholder="Total Kills Made" class="w-full bg-black/50 border border-purple-900 rounded-xl px-3 py-2 text-white" />
-        <input type="file" id="proof-img-file" accept="image/*" onchange="compressAndPreviewImage(event, 'proof-img-preview')" class="w-full bg-black/50 border border-purple-900 rounded-xl px-3 py-1.5 text-slate-300 file:bg-cyan-600 file:text-white file:rounded file:border-0" />
+        <input type="file" id="proof-img-file" accept="image/*" onchange="captureOriginalImage(event, 'proof-img-preview')" class="w-full bg-black/50 border border-purple-900 rounded-xl px-3 py-1.5 text-slate-300 file:bg-cyan-600 file:text-white file:rounded file:border-0" />
         <img id="proof-img-preview" src="" class="hidden h-20 mx-auto rounded border border-cyan-500 object-contain bg-black mt-1" />
         <button onclick="submitResultProof()" class="w-full mt-2 py-2.5 bg-cyan-600 text-white font-black rounded-xl">Upload & Claim</button>
       </div>
@@ -477,19 +488,6 @@
       <div class="p-2.5 bg-purple-950/40 rounded-xl border border-purple-800 flex justify-between items-center">
         <span class="text-xs font-mono font-black text-white" id="referral-code-txt">REF-DEEP000</span>
         <button onclick="playSFX('click'); alert('Link Copied!');" class="px-3 py-1 bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-xs rounded-lg active:scale-95">Copy Link</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- COMPLAINT POPUP -->
-  <div id="complaint-popup" class="modal-box">
-    <div class="bg-[#0f0728] border border-rose-600/50 rounded-2xl w-full max-w-sm p-5 relative shadow-2xl">
-      <button onclick="closeModal('complaint-popup')" class="absolute top-4 right-4 text-slate-400"><i class="fa-solid fa-xmark text-lg"></i></button>
-      <h3 class="text-base font-black text-white flex items-center gap-2"><i class="fa-solid fa-headset text-rose-400"></i> Complaint Box</h3>
-      <div class="mt-4 space-y-3 text-xs">
-        <select class="w-full bg-black/50 border border-purple-900 rounded-xl px-3 py-2 text-white"><option>Deposit Issue</option><option>Withdrawal Issue</option><option>Other</option></select>
-        <textarea rows="3" placeholder="Apni dikkat yahan likhein..." class="w-full bg-black/50 border border-purple-900 rounded-xl px-3 py-2 text-white"></textarea>
-        <button onclick="closeModal('complaint-popup'); alert('Complaint Sent!');" class="w-full py-2.5 rounded-xl bg-rose-600 text-white font-bold text-xs">Submit to Admin</button>
       </div>
     </div>
   </div>
@@ -514,14 +512,13 @@
     </div>
   </div>
 
-  <!-- SLOT PICKER MODAL (CS TEAM NAME ADDED) -->
+  <!-- SLOT PICKER MODAL -->
   <div id="slot-modal" class="modal-box">
     <div class="bg-[#0f0728] border border-purple-600/50 rounded-2xl w-full max-w-sm p-4 relative shadow-2xl flex flex-col max-h-[85vh]">
       <button onclick="closeModal('slot-modal')" class="absolute top-3 right-3 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
       <h3 class="text-sm font-black text-white">Choose Your Slot</h3>
       <p class="text-[11px] text-slate-400 mt-1" id="slot-modal-subtitle">Entry: ₹20</p>
       
-      <!-- Dynamic Team Name Input for CS -->
       <div id="cs-team-input-box" class="hidden mt-2">
          <input type="text" id="cs-team-name" placeholder="Enter Team Name (e.g. Total Gaming)" class="w-full bg-black/80 border border-cyan-500/50 rounded-lg px-2 py-1.5 text-xs text-cyan-200 font-bold" />
       </div>
@@ -586,7 +583,6 @@
           <input type="number" id="new-match-prize" oninput="updateMatchCalculator()" placeholder="Total Prize Pool (₹)" class="bg-black/50 border border-purple-900 rounded-xl px-2 py-1.5 text-white" />
           <input type="datetime-local" id="new-match-datetime" class="col-span-2 bg-black/50 border border-purple-900 rounded-xl px-2 py-1.5 text-white" />
         </div>
-        <!-- Live Calculator UI -->
         <div class="mt-2 p-2 bg-black/60 rounded-xl border border-purple-800/50 flex justify-between items-center text-xs">
            <span class="text-slate-400">Total Est. Collection: <strong class="text-cyan-400">₹<span id="calc-collection">0</span></strong></span>
            <span class="text-slate-400">Net Profit: <strong id="calc-profit" class="text-emerald-400">₹0</strong></span>
@@ -600,10 +596,10 @@
         <div id="admin-match-manage-box" class="space-y-2 text-xs max-h-48 overflow-y-auto"></div>
       </div>
 
-      <!-- DEPOSITS VERIFICATION (FIXED WITH USER UPI VISIBILITY & PROPER WALLET ADD) -->
+      <!-- DEPOSITS VERIFICATION -->
       <div class="p-3 bg-slate-900 rounded-xl border border-amber-800">
         <h4 class="text-xs font-black text-amber-400 mb-2">DEPOSITS VERIFICATION</h4>
-        <div id="admin-deposits-box" class="space-y-2 text-xs max-h-[400px] overflow-y-auto"></div>
+        <div id="admin-deposits-box" class="space-y-2 text-xs max-h-[500px] overflow-y-auto"></div>
       </div>
 
       <!-- WITHDRAWAL REQUESTS -->
@@ -624,9 +620,7 @@
           <h4 class="text-xs font-black text-cyan-400 uppercase flex items-center gap-1.5"><i class="fa-solid fa-users"></i> Registered Players List</h4>
           <span class="text-[10px] text-cyan-300 font-bold" id="admin-total-players-count">0 Players</span>
         </div>
-        <div id="admin-players-box" class="space-y-2 text-xs max-h-48 overflow-y-auto">
-          <p class="text-slate-500 italic">Players data load ho raha hai...</p>
-        </div>
+        <div id="admin-players-box" class="space-y-2 text-xs max-h-48 overflow-y-auto"></div>
       </div>
 
     </div>
@@ -676,34 +670,19 @@
       } catch(e) {}
     }
 
-    // IMAGE COMPRESSOR (FIX FOR LARGE FILES NOT UPLOADING)
-    function compressAndPreviewImage(e, previewElementId) {
+    // IMAGE CAPTURE WITHOUT COMPRESSION (FIXES 4K BLUR ISSUE)
+    function captureOriginalImage(e, previewElementId) {
       const file = e.target.files[0];
       if (!file) return;
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = function (event) {
-        const img = new Image();
-        img.src = event.target.result;
-        img.onload = function () {
-          const canvas = document.createElement('canvas');
-          const ctx = canvas.getContext('2d');
-          const MAX_WIDTH = 600; const MAX_HEIGHT = 600;
-          let width = img.width; let height = img.height;
-          if (width > height) { if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; } } 
-          else { if (height > MAX_HEIGHT) { width *= MAX_HEIGHT / height; height = MAX_HEIGHT; } }
-          canvas.width = width; canvas.height = height;
-          ctx.drawImage(img, 0, 0, width, height);
-          
-          const compressedBase64 = canvas.toDataURL('image/jpeg', 0.6); // 60% quality jpeg
-          
-          if(previewElementId === 'deposit-img-preview') depositBase64Image = compressedBase64;
-          if(previewElementId === 'proof-img-preview') proofBase64Image = compressedBase64;
-
+          const originalBase64 = event.target.result;
+          if(previewElementId === 'deposit-img-preview') depositBase64Image = originalBase64;
+          if(previewElementId === 'proof-img-preview') proofBase64Image = originalBase64;
           const previewEl = document.getElementById(previewElementId);
-          previewEl.src = compressedBase64;
+          previewEl.src = originalBase64;
           previewEl.classList.remove('hidden');
-        }
       };
     }
 
@@ -716,12 +695,14 @@
         const img = new Image(); img.src = event.target.result;
         img.onload = function() {
            const canvas = document.createElement('canvas'); const ctx = canvas.getContext('2d');
-           canvas.width = 200; canvas.height = 200; // Small square avatar
+           canvas.width = 200; canvas.height = 200; 
            ctx.drawImage(img, 0, 0, 200, 200);
-           const avatarBase64 = canvas.toDataURL('image/jpeg', 0.7);
+           const avatarBase64 = canvas.toDataURL('image/jpeg', 0.8);
            currentUser.avatar = avatarBase64;
            localStorage.setItem('apex_user', JSON.stringify(currentUser));
-           if(currentUser.phone) db.ref('players/' + currentUser.phone).update({avatar: avatarBase64});
+           if(currentUser.phone && currentUser.phone !== "Not Verified") {
+               db.ref('players/' + currentUser.phone).update({avatar: avatarBase64});
+           }
            syncUI();
         }
       };
@@ -743,7 +724,6 @@
       if (!currentUser.isBanned) {
         if (!localStorage.getItem('has_visited')) { db.ref('analytics/visitors').transaction(curr => (curr || 0) + 1); localStorage.setItem('has_visited', 'true'); }
         syncUI(); startFakeWithdrawToasts(); drawSpinWheel(); checkSpinLockStatus(); renderCheckinGrid();
-        // Load initial UPIs
         db.ref('settings/upis').once('value').then(s => {
            systemUPIs = s.val() || ["fftournamenthub@ibl"];
            document.getElementById('upi-selector').innerHTML = systemUPIs.map(u => `<option value="${u}">${u}</option>`).join('');
@@ -769,13 +749,11 @@
       document.getElementById('screen-' + name).classList.remove('hidden');
     }
     
-    // OPEN ZOOM IMAGE MODAL
     function openImagePreview(src) {
        document.getElementById('enlarged-img').src = src;
        openModal('image-preview-modal');
     }
 
-    // SYNC USER PROFILE & UI
     function syncUI() {
       document.getElementById('top-wallet-val').textContent = currentUser.balance || 0;
       document.getElementById('wallet-main-bal').textContent = currentUser.balance || 0;
@@ -788,9 +766,8 @@
       document.getElementById('prof-win-stars').textContent = currentUser.stars || 0;
       document.getElementById('player-total-stars').textContent = (currentUser.stars || 0) + " Stars";
 
-      // Display Avatar if exists
       if (currentUser.avatar) {
-         document.getElementById('user-avatar-img').src = currentUser.avatar; document.getElementById('user-avatar-img').classList.remove('hidden');
+         document.getElementById('header-avatar-img').src = currentUser.avatar; document.getElementById('header-avatar-img').classList.remove('hidden');
          document.getElementById('prof-main-avatar').src = currentUser.avatar; document.getElementById('prof-main-avatar').classList.remove('hidden');
          document.getElementById('avatar-initial').classList.add('hidden'); document.getElementById('prof-initial').classList.add('hidden');
       } else {
@@ -826,7 +803,7 @@
           if(currentUser.phone) db.ref('players/' + currentUser.phone).update({isBanned: true});
           location.reload(); 
         } else {
-          localStorage.setItem('apex_user', JSON.stringify(currentUser)); alert("⚠️ WARNING: Unauthorized access detected! Ek aur galat attempt par aapka account permanent ban ho jayega.");
+          localStorage.setItem('apex_user', JSON.stringify(currentUser)); alert("⚠️ WARNING: Unauthorized access detected!");
         }
       }
     }
@@ -926,7 +903,6 @@
       });
     }, 1000);
 
-    // CLASH SQUAD SLOT PICKER WITH CS TEAM NAME INPUT
     function openSlotPicker(matchId, fee) {
       if (!currentUser.phone || currentUser.phone === "Not Verified") { alert("Verify Account first in Profile tab!"); return; }
       if (currentUser.balance < fee) { 
@@ -993,7 +969,7 @@
       });
     }
 
-    // MULTIPLE UPI & DEPOSIT/WITHDRAW (FIXED QR & BALANCE SYNC BUG)
+    // MULTIPLE UPI & DEPOSIT
     function updateWalletQR() {
       const s = document.getElementById('upi-selector').value;
       if (s && s !== "") { 
@@ -1014,7 +990,7 @@
       db.ref('deposits/' + utr).once('value').then(s => {
         if(s.exists()) { alert("Duplicate UTR! Yeh already use ho chuka hai."); return; }
         db.ref('deposits/' + utr).set({
-           phone: currentUser.phone, ign: currentUser.ign, amount: amt, utr: utr, senderUpi: senderUpi, screenshot: depositBase64Image, status: "pending"
+           phone: currentUser.phone, ign: currentUser.ign, amount: amt, utr: utr, senderUpi: senderUpi, screenshot: depositBase64Image, status: "pending", time: Date.now()
         }).then(() => { 
            alert("Request sent to Admin! Verification ke baad balance add hoga."); 
            closeModal('deposit-popup'); depositBase64Image = null; document.getElementById('deposit-img-preview').classList.add('hidden');
@@ -1053,28 +1029,38 @@
       db.ref('tournaments/M'+Date.now()).set({title: document.getElementById('new-match-title').value, mode: m, maxSlots: m.includes("CS") ? 8 : 48, entry: document.getElementById('new-match-fee').value, prize: document.getElementById('new-match-prize').value, datetime: document.getElementById('new-match-datetime').value, rules: document.getElementById('new-match-rules').value}); alert("Published!");
     }
 
-    // ADMIN ACTIONS: DEPOSIT & WITHDRAWAL (PROPER FIX FOR REAL ADD MONEY)
+    function endMatchAndDeclare(matchKey) {
+       const m = allTournaments[matchKey]; if(!m) return;
+       const wName = prompt("Winner Team/Player Name likhiye:");
+       if(!wName) return;
+       const wKills = prompt("Kills kitne kiye hain winner ne?");
+       
+       db.ref('results/' + matchKey).set({
+           title: m.title, mode: m.mode, date: m.datetime, roomId: m.roomId || "N/A", winner: wName, kills: wKills || "0"
+       }).then(() => {
+           db.ref('tournaments/' + matchKey).remove();
+           alert("Match Result Announced successfully!");
+       });
+    }
+
+    // ADMIN ACTIONS: DEPOSIT & WITHDRAWAL (WITH NOTIFICATIONS)
     function approveDeposit(utr, phone, amt) {
       if(!confirm(`Approve ₹${amt} deposit for User (${phone})?`)) return;
-      
-      // Step 1: Update in Players DB
       db.ref('players/' + phone + '/balance').transaction(curr => (curr || 0) + Number(amt), (error, committed) => {
         if(committed) { 
-          // Step 2: Mark Request as Approved
           db.ref('deposits/' + utr).update({status: 'approved'}); 
+          // Send Success Notification
+          db.ref('alerts/' + phone + '/' + Date.now()).set({msg: `Deposit of ₹${amt} Approved! Balance added.`, type: 'success'});
           alert("Deposit Approved! Balance user ke wallet mein add ho gaya."); 
         }
       });
     }
     
-    function rejectDeposit(utr) { if(confirm("Reject this deposit request (Fake UTR)?")) db.ref('deposits/' + utr).update({status: 'rejected'}); }
-
-    function approveWithdrawal(wId) { if(confirm("Mark this withdrawal as PAID?")) db.ref('withdrawals/' + wId).update({status: 'approved'}); }
-    function rejectWithdrawal(wId, phone, amt) {
-      if(!confirm(`Reject and refund ₹${amt} back to user wallet?`)) return;
-      db.ref('players/' + phone + '/balance').transaction(curr => (curr || 0) + Number(amt), (err, committed) => {
-        if(committed) db.ref('withdrawals/' + wId).update({status: 'rejected'});
-      });
+    function rejectDeposit(utr, phone) { 
+      const reason = prompt("Reject karne ka reason (e.g. Fake UTR, Duplicate):", "Fake UTR / Payment Not Received");
+      if(!reason) return;
+      db.ref('deposits/' + utr).update({status: 'rejected'}); 
+      db.ref('alerts/' + phone + '/' + Date.now()).set({msg: `Deposit Rejected. Reason: ${reason}`, type: 'error'});
     }
 
     // DATABASE LISTENERS
@@ -1085,17 +1071,17 @@
       updateWalletQR();
     });
 
-    // LISTEN FOR PLAYER DB SYNC (Updates my wallet live if admin approved)
+    // LISTEN FOR PLAYER DB SYNC
     db.ref('players').on('value', snap => {
       const users = snap.val() || {};
       const regCount = Object.keys(users).length;
       if(document.getElementById('admin-reg-count')) document.getElementById('admin-reg-count').textContent = regCount;
       if(document.getElementById('admin-total-players-count')) document.getElementById('admin-total-players-count').textContent = regCount + " Players";
       
-      // If I am logged in, sync my live balance from DB
       if (currentUser.phone && currentUser.phone !== "Not Verified" && users[currentUser.phone]) {
          currentUser.balance = users[currentUser.phone].balance || 0;
          currentUser.stars = users[currentUser.phone].stars || 0;
+         currentUser.avatar = users[currentUser.phone].avatar || currentUser.avatar || "";
          localStorage.setItem('apex_user', JSON.stringify(currentUser));
          syncUI();
       }
@@ -1106,7 +1092,7 @@
         Object.keys(users).forEach(phone => {
           const u = users[phone];
           phtml += `
-            <div class="p-2 bg-black/50 border border-cyan-900/60 rounded-xl flex justify-between items-center">
+            <div class="p-2 bg-black/50 border border-cyan-900/60 rounded-xl flex justify-between items-center mb-1">
               <div>
                 <p class="font-bold text-white">${u.ign} <span class="text-cyan-300 font-mono">(${phone})</span></p>
                 <p class="text-[10px] text-slate-400 font-mono">UID: ${u.uid} • Stars: ${u.stars || 0} ★</p>
@@ -1118,6 +1104,33 @@
         });
         pBox.innerHTML = phtml || `<p class="text-slate-500 italic">No registered players yet.</p>`;
       }
+    });
+
+    // NOTIFICATIONS (ALERTS) SYNC
+    db.ref('alerts').on('value', snap => {
+       if(!currentUser.phone || currentUser.phone === "Not Verified") return;
+       const allAlerts = snap.val() || {};
+       const myAlerts = allAlerts[currentUser.phone] || {};
+       const alertKeys = Object.keys(myAlerts);
+       const alertBox = document.getElementById('user-notifications-box');
+       const alertList = document.getElementById('user-notifications-list');
+       
+       // Filter out old alerts (Older than 24 hours)
+       let activeAlerts = "";
+       let showBox = false;
+       alertKeys.forEach(k => {
+           const timeDiff = Date.now() - Number(k);
+           if (timeDiff < 86400000) { // 24 hours
+              showBox = true;
+              const a = myAlerts[k];
+              const color = a.type === 'error' ? 'text-red-400' : 'text-emerald-400';
+              activeAlerts += `<p class="text-[10px] ${color} bg-black/50 p-1.5 rounded font-mono">${a.msg}</p>`;
+           } else {
+              db.ref('alerts/' + currentUser.phone + '/' + k).remove(); // Auto-clean
+           }
+       });
+       if(showBox) { alertBox.classList.remove('hidden'); alertList.innerHTML = activeAlerts; }
+       else { alertBox.classList.add('hidden'); alertList.innerHTML = ""; }
     });
 
     db.ref('deposits').on('value', snap => {
@@ -1139,34 +1152,41 @@
             </div>
             <div class="flex gap-2">
               <button onclick="approveDeposit('${k}', '${d.phone}', ${d.amount})" class="flex-1 py-1.5 bg-emerald-600 rounded text-white font-bold shadow">✅ Approve (Add Money)</button>
-              <button onclick="rejectDeposit('${k}')" class="flex-1 py-1.5 bg-red-600 rounded text-white font-bold shadow">❌ Reject</button>
+              <button onclick="rejectDeposit('${k}', '${d.phone}')" class="flex-1 py-1.5 bg-red-600 rounded text-white font-bold shadow">❌ Reject</button>
             </div>
           </div>`;
       }).join('');
       document.getElementById('admin-deposits-box').innerHTML = h || `<p class="text-slate-500 italic">No pending deposits.</p>`;
     });
 
-    db.ref('withdrawals').on('value', snap => {
-      if(!document.getElementById('admin-withdrawals-box')) return;
-      const data = snap.val() || {};
-      let h = Object.keys(data).filter(k => data[k].status === 'pending').map(k => {
-        let w = data[k];
-        return `
-          <div class="p-2 border border-emerald-900 bg-black/50 text-xs text-white rounded mb-2 shadow-lg">
-            <div class="flex justify-between items-center mb-1">
-              <span class="font-black text-emerald-400 text-sm">₹${w.amount}</span>
-              <span class="text-[10px] text-slate-300 font-mono">${w.phone}</span>
-            </div>
-            <p class="text-[11px] text-amber-300 mb-2 bg-black/40 p-1.5 rounded font-mono break-all border border-amber-900/50">UPI: ${w.upi}</p>
-            <div class="flex gap-2">
-              <button onclick="approveWithdrawal('${k}')" class="flex-1 py-1.5 bg-emerald-600 rounded text-white font-bold shadow">✅ Paid</button>
-              <button onclick="rejectWithdrawal('${k}', '${w.phone}', ${w.amount})" class="flex-1 py-1.5 bg-red-600 rounded text-white font-bold shadow">❌ Refund to User</button>
-            </div>
-          </div>`;
-      }).join('');
-      document.getElementById('admin-withdrawals-box').innerHTML = h || `<p class="text-slate-500 italic">No pending withdrawals.</p>`;
+    db.ref('results').on('value', snap => {
+        const resBox = document.getElementById('results-container');
+        if(!resBox) return;
+        const data = snap.val() || {}; const keys = Object.keys(data);
+        if(keys.length === 0) { resBox.innerHTML = "<p class='text-xs text-slate-500 text-center py-4'>No past results yet.</p>"; return; }
+        let h = "";
+        keys.reverse().forEach(k => { 
+           let r = data[k];
+           h += `<div class="p-3 bg-black/50 border border-purple-900 rounded-xl mb-2 text-xs shadow-md">
+              <span class="text-[9px] font-black text-amber-300 bg-amber-900/40 border border-amber-700/50 px-1.5 py-0.5 rounded uppercase">${r.mode}</span>
+              <h4 class="font-extrabold text-white mt-1.5">${r.title}</h4>
+              <p class="text-[10px] text-slate-400 border-b border-purple-900/50 pb-1 mb-1.5 mt-0.5">Time: ${new Date(r.date).toLocaleString()} | Room ID: <span class="font-mono text-purple-300">${r.roomId}</span></p>
+              <div class="flex justify-between items-center text-emerald-400">
+                <span class="flex items-center gap-1.5"><i class="fa-solid fa-trophy text-amber-400"></i> Winner: <strong class="text-white">${r.winner}</strong></span>
+                <span class="bg-emerald-950 px-2 py-0.5 rounded border border-emerald-800">🔫 Kills: ${r.kills}</span>
+              </div>
+           </div>`;
+        });
+        resBox.innerHTML = h;
     });
 
+    db.ref('tournaments').on('value', snap => { 
+      renderTournaments(snap.val());
+      const adBox = document.getElementById('admin-match-manage-box');
+      if(!adBox) return;
+      if(!snap.val()){ adBox.innerHTML = "No matches."; return; }
+      adBox.innerHTML = Object.keys(snap.val()).map(k => `<div class="p-2 bg-black/40 border border-purple-900 flex justify-between items-center mb-1 rounded"><div><p class="text-white text-xs font-bold">${snap.val()[k].title}</p><span class="text-[9px] text-amber-300">Key: ${k}</span></div><div class="flex gap-1"><button onclick="endMatchAndDeclare('${k}')" class="px-2 py-1 bg-emerald-600 rounded text-[9px] font-bold text-white shadow">Result</button></div></div>`).join('');
+    });
   </script>
 </body>
 </html>
