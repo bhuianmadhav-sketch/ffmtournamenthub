@@ -15,7 +15,6 @@
     html, body { height: 100%; overflow: hidden; background-color: #050112; color: #e2e8f0; font-family: system-ui, sans-serif; touch-action: manipulation; user-select: none; -webkit-tap-highlight-color: transparent; }
     .bg-freefire-theme { background-image: radial-gradient(circle at 50% 10%, rgba(35, 10, 70, 0.8) 0%, rgba(5, 1, 18, 0.98) 100%), url('https://images.alphacoders.com/100/1004169.jpg'); background-size: cover; background-position: center top; background-attachment: fixed; }
     
-    /* Pre-App Auth Screen */
     #auth-gate-screen { position: fixed; inset: 0; z-index: 9999; background: #050112; display: flex; flex-direction: column; align-items: center; justify-content: center; background-image: radial-gradient(circle at 50% 10%, rgba(35, 10, 70, 0.9) 0%, #050112 100%); }
     .auth-box { background: rgba(10, 4, 25, 0.8); border: 1px solid rgba(139, 92, 246, 0.3); backdrop-filter: blur(10px); width: 90%; max-width: 24rem; border-radius: 1.5rem; padding: 1.5rem; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
     
@@ -54,7 +53,6 @@
     </div>
     <h1 class="text-xl font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-purple-300 via-pink-300 to-amber-300 uppercase mb-6">FF TOURNAMENT HUB</h1>
     
-    <!-- Login Box -->
     <div id="auth-login-box" class="auth-box">
       <h2 class="text-lg font-black text-white mb-4 text-center">Login to Arena</h2>
       <div class="space-y-3">
@@ -64,12 +62,11 @@
           <i class="fa-solid fa-eye absolute right-3 top-3.5 text-slate-400 cursor-pointer" onclick="togglePassword('login-pass', this)"></i>
         </div>
         <p class="text-right text-[10px] text-amber-400 font-bold cursor-pointer" onclick="toggleAuth('forgot')">Forgot Password?</p>
-        <button onclick="doLogin()" class="w-full py-3 mt-2 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 font-black text-sm text-white shadow-lg active:scale-95">LOGIN</button>
+        <button onclick="doLogin(this)" class="w-full py-3 mt-2 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 font-black text-sm text-white shadow-lg active:scale-95">LOGIN</button>
       </div>
       <p class="text-xs text-slate-400 text-center mt-4 cursor-pointer" onclick="toggleAuth('register')">Don't have an account? <span class="text-amber-400 font-bold">Register Now</span></p>
     </div>
 
-    <!-- Register Box -->
     <div id="auth-register-box" class="auth-box hidden">
       <h2 class="text-lg font-black text-white mb-4 text-center">Create Account</h2>
       <div class="space-y-3">
@@ -80,17 +77,16 @@
           <input type="password" id="reg-pass" placeholder="Create Password" class="w-full bg-black/60 border border-purple-800 rounded-xl px-4 py-2 text-sm text-white pr-10" />
           <i class="fa-solid fa-eye absolute right-3 top-3 text-slate-400 cursor-pointer" onclick="togglePassword('reg-pass', this)"></i>
         </div>
-        <button onclick="doRegister()" class="w-full py-3 mt-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 font-black text-sm text-white shadow-lg active:scale-95">REGISTER & ENTER</button>
+        <button onclick="doRegister(this)" class="w-full py-3 mt-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 font-black text-sm text-white shadow-lg active:scale-95">REGISTER & ENTER</button>
       </div>
       <p class="text-xs text-slate-400 text-center mt-4 cursor-pointer" onclick="toggleAuth('login')">Already have an account? <span class="text-amber-400 font-bold">Login</span></p>
     </div>
 
-    <!-- Forgot Password Box -->
     <div id="auth-forgot-box" class="auth-box hidden">
       <h2 class="text-lg font-black text-white mb-4 text-center">Reset Password</h2>
       <div class="space-y-3" id="forgot-step-1">
         <input type="tel" id="forgot-phone" placeholder="Registered Mobile Number" class="w-full bg-black/60 border border-purple-800 rounded-xl px-4 py-2.5 text-sm text-white" />
-        <button onclick="sendForgotOTP()" class="w-full py-3 mt-2 rounded-xl bg-gradient-to-r from-amber-600 to-orange-600 font-black text-sm text-white shadow-lg active:scale-95">SEND RESET CODE</button>
+        <button onclick="sendForgotOTP(this)" class="w-full py-3 mt-2 rounded-xl bg-gradient-to-r from-amber-600 to-orange-600 font-black text-sm text-white shadow-lg active:scale-95">SEND RESET CODE</button>
       </div>
       <div class="space-y-3 hidden" id="forgot-step-2">
         <div class="text-2xl font-black text-amber-300 font-mono text-center">123456</div>
@@ -99,13 +95,12 @@
           <input type="password" id="forgot-new-pass" placeholder="New Password" class="w-full bg-black/60 border border-purple-800 rounded-xl px-4 py-2 text-sm text-white pr-10" />
           <i class="fa-solid fa-eye absolute right-3 top-3 text-slate-400 cursor-pointer" onclick="togglePassword('forgot-new-pass', this)"></i>
         </div>
-        <button onclick="resetPassword()" class="w-full py-3 mt-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 font-black text-sm text-white shadow-lg active:scale-95">SAVE NEW PASSWORD</button>
+        <button onclick="resetPassword(this)" class="w-full py-3 mt-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 font-black text-sm text-white shadow-lg active:scale-95">SAVE NEW PASSWORD</button>
       </div>
       <p class="text-xs text-slate-400 text-center mt-4 cursor-pointer" onclick="toggleAuth('login')">Back to <span class="text-amber-400 font-bold">Login</span></p>
     </div>
   </div>
 
-  <!-- BAN SCREEN -->
   <div id="ban-screen" class="fixed inset-0 z-[999] bg-red-950 flex-col items-center justify-center p-6 text-center text-white hidden">
     <div>
       <i onclick="unbanMe()" class="fa-solid fa-triangle-exclamation text-6xl text-red-500 mb-4 animate-bounce cursor-pointer"></i>
@@ -114,10 +109,8 @@
     </div>
   </div>
 
-  <!-- FAKE TOAST -->
   <div id="live-toast" class="fake-toast"><i class="fa-solid fa-money-bill-wave text-white"></i> <span id="toast-msg">Rahul just withdrew ₹250</span></div>
 
-  <!-- IMAGE ZOOM MODAL -->
   <div id="image-preview-modal" class="modal-box z-[9999]" onclick="closeModal('image-preview-modal')">
     <div class="relative w-full max-w-md p-2 bg-[#060214] rounded-2xl border-2 border-purple-600 shadow-2xl text-center flex flex-col items-center justify-center max-h-screen overflow-auto">
       <button class="absolute top-2 right-2 w-8 h-8 bg-rose-600 rounded-full text-white font-black border-2 border-white shadow-lg z-50"><i class="fa-solid fa-xmark"></i></button>
@@ -126,7 +119,6 @@
     </div>
   </div>
 
-  <!-- ROBOT KELLY AI MODAL -->
   <div id="kelly-welcome-modal" class="modal-box z-[9000]">
     <div class="bg-[#08021c] border-2 border-cyan-400 rounded-3xl w-full max-w-sm p-5 relative shadow-[0_0_40px_rgba(34,211,238,0.45)] text-center overflow-hidden">
       <div class="flex justify-between items-center text-[10px] font-mono text-cyan-400 mb-2 border-b border-cyan-900 pb-1.5"><span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span> SYSTEM: ONLINE</span><span class="tracking-widest">CYBORG v2.6</span></div>
@@ -139,10 +131,8 @@
     </div>
   </div>
 
-  <!-- MAIN APP WRAPPER (HIDDEN INITIALLY) -->
+  <!-- ================= MAIN APP ================= -->
   <div id="main-app-wrapper" class="app-wrapper">
-    
-    <!-- HEADER WITH BELL ICON -->
     <header class="fixed top-0 left-0 right-0 max-w-md mx-auto h-16 bg-[#070216]/95 backdrop-blur-md px-4 flex justify-between items-center border-b border-purple-900/50 z-40 shadow-md">
       <div class="flex items-center gap-2.5">
         <div onclick="handleAdminSecretTap()" class="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 via-indigo-600 to-purple-500 flex items-center justify-center text-white shadow-lg cursor-pointer active:scale-90"><i class="fa-solid fa-gamepad text-lg animate-pulse"></i></div>
@@ -152,20 +142,17 @@
         </div>
       </div>
       <div class="flex items-center gap-3">
-        <!-- BELL ICON NOTIFICATION -->
         <div class="relative cursor-pointer" onclick="openModal('notifications-modal')">
           <i class="fa-solid fa-bell text-slate-300 text-xl hover:text-amber-400 transition-colors"></i>
           <span id="bell-badge" class="bell-badge"></span>
         </div>
-        <button onclick="playSFX('click'); openModal('main-wallet-popup')" class="bg-purple-950/80 border border-purple-700/60 rounded-xl px-3 py-1.5 flex items-center gap-1.5 text-xs font-bold text-amber-300 active:scale-95 shadow">
-          <i class="fa-solid fa-wallet text-amber-400 text-xs"></i><span>₹<span id="top-wallet-val">0</span></span>
+        <button onclick="playSFX('click'); openModal('main-wallet-popup')" class="bg-purple-950/80 border border-purple-700/60 rounded-xl px-3 py-1.5 flex items-center gap-1.5 text-xs font-bold text-amber-300 shadow">
+          <i class="fa-solid fa-wallet text-amber-400"></i><span>₹<span id="top-wallet-val">0</span></span>
         </button>
       </div>
     </header>
 
     <div class="app-scroll-container px-4 space-y-4">
-      
-      <!-- PROFILE STRIP -->
       <div class="p-3.5 bg-gradient-to-r from-purple-950/70 via-slate-900/90 to-purple-950/70 rounded-2xl border border-purple-800/50 flex justify-between items-center shadow-lg">
         <div class="flex items-center gap-3">
           <div class="relative cursor-pointer" onclick="goTab('profile')">
@@ -188,7 +175,6 @@
         <div class="truncate text-[11px] font-medium text-slate-300">🔥 Daily Check-in & Rewards Active!</div>
       </div>
 
-      <!-- REWARDS ROW -->
       <div class="grid grid-cols-2 gap-2.5">
         <div onclick="playSFX('click'); openModal('spin-popup')" class="p-3 bg-gradient-to-r from-purple-900/40 to-indigo-950/60 border border-purple-700/50 rounded-2xl flex items-center gap-2.5 cursor-pointer active:scale-95">
           <div class="w-9 h-9 rounded-xl bg-purple-600/30 border border-purple-400/40 flex items-center justify-center text-purple-300 text-lg"><i class="fa-solid fa-dharmachakra animate-spin" style="animation-duration: 6s;"></i></div>
@@ -200,10 +186,7 @@
         </div>
       </div>
 
-      <!-- MAIN TABS -->
       <main class="space-y-4">
-        
-        <!-- BATTLES TAB -->
         <section id="screen-battles" class="space-y-4">
           <div class="flex items-center justify-between"><h2 class="text-sm font-black uppercase tracking-wider text-slate-200 border-l-4 border-purple-500 pl-2">ACTIVE TOURNAMENTS</h2></div>
           <div id="tournaments-container" class="space-y-3"><p class="text-xs text-slate-400 text-center py-8">Loading live arena matches...</p></div>
@@ -214,7 +197,6 @@
           </div>
         </section>
 
-        <!-- ROOM PASS TAB -->
         <section id="screen-room-pass" class="hidden space-y-4">
           <div class="p-4 rounded-2xl bg-gradient-to-b from-purple-950/70 to-slate-900/90 border border-purple-800/40 text-center">
             <i class="fa-solid fa-key text-3xl text-purple-400 mb-2"></i><h3 class="font-extrabold text-white text-base">My Registered Matches</h3>
@@ -222,7 +204,6 @@
           </div>
         </section>
 
-        <!-- GAMERS TAB -->
         <section id="screen-gamers" class="hidden space-y-3">
           <div class="p-4 bg-gradient-to-r from-amber-600/20 to-purple-900/40 border border-amber-500/30 rounded-2xl text-center mb-3">
             <h3 class="text-sm font-black text-amber-400 uppercase">Next Champion Tum Ban Sakte Ho!</h3><p class="text-[10px] text-slate-300 mt-1">Jyada matches khelo, stars jeeto aur leaderboard par apna naam chamkao.</p>
@@ -231,7 +212,6 @@
           <div class="space-y-2" id="champions-list"><p class="text-xs text-slate-400 text-center py-4">Loading real-time leaderboard...</p></div>
         </section>
 
-        <!-- PROFILE TAB -->
         <section id="screen-profile" class="hidden space-y-4">
           <div class="p-6 rounded-2xl bg-gradient-to-b from-[#11062b] to-[#070216] border border-purple-900/60 shadow-2xl relative overflow-hidden">
             <div class="absolute top-0 right-0 w-32 h-32 bg-amber-500/10 rounded-full blur-3xl"></div>
@@ -245,7 +225,6 @@
                   </div>
                   <div class="absolute inset-0 bg-black/50 rounded-full flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"><i class="fa-solid fa-camera text-white"></i><span class="text-[8px] text-white font-bold">Edit</span></div>
                </div>
-               <!-- Profile Image File Input -->
                <input type="file" id="profile-img-upload" accept="image/*" onchange="uploadProfileImage(event)" class="hidden" />
 
                <h3 class="font-black text-2xl text-white tracking-wider flex items-center justify-center gap-2" id="prof-ign-main">Player</h3>
@@ -253,7 +232,6 @@
                <p class="text-xs text-slate-400 font-mono mt-2 bg-black/40 px-3 py-1 rounded-lg">Phone: <span id="prof-phone-main" class="text-cyan-300">Not Verified</span></p>
             </div>
 
-            <!-- Monthly Stats -->
             <div class="mt-4 p-3 bg-black/40 rounded-xl border border-purple-900/40 relative z-10">
                <h4 class="text-[10px] font-black text-purple-300 uppercase mb-2 flex items-center gap-1"><i class="fa-solid fa-chart-pie"></i> Monthly Analytics</h4>
                <div class="grid grid-cols-2 gap-2 text-center">
@@ -262,7 +240,6 @@
                </div>
             </div>
 
-            <!-- Lifetime Stats -->
             <div class="mt-4 grid grid-cols-2 gap-3 text-center relative z-10">
               <div class="p-3 bg-black/60 rounded-xl border border-purple-900/50 shadow-inner"><span class="text-[10px] text-slate-400 uppercase tracking-widest">Matches Played</span><p class="text-2xl font-black text-purple-300 mt-1" id="prof-matches-played">0</p></div>
               <div class="p-3 bg-black/60 rounded-xl border border-amber-900/50 shadow-inner"><span class="text-[10px] text-slate-400 uppercase tracking-widest flex justify-center items-center gap-1"><i class="fa-solid fa-star text-amber-500"></i> Stars</span><p class="text-2xl font-black text-amber-400 mt-1 drop-shadow-[0_0_5px_rgba(251,191,36,0.6)]" id="prof-win-stars">0</p></div>
@@ -288,8 +265,7 @@
   </div>
 
   <!-- ================= MODALS ================= -->
-
-  <!-- NOTIFICATIONS MODAL (12AM RESET) -->
+  
   <div id="notifications-modal" class="modal-box">
     <div class="bg-[#0f0728] border border-purple-600/50 rounded-2xl w-full max-w-sm p-5 relative shadow-2xl">
       <button onclick="closeModal('notifications-modal')" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
@@ -301,7 +277,6 @@
     </div>
   </div>
 
-  <!-- COMPLAINT BOX -->
   <div id="complaint-popup" class="modal-box">
     <div class="bg-[#0f0728] border border-rose-600/50 rounded-2xl w-full max-w-sm p-5 relative shadow-2xl">
       <button onclick="closeModal('complaint-popup')" class="absolute top-4 right-4 text-slate-400"><i class="fa-solid fa-xmark text-lg"></i></button>
@@ -309,12 +284,11 @@
       <div class="mt-4 space-y-3 text-xs">
         <select id="comp-type" class="w-full bg-black/50 border border-purple-900 rounded-xl px-3 py-2 text-white"><option>Deposit Issue</option><option>Withdrawal Issue</option><option>Other Help</option></select>
         <textarea id="comp-msg" rows="3" placeholder="Apni dikkat yahan likhein..." class="w-full bg-black/50 border border-purple-900 rounded-xl px-3 py-2 text-white"></textarea>
-        <button onclick="submitComplaint()" class="w-full py-2.5 rounded-xl bg-rose-600 text-white font-bold text-xs shadow-lg">Submit to Admin</button>
+        <button id="comp-btn" onclick="submitComplaint(this)" class="w-full py-2.5 rounded-xl bg-rose-600 text-white font-bold text-xs shadow-lg">Submit to Admin</button>
       </div>
     </div>
   </div>
 
-  <!-- FEEDBACK MODAL -->
   <div id="feedback-popup" class="modal-box">
     <div class="bg-[#0f0728] border border-blue-600/50 rounded-2xl w-full max-w-sm p-5 relative shadow-2xl text-center">
       <button onclick="closeModal('feedback-popup')" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
@@ -324,12 +298,11 @@
       </div>
       <div class="mt-4 space-y-3 text-xs text-left">
         <textarea id="feedback-text" rows="3" placeholder="Apne ideas yahan likhein..." class="w-full bg-black/50 border border-purple-900 rounded-xl px-3 py-2 text-white"></textarea>
-        <button onclick="submitUserFeedback()" class="w-full py-2.5 rounded-xl bg-blue-600 text-white font-bold text-xs shadow-lg">Submit Feedback</button>
+        <button id="feed-btn" onclick="submitUserFeedback(this)" class="w-full py-2.5 rounded-xl bg-blue-600 text-white font-bold text-xs shadow-lg">Submit Feedback</button>
       </div>
     </div>
   </div>
 
-  <!-- MAIN WALLET -->
   <div id="main-wallet-popup" class="modal-box">
     <div class="bg-[#0f0728] border border-purple-600/50 rounded-2xl w-full max-w-sm p-5 relative shadow-2xl text-center">
       <button onclick="closeModal('main-wallet-popup')" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
@@ -345,7 +318,6 @@
     </div>
   </div>
 
-  <!-- DEPOSIT POPUP WITH MULTIPLE UPI & STRICT UTR REGEX -->
   <div id="deposit-popup" class="modal-box">
     <div class="bg-[#0f0728] border border-emerald-600/50 rounded-2xl w-full max-w-sm p-4 relative text-center shadow-2xl max-h-[90vh] overflow-y-auto">
       <button onclick="closeModal('deposit-popup')" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
@@ -372,12 +344,11 @@
           <input type="file" id="deposit-screenshot-file" accept="image/*" onchange="captureOriginalImage(event, 'deposit-img-preview')" class="w-full mt-0.5 bg-black/50 border border-purple-900 rounded-xl px-3 py-1.5 text-xs text-slate-300 file:bg-emerald-600 file:text-white file:border-0 file:rounded" />
           <img id="deposit-img-preview" src="" class="hidden h-20 mx-auto mt-2 rounded border border-purple-500 object-contain bg-black" />
         </div>
-        <button onclick="sendDepositUTR()" class="w-full mt-2 py-2.5 rounded-xl bg-emerald-600 font-bold text-xs text-white shadow-lg active:scale-95">Submit Request</button>
+        <button id="dep-submit-btn" onclick="sendDepositUTR(this)" class="w-full mt-2 py-2.5 rounded-xl bg-emerald-600 font-bold text-xs text-white shadow-lg active:scale-95 transition-all">Submit Request</button>
       </div>
     </div>
   </div>
 
-  <!-- WITHDRAWAL -->
   <div id="withdraw-popup" class="modal-box">
     <div class="bg-[#0f0728] border border-purple-600/50 rounded-2xl w-full max-w-sm p-5 relative shadow-2xl">
       <button onclick="closeModal('withdraw-popup')" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
@@ -386,12 +357,11 @@
       <div class="mt-4 space-y-3 text-xs">
         <input type="number" id="withdraw-amt" placeholder="Amount to withdraw" class="w-full bg-black/50 border border-purple-900 rounded-xl px-3 py-2 text-white" />
         <input type="text" id="withdraw-upi-input" placeholder="Your UPI ID (e.g. name@ybl)" class="w-full bg-black/50 border border-purple-900 rounded-xl px-3 py-2 text-white" />
-        <button onclick="submitWithdrawRequest()" class="w-full py-2.5 rounded-xl bg-purple-600 font-bold text-white text-xs">Send Cashout Request</button>
+        <button id="with-submit-btn" onclick="submitWithdrawRequest(this)" class="w-full py-2.5 rounded-xl bg-purple-600 font-bold text-white text-xs">Send Cashout Request</button>
       </div>
     </div>
   </div>
 
-  <!-- SPIN WHEEL -->
   <div id="spin-popup" class="modal-box">
     <div class="bg-[#0f0624] border border-purple-600/60 rounded-3xl w-full max-w-sm p-5 relative shadow-2xl text-center">
       <button onclick="closeModal('spin-popup')" class="absolute top-3 right-3 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
@@ -404,7 +374,6 @@
     </div>
   </div>
 
-  <!-- CHECKIN -->
   <div id="checkin-popup" class="modal-box">
     <div class="bg-[#0f0624] border border-amber-600/60 rounded-3xl w-full max-w-sm p-5 relative shadow-2xl text-center">
       <button onclick="closeModal('checkin-popup')" class="absolute top-3 right-3 text-slate-400"><i class="fa-solid fa-xmark text-lg"></i></button>
@@ -414,7 +383,6 @@
     </div>
   </div>
 
-  <!-- SLOT PICKER -->
   <div id="slot-modal" class="modal-box">
     <div class="bg-[#0f0728] border border-purple-600/50 rounded-2xl w-full max-w-sm p-4 relative shadow-2xl flex flex-col max-h-[85vh]">
       <button onclick="closeModal('slot-modal')" class="absolute top-3 right-3 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
@@ -430,7 +398,7 @@
       </div>
       <div class="mt-2 pt-2 border-t border-purple-900/60 flex justify-between items-center">
         <div><span class="text-[10px] text-slate-400">Selected:</span><p class="font-extrabold text-amber-300 text-sm" id="selected-slot-num">None</p></div>
-        <button id="confirm-slot-btn" onclick="confirmSlotBooking()" disabled class="px-5 py-2 bg-purple-900/50 text-slate-500 font-extrabold text-xs rounded-xl">Confirm & Pay</button>
+        <button id="confirm-slot-btn" onclick="confirmSlotBooking(this)" disabled class="px-5 py-2 bg-purple-900/50 text-slate-500 font-extrabold text-xs rounded-xl">Confirm & Pay</button>
       </div>
     </div>
   </div>
@@ -443,18 +411,12 @@
         <button onclick="closeAdminDesk()" class="px-3 py-1 bg-red-600/30 border border-red-500/50 rounded-xl text-red-200 text-xs font-bold">Close</button>
       </div>
 
-      <!-- ANALYTICS LIVE -->
       <div class="grid grid-cols-2 gap-2 text-center text-xs">
-        <div class="p-3 bg-indigo-950/40 border border-indigo-800 rounded-xl">
-          <p class="text-[10px] text-indigo-300 uppercase">Total Visitors</p><p class="text-xl font-black text-white" id="admin-visitor-count">0</p>
-        </div>
-        <div class="p-3 bg-cyan-950/40 border border-cyan-800 rounded-xl">
-          <p class="text-[10px] text-cyan-300 uppercase">Registered Users</p><p class="text-xl font-black text-white" id="admin-reg-count">0</p>
-        </div>
+        <div class="p-3 bg-indigo-950/40 border border-indigo-800 rounded-xl"><p class="text-[10px] text-indigo-300 uppercase">Total Visitors</p><p class="text-xl font-black text-white" id="admin-visitor-count">0</p></div>
+        <div class="p-3 bg-cyan-950/40 border border-cyan-800 rounded-xl"><p class="text-[10px] text-cyan-300 uppercase">Registered Users</p><p class="text-xl font-black text-white" id="admin-reg-count">0</p></div>
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <!-- MULTIPLE UPI RESTORED -->
         <div class="p-3 bg-slate-900 rounded-xl border border-purple-900">
           <h4 class="text-xs font-black uppercase text-purple-300 mb-1.5">Manage UPI IDs</h4>
           <div class="flex gap-2">
@@ -473,7 +435,6 @@
         </div>
       </div>
 
-      <!-- MATCH CREATOR (ADVANCED MODES) -->
       <div class="p-3 bg-slate-900 rounded-xl border border-purple-900">
         <h4 class="text-xs font-black text-amber-300 uppercase mb-2">Publish Match (Auto Calc)</h4>
         <div class="grid grid-cols-2 gap-2 text-xs">
@@ -511,7 +472,6 @@
         <div id="admin-withdrawals-box" class="space-y-2 text-xs max-h-[400px] overflow-y-auto"></div>
       </div>
       
-      <!-- COMPLAINTS / HELPDESK VIEWER -->
       <div class="p-3 bg-slate-900 rounded-xl border border-rose-800">
         <h4 class="text-xs font-black text-rose-400 uppercase mb-2"><i class="fa-solid fa-headset"></i> User Complaints & Support</h4>
         <div id="admin-complaints-box" class="space-y-2 text-xs max-h-48 overflow-y-auto"></div>
@@ -638,7 +598,7 @@
        else { input.type = 'password'; iconEl.classList.replace('fa-eye-slash', 'fa-eye'); }
     }
 
-    // --- PRE-APP AUTH LOGIC ---
+    // --- PRE-APP AUTH LOGIC WITH IMMEDIATE UI FEEDBACK ---
     function toggleAuth(type) {
       document.getElementById('auth-login-box').classList.add('hidden');
       document.getElementById('auth-register-box').classList.add('hidden');
@@ -649,10 +609,13 @@
       else document.getElementById('auth-login-box').classList.remove('hidden');
     }
 
-    function sendForgotOTP() {
+    function sendForgotOTP(btn) {
        const phone = document.getElementById('forgot-phone').value.trim();
        if(!phone) { alert("Mobile number daaliye!"); return; }
+       
+       const oText = btn.innerText; btn.innerText = "⏳ Checking..."; btn.disabled = true;
        db.ref('players/' + phone).once('value', snap => {
+          btn.innerText = oText; btn.disabled = false;
           if(snap.exists()) {
              document.getElementById('forgot-step-1').classList.add('hidden');
              document.getElementById('forgot-step-2').classList.remove('hidden');
@@ -660,13 +623,16 @@
        });
     }
 
-    function resetPassword() {
+    function resetPassword(btn) {
        const phone = document.getElementById('forgot-phone').value.trim();
        const otp = document.getElementById('forgot-otp').value.trim();
        const newPass = document.getElementById('forgot-new-pass').value.trim();
        if(otp !== "123456") { alert("Galat OTP!"); return; }
        if(!newPass) { alert("Naya Password banaiye!"); return; }
+       
+       const oText = btn.innerText; btn.innerText = "⏳ Saving..."; btn.disabled = true;
        db.ref('players/' + phone).update({pass: newPass}).then(() => {
+          btn.innerText = oText; btn.disabled = false;
           alert("Password successfully reset ho gaya hai! Ab Login karein.");
           document.getElementById('forgot-step-1').classList.remove('hidden');
           document.getElementById('forgot-step-2').classList.add('hidden');
@@ -674,26 +640,32 @@
        });
     }
     
-    function doRegister() {
+    function doRegister(btn) {
        const ign = document.getElementById('reg-ign').value.trim(); const uid = document.getElementById('reg-uid').value.trim();
        const phone = document.getElementById('reg-phone').value.trim(); const pass = document.getElementById('reg-pass').value.trim();
        if(!ign || !uid || !phone || !pass) { alert("Please fill all details!"); return; }
        
+       const oText = btn.innerText; btn.innerText = "⏳ Creating..."; btn.disabled = true;
        db.ref('players/' + phone).once('value', snap => {
+          btn.innerText = oText; btn.disabled = false;
           if(snap.exists()) { alert("Bhaiya, is number se pehle hi account bana hai. Please Login karein."); toggleAuth('login'); }
           else {
              currentUser = { ign: ign, uid: uid, phone: phone, pass: pass, balance: 0, stars: 0, matchesPlayed: 0, adminWarnings: 0, isBanned: false, avatar: "" };
-             db.ref('players/' + phone).set(currentUser);
-             localStorage.setItem('apex_user', JSON.stringify(currentUser));
-             enterApp(true);
+             db.ref('players/' + phone).set(currentUser).then(() => {
+                localStorage.setItem('apex_user', JSON.stringify(currentUser));
+                enterApp(true);
+             });
           }
        });
     }
 
-    function doLogin() {
+    function doLogin(btn) {
        const phone = document.getElementById('login-phone').value.trim(); const pass = document.getElementById('login-pass').value.trim();
        if(!phone || !pass) { alert("Phone aur Password daaliye!"); return; }
+       
+       const oText = btn.innerText; btn.innerText = "⏳ Logging in..."; btn.disabled = true;
        db.ref('players/' + phone).once('value', snap => {
+          btn.innerText = oText; btn.disabled = false;
           if(snap.exists()) {
              const userObj = snap.val();
              if(userObj.pass === pass) { currentUser = userObj; localStorage.setItem('apex_user', JSON.stringify(currentUser)); enterApp(true); }
@@ -905,14 +877,17 @@
       if (selectedSlotNumber && isChecked) { btn.disabled = false; btn.className = "px-5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs rounded-xl shadow-lg"; } 
       else { btn.disabled = true; btn.className = "px-5 py-2 bg-purple-900/50 text-slate-500 font-extrabold text-xs rounded-xl cursor-not-allowed"; }
     }
-    function confirmSlotBooking() {
+    
+    function confirmSlotBooking(btn) {
+      const oText = btn.innerText; btn.innerText = "⏳ Booking..."; btn.disabled = true;
       db.ref(`tournaments/${activeSelectingMatchId}/bookedSlots/${selectedSlotNumber}`).once('value').then(snap => {
-        if (snap.exists()) { alert("Yeh slot kisi aur ne book kar liya hai. Koi dusra chunein."); return; }
+        if (snap.exists()) { alert("Yeh slot kisi aur ne book kar liya hai. Koi dusra chunein."); btn.innerText = oText; return; }
         let tName = document.getElementById('cs-team-name').value || "Solo/Random";
         currentUser.balance -= activeSelectingFee; currentUser.matchesPlayed += 1; localStorage.setItem('apex_user', JSON.stringify(currentUser));
         db.ref('players/' + currentUser.phone).update({balance: currentUser.balance, matchesPlayed: currentUser.matchesPlayed});
-        db.ref(`tournaments/${activeSelectingMatchId}/bookedSlots/${selectedSlotNumber}`).set({ ign: currentUser.ign, phone: currentUser.phone, team: tName });
-        syncUI(); closeModal('slot-modal'); alert("Match Joined Successfully!");
+        db.ref(`tournaments/${activeSelectingMatchId}/bookedSlots/${selectedSlotNumber}`).set({ ign: currentUser.ign, phone: currentUser.phone, team: tName }).then(() => {
+           btn.innerText = oText; btn.disabled = false; syncUI(); closeModal('slot-modal'); alert("Match Joined Successfully!");
+        });
       });
     }
 
@@ -922,47 +897,61 @@
       if (s) { document.getElementById('qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=${s}&pn=FF%20HUB`; }
     }
     
-    function sendDepositUTR() {
+    function sendDepositUTR(btn) {
       const amt = Number(document.getElementById('deposit-amt').value); const utr = document.getElementById('deposit-utr-code').value.trim();
       const senderUpi = document.getElementById('deposit-upi-sender').value.trim() || "Not Provided";
       if (amt < 49) { alert("Deposit ₹49 se kam nahi ho sakta!"); return; }
       if (!/^\d{12}$/.test(utr)) { alert("Bhaiya, UTR exactly 12 digits ka numbers hona chahiye! Sahi daalo."); return; }
       if (!depositBase64Image) { alert("Screenshot attach karna compulsory hai!"); return; }
       
+      const oText = btn.innerText; btn.innerText = "⏳ Submitting..."; btn.disabled = true;
+
       db.ref('deposits/' + utr).once('value').then(s => {
-        if(s.exists()) { alert("Duplicate UTR!"); return; }
-        // Fast UI Update
-        document.getElementById('deposit-amt').value=""; document.getElementById('deposit-utr-code').value="";
-        closeModal('deposit-popup');
+        if(s.exists()) { alert("Duplicate UTR!"); btn.innerText = oText; btn.disabled = false; return; }
+        
         db.ref('deposits/' + utr).set({ phone: currentUser.phone, ign: currentUser.ign, amount: amt, utr: utr, senderUpi: senderUpi, screenshot: depositBase64Image, status: "pending", time: Date.now() }).then(() => { 
-           alert("Request sent to Admin! Wait for approval."); depositBase64Image = null; document.getElementById('deposit-img-preview').classList.add('hidden');
+           alert("Success! Request sent to Admin."); 
+           document.getElementById('deposit-amt').value=""; document.getElementById('deposit-utr-code').value="";
+           btn.innerText = oText; btn.disabled = false;
+           depositBase64Image = null; document.getElementById('deposit-img-preview').classList.add('hidden');
+           closeModal('deposit-popup'); 
         });
       });
     }
-    function submitWithdrawRequest() {
+    
+    function submitWithdrawRequest(btn) {
       const amt = Number(document.getElementById('withdraw-amt').value);
       if (amt < 50) { alert("Min ₹50"); return; } if (amt > 999) { alert("Daily limit ₹999"); return; } if (amt > currentUser.balance) { alert("Insufficient balance"); return; }
+      
+      const oText = btn.innerText; btn.innerText = "⏳ Submitting..."; btn.disabled = true;
       const wid = 'W'+Date.now().toString().slice(-5);
+      
       db.ref('withdrawals/'+wid).set({phone: currentUser.phone, amount: amt, upi: document.getElementById('withdraw-upi-input').value, status: "pending", time: Date.now()}).then(() => { 
          currentUser.balance -= amt; localStorage.setItem('apex_user', JSON.stringify(currentUser)); syncUI(); 
          db.ref('alerts/' + currentUser.phone + '/' + Date.now()).set({msg: `Withdrawal request of ₹${amt} submitted.`, type: 'success'});
-         alert("Withdraw Request Sent!"); closeModal('withdraw-popup'); 
+         alert("Withdraw Request Sent Instantly!"); 
+         btn.innerText = oText; btn.disabled = false; closeModal('withdraw-popup'); 
       });
     }
 
-    // COMPLAINTS / FEEDBACK SUBMIT
-    function submitComplaint() {
+    // COMPLAINTS / FEEDBACK SUBMIT WITH IMMEDIATE UI
+    function submitComplaint(btn) {
       const type = document.getElementById('comp-type').value; const msg = document.getElementById('comp-msg').value.trim();
       if(!msg) return;
+      const oText = btn.innerText; btn.innerText = "⏳ Sending..."; btn.disabled = true;
       db.ref('complaints/' + Date.now()).set({phone: currentUser.phone, ign: currentUser.ign, type: type, msg: msg, time: new Date().toLocaleString()}).then(()=>{
-         alert("Message sent to Admin!"); document.getElementById('comp-msg').value=""; closeModal('complaint-popup');
+         alert("Message sent to Admin!"); document.getElementById('comp-msg').value=""; btn.innerText = oText; btn.disabled = false; closeModal('complaint-popup');
       });
     }
     let appRating = 0;
     function setAppRating(stars) { appRating = stars; const box = document.getElementById('star-rating-box'); box.innerHTML = ''; for(let i=1; i<=5; i++) { if(i <= stars) box.innerHTML += `<i class="fa-solid fa-star text-amber-400 cursor-pointer drop-shadow-[0_0_8px_#fbbf24]" onclick="setAppRating(${i})"></i>`; else box.innerHTML += `<i class="fa-solid fa-star text-slate-600 cursor-pointer" onclick="setAppRating(${i})"></i>`; } }
-    function submitUserFeedback() {
+    function submitUserFeedback(btn) {
       const txt = document.getElementById('feedback-text').value.trim(); if(appRating === 0 || !txt) { alert("Star & Message required!"); return; }
-      db.ref('feedback/' + Date.now()).set({ign: currentUser.ign, phone: currentUser.phone, rating: appRating, text: txt, time: new Date().toLocaleString()}).then(() => { alert("Feedback Submitted!"); document.getElementById('feedback-text').value = ''; setAppRating(0); closeModal('feedback-popup'); });
+      const oText = btn.innerText; btn.innerText = "⏳ Submitting..."; btn.disabled = true;
+      db.ref('feedback/' + Date.now()).set({ign: currentUser.ign, phone: currentUser.phone, rating: appRating, text: txt, time: new Date().toLocaleString()}).then(() => { 
+          alert("Feedback Submitted!"); document.getElementById('feedback-text').value = ''; setAppRating(0); 
+          btn.innerText = oText; btn.disabled = false; closeModal('feedback-popup'); 
+      });
     }
 
     // ADMIN MULTIPLE UPI & AUTO PROFIT CALCULATOR
@@ -987,12 +976,26 @@
 
     function endMatchAndDeclare(matchKey) {
        const m = allTournaments[matchKey]; if(!m) return;
-       const wName = prompt("Winner Team/Player Name likhiye:");
-       if(!wName) return;
+       const wName = prompt("Winner Team/Player Name likhiye:"); if(!wName) return;
        const wKills = prompt("Kills kitne kiye hain winner ne?");
-       db.ref('results/' + matchKey).set({
-           title: m.title, mode: m.mode, date: m.datetime, roomId: m.roomId || "N/A", winner: wName, kills: wKills || "0"
-       }).then(() => { db.ref('tournaments/' + matchKey).remove(); alert("Match Result Announced successfully!"); });
+       db.ref('results/' + matchKey).set({ title: m.title, mode: m.mode, date: m.datetime, roomId: m.roomId || "N/A", winner: wName, kills: wKills || "0" }).then(() => { db.ref('tournaments/' + matchKey).remove(); alert("Match Result Announced successfully!"); });
+    }
+
+    // ADMIN REFUND FUNCTION
+    function cancelMatchAndMassRefund(matchKey) {
+      const m = allTournaments[matchKey]; if (!m) return;
+      if (!confirm(`Cancel & refund "${m.title}"?`)) return;
+      const booked = m.bookedSlots || {}; const slotKeys = Object.keys(booked);
+      
+      let mode = m.mode || ""; let multiplier = 1;
+      if(mode.includes("SQUAD") || mode.includes("Direct Squads")) multiplier = 4; else if(mode.includes("DUO")) multiplier = 2;
+      const refundAmt = (Number(m.entry) || 0) * multiplier;
+
+      slotKeys.forEach(slotNum => {
+        const p = booked[slotNum];
+        if (p.phone) { db.ref('players/' + p.phone + '/balance').transaction(curr => (curr || 0) + refundAmt); }
+      });
+      db.ref('tournaments/' + matchKey).remove().then(() => alert(`Cancelled & ${slotKeys.length} slots refunded!`));
     }
 
     // ADMIN ACTIONS (APPROVE/REJECT + NOTIFICATIONS)
@@ -1037,7 +1040,7 @@
            } else { db.ref('alerts/' + currentUser.phone + '/' + k).remove(); }
        });
        document.getElementById('notifications-list-box').innerHTML = h || `<p class="text-xs text-slate-500 italic text-center py-4">No new notifications.</p>`;
-       if(show) document.getElementById('bell-badge').classList.add('active'); else document.getElementById('bell-badge').classList.remove('active');
+       if(show) { document.getElementById('bell-badge').classList.add('active'); } else { document.getElementById('bell-badge').classList.remove('active'); }
     });
 
     db.ref('tournaments').on('value', snap => { 
@@ -1045,7 +1048,8 @@
       const adBox = document.getElementById('admin-match-manage-box');
       if(!adBox) return;
       if(!snap.val()){ adBox.innerHTML = "No matches."; return; }
-      adBox.innerHTML = Object.keys(snap.val()).map(k => `<div class="p-2 bg-black/40 border border-purple-900 flex justify-between items-center mb-1 rounded"><div><p class="text-white text-xs font-bold">${snap.val()[k].title}</p><span class="text-[9px] text-amber-300">Key: ${k}</span></div><div class="flex gap-1"><button onclick="endMatchAndDeclare('${k}')" class="px-2 py-1 bg-emerald-600 rounded text-[9px] font-bold text-white shadow">Result</button></div></div>`).join('');
+      // FIX: Added the Refund Button in the admin panel explicitly.
+      adBox.innerHTML = Object.keys(snap.val()).map(k => `<div class="p-2 bg-black/40 border border-purple-900 flex justify-between items-center mb-1 rounded"><div><p class="text-white text-xs font-bold">${snap.val()[k].title}</p><span class="text-[9px] text-amber-300">Key: ${k}</span></div><div class="flex gap-1"><button onclick="endMatchAndDeclare('${k}')" class="px-2 py-1 bg-emerald-600 rounded text-[9px] font-bold text-white shadow">Result</button> <button onclick="cancelMatchAndMassRefund('${k}')" class="px-2 py-1 bg-amber-600 rounded text-[9px] font-bold text-black shadow">Refund</button></div></div>`).join('');
     });
 
     db.ref('results').on('value', snap => {
@@ -1109,6 +1113,14 @@
       const data = snap.val() || {}; let h = "";
       Object.keys(data).forEach(k => { const c = data[k]; h += `<div class="p-2 border border-rose-900 bg-black/50 text-xs text-white rounded mb-2"><div class="flex justify-between font-bold text-amber-300"><span>${c.ign} (${c.phone})</span><span class="text-[9px] bg-rose-900 px-1 rounded">${c.type}</span></div><p class="text-slate-300 mt-1">"${c.msg}"</p><p class="text-[9px] text-slate-500 mt-1">${c.time}</p></div>`; });
       document.getElementById('admin-complaints-box').innerHTML = h || `<p class="text-slate-500 italic">No complaints.</p>`;
+    });
+
+    // FEEDBACK IN ADMIN
+    db.ref('feedback').on('value', snap => {
+      if(!document.getElementById('admin-feedback-box')) return;
+      const data = snap.val() || {}; let h = "";
+      Object.keys(data).forEach(k => { const f = data[k]; let stars = "⭐".repeat(f.rating); h += `<div class="p-2 border border-blue-900 bg-black/50 text-xs text-white rounded mb-2"><div class="flex justify-between"><span class="font-bold text-amber-300">${f.ign} (${f.phone})</span><span>${stars}</span></div><p class="text-slate-300 mt-1 italic">"${f.text}"</p><p class="text-[9px] text-slate-500 mt-1">${f.time}</p></div>`; });
+      document.getElementById('admin-feedback-box').innerHTML = h || `<p class="text-slate-500 italic">No feedback yet.</p>`;
     });
 
     db.ref('analytics/visitors').on('value', snap => { if(document.getElementById('admin-visitor-count')) document.getElementById('admin-visitor-count').textContent = snap.val() || 0; });
