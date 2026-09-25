@@ -7,7 +7,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
-  <!-- Google Firebase SDKs (v9 Compat) -->
+  <!-- Google Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
@@ -165,7 +165,6 @@
       <div class="p-3.5 bg-gradient-to-r from-purple-950/70 via-slate-900/90 to-purple-950/70 rounded-2xl border border-purple-800/50 flex justify-between items-center shadow-lg">
         <div class="flex items-center gap-3">
           <div class="relative cursor-pointer" onclick="goTab('profile')">
-            <!-- Glowing Tier Setup -->
             <div class="w-12 h-12 rounded-full border-2 border-amber-400 bg-gradient-to-tr from-purple-900 to-indigo-800 flex items-center justify-center font-black text-white text-lg shadow-[0_0_15px_#fbbf24] overflow-hidden">
               <img id="header-avatar-img" src="" class="hidden w-full h-full object-cover" />
               <span id="avatar-initial">U</span>
@@ -274,7 +273,7 @@
           </div>
         </section>
 
-        <!-- SPECIAL PROFILE TAB (WITH PHOTO UPLOAD) -->
+        <!-- SPECIAL PROFILE TAB -->
         <section id="screen-profile" class="hidden space-y-4">
           <div class="p-6 rounded-2xl bg-gradient-to-b from-[#11062b] to-[#070216] border border-purple-900/60 shadow-2xl relative overflow-hidden">
             <!-- Background Glow -->
@@ -301,13 +300,22 @@
                <p class="text-xs text-slate-400 font-mono mt-2 bg-black/40 px-3 py-1 rounded-lg">Phone: <span id="prof-phone-main" class="text-cyan-300">Not Verified</span></p>
             </div>
 
-            <!-- Notifications Area -->
-            <div id="user-notifications-box" class="mt-4 hidden p-3 bg-red-950/40 border border-red-800/50 rounded-xl relative z-10">
-               <h4 class="text-[10px] font-black text-rose-400 uppercase mb-1 flex items-center gap-1"><i class="fa-solid fa-bell"></i> Alerts</h4>
-               <div id="user-notifications-list" class="space-y-1"></div>
+            <!-- Notifications Area (Fixed) -->
+            <div id="user-notifications-box" class="mt-4 hidden p-3 bg-indigo-950/40 border border-indigo-800/50 rounded-xl relative z-10 shadow-lg">
+               <h4 class="text-[10px] font-black text-amber-400 uppercase mb-2 flex items-center gap-1.5"><i class="fa-solid fa-bell animate-bounce"></i> Recent Alerts</h4>
+               <div id="user-notifications-list" class="space-y-1.5"></div>
             </div>
 
-            <div class="mt-6 grid grid-cols-2 gap-3 text-center relative z-10">
+            <!-- Monthly Financial Stats (NEW) -->
+            <div class="mt-4 p-3 bg-black/40 rounded-xl border border-purple-900/40 relative z-10">
+               <h4 class="text-[10px] font-black text-purple-300 uppercase mb-2 flex items-center gap-1"><i class="fa-solid fa-chart-pie"></i> This Month</h4>
+               <div class="grid grid-cols-2 gap-2 text-center">
+                 <div><p class="text-[9px] text-slate-400">Total Deposit</p><p class="text-xs font-bold text-emerald-400" id="monthly-deposit">₹0</p></div>
+                 <div><p class="text-[9px] text-slate-400">Total Withdraw</p><p class="text-xs font-bold text-amber-400" id="monthly-withdraw">₹0</p></div>
+               </div>
+            </div>
+
+            <div class="mt-4 grid grid-cols-2 gap-3 text-center relative z-10">
               <div class="p-3 bg-black/60 rounded-xl border border-purple-900/50 shadow-inner">
                 <span class="text-[10px] text-slate-400 uppercase tracking-widest">Matches Played</span>
                 <p class="text-2xl font-black text-purple-300 mt-1" id="prof-matches-played">0</p>
@@ -410,7 +418,7 @@
 
       <div class="mt-3 space-y-2 text-left">
         <input type="number" id="deposit-amt" placeholder="Amount (Minimum ₹49)" class="w-full bg-black/50 border border-purple-900 rounded-xl px-3 py-2 text-xs text-white" />
-        <input type="number" id="deposit-utr-code" placeholder="12-Digit UTR Number" class="w-full bg-black/50 border border-purple-900 rounded-xl px-3 py-2 text-xs text-white font-mono" />
+        <input type="number" id="deposit-utr-code" placeholder="Exactly 12-Digit UTR Number" class="w-full bg-black/50 border border-purple-900 rounded-xl px-3 py-2 text-xs text-white font-mono" />
         <input type="text" id="deposit-upi-sender" placeholder="Your UPI ID (Jaise aapse payment ki)" class="w-full bg-black/50 border border-purple-900 rounded-xl px-3 py-2 text-xs text-white" />
         
         <div>
@@ -492,7 +500,7 @@
     </div>
   </div>
 
-  <!-- REGISTRATION -->
+  <!-- REGISTRATION (FIXED BUTTON EVENT) -->
   <div id="auth-popup" class="modal-box">
     <div class="bg-[#0f0728] border border-purple-600/50 rounded-2xl w-full max-w-sm p-5 relative shadow-2xl">
       <button onclick="closeModal('auth-popup')" class="absolute top-4 right-4 text-slate-400"><i class="fa-solid fa-xmark"></i></button>
@@ -502,12 +510,12 @@
         <input type="number" id="input-ff-uid" placeholder="Free Fire UID" class="w-full bg-black/50 border border-purple-900 rounded-xl px-3 py-2 text-xs text-white" />
         <input type="tel" id="input-phone" placeholder="10 Digit Mobile Number" class="w-full bg-black/50 border border-purple-900 rounded-xl px-3 py-2 text-xs text-white" />
         <input type="text" id="input-refer-code" placeholder="Referral Code (Optional - Get ₹20)" class="w-full bg-black/50 border border-purple-900 rounded-xl px-3 py-2 text-xs text-amber-300 font-mono" />
-        <button onclick="generateSecureToken()" class="w-full py-2.5 rounded-xl bg-purple-600 font-extrabold text-xs text-white">Get Code</button>
+        <button type="button" onclick="generateSecureToken()" class="w-full py-2.5 rounded-xl bg-purple-600 font-extrabold text-xs text-white shadow active:scale-95 cursor-pointer">Get Code</button>
       </div>
       <div class="mt-4 space-y-3 hidden" id="step-otp-box">
         <div class="text-2xl font-black text-amber-300 font-mono text-center" id="disp-gen-token">------</div>
         <input type="number" id="input-otp-val" placeholder="Enter Code" class="w-full bg-black/50 border border-purple-900 rounded-xl px-3 py-2 text-center font-bold text-white" />
-        <button onclick="verifyPlayerToken()" class="w-full py-2.5 rounded-xl bg-emerald-600 font-extrabold text-xs text-white">Complete</button>
+        <button onclick="verifyPlayerToken()" class="w-full py-2.5 rounded-xl bg-emerald-600 font-extrabold text-xs text-white active:scale-95">Complete</button>
       </div>
     </div>
   </div>
@@ -551,6 +559,7 @@
         <button onclick="closeAdminDesk()" class="px-3 py-1 bg-red-600/30 border border-red-500/50 rounded-xl text-red-200 text-xs font-bold">Close Desk</button>
       </div>
 
+      <!-- Quick Settings (UPI & PIN) -->
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div class="p-3 bg-slate-900 rounded-xl border border-purple-900">
           <h4 class="text-xs font-black uppercase text-purple-300 mb-1.5">Manage UPI IDs</h4>
@@ -566,6 +575,18 @@
             <input type="password" id="admin-new-pin" placeholder="Enter new secret PIN" class="w-full bg-black/50 border border-purple-800 rounded-lg px-2.5 py-1.5 text-xs text-white" />
             <button onclick="saveAdminPIN()" class="w-full py-1.5 bg-amber-600 rounded-lg text-black font-bold text-xs shadow-lg">Save New PIN</button>
           </div>
+        </div>
+      </div>
+
+      <!-- ANALYTICS -->
+      <div class="grid grid-cols-2 gap-2 text-center text-xs">
+        <div class="p-3 bg-indigo-950/40 border border-indigo-800 rounded-xl">
+          <p class="text-[10px] text-indigo-300 uppercase">Total Visitors</p>
+          <p class="text-xl font-black text-white" id="admin-visitor-count">0</p>
+        </div>
+        <div class="p-3 bg-cyan-950/40 border border-cyan-800 rounded-xl">
+          <p class="text-[10px] text-cyan-300 uppercase">Registered Users</p>
+          <p class="text-xl font-black text-white" id="admin-reg-count">0</p>
         </div>
       </div>
 
@@ -596,16 +617,16 @@
         <div id="admin-match-manage-box" class="space-y-2 text-xs max-h-48 overflow-y-auto"></div>
       </div>
 
-      <!-- DEPOSITS VERIFICATION -->
+      <!-- DEPOSITS VERIFICATION (FIXED WITH USER UPI VISIBILITY & PROPER WALLET ADD) -->
       <div class="p-3 bg-slate-900 rounded-xl border border-amber-800">
         <h4 class="text-xs font-black text-amber-400 mb-2">DEPOSITS VERIFICATION</h4>
-        <div id="admin-deposits-box" class="space-y-2 text-xs max-h-[500px] overflow-y-auto"></div>
+        <div id="admin-deposits-box" class="space-y-2 text-xs max-h-[400px] overflow-y-auto"></div>
       </div>
 
       <!-- WITHDRAWAL REQUESTS -->
       <div class="p-3 bg-slate-900 rounded-xl border border-emerald-800">
         <h4 class="text-xs font-black text-emerald-400 mb-2">WITHDRAWAL REQUESTS</h4>
-        <div id="admin-withdrawals-box" class="space-y-2 text-xs max-h-56 overflow-y-auto"></div>
+        <div id="admin-withdrawals-box" class="space-y-2 text-xs max-h-[400px] overflow-y-auto"></div>
       </div>
       
       <!-- USER FEEDBACK VIEWER -->
@@ -614,13 +635,15 @@
         <div id="admin-feedback-box" class="space-y-2 text-xs max-h-48 overflow-y-auto"></div>
       </div>
       
-      <!-- REAL REGISTERED PLAYERS LIST -->
+      <!-- REAL REGISTERED PLAYERS LIST (OPTIMIZED) -->
       <div class="p-3 bg-slate-900 rounded-xl border border-purple-900">
         <div class="flex justify-between items-center mb-2">
           <h4 class="text-xs font-black text-cyan-400 uppercase flex items-center gap-1.5"><i class="fa-solid fa-users"></i> Registered Players List</h4>
           <span class="text-[10px] text-cyan-300 font-bold" id="admin-total-players-count">0 Players</span>
         </div>
-        <div id="admin-players-box" class="space-y-2 text-xs max-h-48 overflow-y-auto"></div>
+        <div id="admin-players-box" class="space-y-2 text-xs max-h-[300px] overflow-y-auto">
+          <p class="text-slate-500 italic">Players data load ho raha hai...</p>
+        </div>
       </div>
 
     </div>
@@ -722,7 +745,11 @@
     window.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => { const s = document.getElementById('splash-screen'); if (s) s.classList.add('fade-out'); }, 2200);
       if (!currentUser.isBanned) {
-        if (!localStorage.getItem('has_visited')) { db.ref('analytics/visitors').transaction(curr => (curr || 0) + 1); localStorage.setItem('has_visited', 'true'); }
+        // LIVE VISITOR COUNTER
+        if (!localStorage.getItem('has_visited')) { 
+           db.ref('analytics/visitors').transaction(curr => (curr || 0) + 1); 
+           localStorage.setItem('has_visited', 'true'); 
+        }
         syncUI(); startFakeWithdrawToasts(); drawSpinWheel(); checkSpinLockStatus(); renderCheckinGrid();
         db.ref('settings/upis').once('value').then(s => {
            systemUPIs = s.val() || ["fftournamenthub@ibl"];
@@ -803,7 +830,7 @@
           if(currentUser.phone) db.ref('players/' + currentUser.phone).update({isBanned: true});
           location.reload(); 
         } else {
-          localStorage.setItem('apex_user', JSON.stringify(currentUser)); alert("⚠️ WARNING: Unauthorized access detected!");
+          localStorage.setItem('apex_user', JSON.stringify(currentUser)); alert("⚠️ WARNING: Unauthorized access detected! Ek aur galat attempt par ban ho jaoge.");
         }
       }
     }
@@ -969,7 +996,7 @@
       });
     }
 
-    // MULTIPLE UPI & DEPOSIT
+    // MULTIPLE UPI, DEPOSIT WITH 12-DIGIT STRICT VALIDATION
     function updateWalletQR() {
       const s = document.getElementById('upi-selector').value;
       if (s && s !== "") { 
@@ -984,7 +1011,10 @@
       const senderUpi = document.getElementById('deposit-upi-sender').value.trim() || "Not Provided";
 
       if (amt < 49) { alert("Deposit ₹49 se kam nahi ho sakta!"); return; }
-      if (utr.length < 10) { alert("Valid UTR Number enter karein!"); return; }
+      
+      // STRICT 12 DIGIT VALIDATION
+      if (utr.length !== 12 || isNaN(utr)) { alert("Bhaiya, UTR number exactly 12 digits ka hona chahiye! Pura aur sahi UTR daalo."); return; }
+      
       if (!depositBase64Image) { alert("Screenshot load hone dijiye ya attach karein!"); return; }
       
       db.ref('deposits/' + utr).once('value').then(s => {
@@ -1004,7 +1034,11 @@
       if (amt > 999) { alert("Daily limit ₹999"); return; }
       if (amt > currentUser.balance) { alert("Insufficient balance"); return; }
       const wid = 'W'+Date.now().toString().slice(-5);
-      db.ref('withdrawals/'+wid).set({phone: currentUser.phone, amount: amt, upi: document.getElementById('withdraw-upi-input').value, status: "pending"}).then(() => { currentUser.balance -= amt; localStorage.setItem('apex_user', JSON.stringify(currentUser)); syncUI(); alert("Withdraw Request Sent!"); closeModal('withdraw-popup'); });
+      db.ref('withdrawals/'+wid).set({phone: currentUser.phone, amount: amt, upi: document.getElementById('withdraw-upi-input').value, status: "pending", time: Date.now()}).then(() => { 
+         currentUser.balance -= amt; localStorage.setItem('apex_user', JSON.stringify(currentUser)); syncUI(); 
+         alert("Withdraw Request Sent to Admin! Please wait for approval."); 
+         closeModal('withdraw-popup'); 
+      });
     }
 
     // ADMIN PANEL AUTO PROFIT CALCULATOR
@@ -1026,7 +1060,9 @@
     
     function createLiveMatch() {
       const m = document.getElementById('new-match-mode').value;
-      db.ref('tournaments/M'+Date.now()).set({title: document.getElementById('new-match-title').value, mode: m, maxSlots: m.includes("CS") ? 8 : 48, entry: document.getElementById('new-match-fee').value, prize: document.getElementById('new-match-prize').value, datetime: document.getElementById('new-match-datetime').value, rules: document.getElementById('new-match-rules').value}); alert("Published!");
+      const title = document.getElementById('new-match-title').value;
+      if(!title) { alert("Title daalo pehle!"); return; }
+      db.ref('tournaments/M'+Date.now()).set({title: title, mode: m, maxSlots: m.includes("CS") ? 8 : 48, entry: document.getElementById('new-match-fee').value, prize: document.getElementById('new-match-prize').value, datetime: document.getElementById('new-match-datetime').value, rules: document.getElementById('new-match-rules').value}).then(() => alert("Match Published successfully!"));
     }
 
     function endMatchAndDeclare(matchKey) {
@@ -1049,18 +1085,34 @@
       db.ref('players/' + phone + '/balance').transaction(curr => (curr || 0) + Number(amt), (error, committed) => {
         if(committed) { 
           db.ref('deposits/' + utr).update({status: 'approved'}); 
-          // Send Success Notification
           db.ref('alerts/' + phone + '/' + Date.now()).set({msg: `Deposit of ₹${amt} Approved! Balance added.`, type: 'success'});
           alert("Deposit Approved! Balance user ke wallet mein add ho gaya."); 
         }
       });
     }
-    
     function rejectDeposit(utr, phone) { 
       const reason = prompt("Reject karne ka reason (e.g. Fake UTR, Duplicate):", "Fake UTR / Payment Not Received");
       if(!reason) return;
       db.ref('deposits/' + utr).update({status: 'rejected'}); 
       db.ref('alerts/' + phone + '/' + Date.now()).set({msg: `Deposit Rejected. Reason: ${reason}`, type: 'error'});
+    }
+
+    function approveWithdrawal(wId, phone, amt) { 
+       if(confirm("Mark this withdrawal as PAID?")) {
+           db.ref('withdrawals/' + wId).update({status: 'approved'}); 
+           db.ref('alerts/' + phone + '/' + Date.now()).set({msg: `Withdrawal of ₹${amt} Successful! Sent to your UPI.`, type: 'success'});
+       }
+    }
+    function rejectWithdrawal(wId, phone, amt) {
+      const reason = prompt("Reject karne ka reason:", "Invalid UPI / Issue");
+      if(!reason) return;
+      if(!confirm(`Reject and refund ₹${amt} back to user wallet?`)) return;
+      db.ref('players/' + phone + '/balance').transaction(curr => (curr || 0) + Number(amt), (err, committed) => {
+        if(committed) {
+            db.ref('withdrawals/' + wId).update({status: 'rejected'});
+            db.ref('alerts/' + phone + '/' + Date.now()).set({msg: `Withdrawal Rejected (Refunded). Reason: ${reason}`, type: 'error'});
+        }
+      });
     }
 
     // DATABASE LISTENERS
@@ -1071,7 +1123,7 @@
       updateWalletQR();
     });
 
-    // LISTEN FOR PLAYER DB SYNC
+    // LISTEN FOR PLAYER DB SYNC & MONTHLY CALCULATION
     db.ref('players').on('value', snap => {
       const users = snap.val() || {};
       const regCount = Object.keys(users).length;
@@ -1106,7 +1158,7 @@
       }
     });
 
-    // NOTIFICATIONS (ALERTS) SYNC
+    // NOTIFICATIONS (ALERTS) SYNC - 24 HOURS AUTO-RESET
     db.ref('alerts').on('value', snap => {
        if(!currentUser.phone || currentUser.phone === "Not Verified") return;
        const allAlerts = snap.val() || {};
@@ -1115,27 +1167,44 @@
        const alertBox = document.getElementById('user-notifications-box');
        const alertList = document.getElementById('user-notifications-list');
        
-       // Filter out old alerts (Older than 24 hours)
-       let activeAlerts = "";
-       let showBox = false;
+       let activeAlerts = ""; let showBox = false;
        alertKeys.forEach(k => {
            const timeDiff = Date.now() - Number(k);
-           if (timeDiff < 86400000) { // 24 hours
+           if (timeDiff < 86400000) { // 24 hours (86400000 ms)
               showBox = true;
               const a = myAlerts[k];
-              const color = a.type === 'error' ? 'text-red-400' : 'text-emerald-400';
-              activeAlerts += `<p class="text-[10px] ${color} bg-black/50 p-1.5 rounded font-mono">${a.msg}</p>`;
+              const color = a.type === 'error' ? 'text-red-400 bg-red-950/80 border-red-800' : 'text-emerald-400 bg-emerald-950/80 border-emerald-800';
+              activeAlerts += `<div class="p-2 rounded border ${color} font-mono text-[10px] leading-tight mb-1 shadow">${a.msg}</div>`;
            } else {
-              db.ref('alerts/' + currentUser.phone + '/' + k).remove(); // Auto-clean
+              db.ref('alerts/' + currentUser.phone + '/' + k).remove(); // Auto-clean old alerts
            }
        });
        if(showBox) { alertBox.classList.remove('hidden'); alertList.innerHTML = activeAlerts; }
        else { alertBox.classList.add('hidden'); alertList.innerHTML = ""; }
     });
 
+    // MONTHLY DEPOSIT CALCULATION FOR PROFILE
     db.ref('deposits').on('value', snap => {
-      if(!document.getElementById('admin-deposits-box')) return;
       const data = snap.val() || {};
+      
+      // Calculate my monthly deposit
+      if(currentUser.phone && currentUser.phone !== "Not Verified") {
+         let myMthDep = 0;
+         const now = new Date();
+         Object.keys(data).forEach(k => {
+            let d = data[k];
+            if(d.phone === currentUser.phone && d.status === 'approved' && d.time) {
+               const dDate = new Date(d.time);
+               if(dDate.getMonth() === now.getMonth() && dDate.getFullYear() === now.getFullYear()) {
+                  myMthDep += Number(d.amount);
+               }
+            }
+         });
+         document.getElementById('monthly-deposit').textContent = `₹${myMthDep}`;
+      }
+
+      // Admin Box Logic
+      if(!document.getElementById('admin-deposits-box')) return;
       let h = Object.keys(data).filter(k => data[k].status === 'pending').map(k => {
         let d = data[k];
         return `
@@ -1151,7 +1220,7 @@
                <p class="text-[8px] text-cyan-400 mt-1">Tap to Zoom Image</p>
             </div>
             <div class="flex gap-2">
-              <button onclick="approveDeposit('${k}', '${d.phone}', ${d.amount})" class="flex-1 py-1.5 bg-emerald-600 rounded text-white font-bold shadow">✅ Approve (Add Money)</button>
+              <button onclick="approveDeposit('${k}', '${d.phone}', ${d.amount})" class="flex-1 py-1.5 bg-emerald-600 rounded text-white font-bold shadow">✅ Approve</button>
               <button onclick="rejectDeposit('${k}', '${d.phone}')" class="flex-1 py-1.5 bg-red-600 rounded text-white font-bold shadow">❌ Reject</button>
             </div>
           </div>`;
@@ -1159,33 +1228,48 @@
       document.getElementById('admin-deposits-box').innerHTML = h || `<p class="text-slate-500 italic">No pending deposits.</p>`;
     });
 
-    db.ref('results').on('value', snap => {
-        const resBox = document.getElementById('results-container');
-        if(!resBox) return;
-        const data = snap.val() || {}; const keys = Object.keys(data);
-        if(keys.length === 0) { resBox.innerHTML = "<p class='text-xs text-slate-500 text-center py-4'>No past results yet.</p>"; return; }
-        let h = "";
-        keys.reverse().forEach(k => { 
-           let r = data[k];
-           h += `<div class="p-3 bg-black/50 border border-purple-900 rounded-xl mb-2 text-xs shadow-md">
-              <span class="text-[9px] font-black text-amber-300 bg-amber-900/40 border border-amber-700/50 px-1.5 py-0.5 rounded uppercase">${r.mode}</span>
-              <h4 class="font-extrabold text-white mt-1.5">${r.title}</h4>
-              <p class="text-[10px] text-slate-400 border-b border-purple-900/50 pb-1 mb-1.5 mt-0.5">Time: ${new Date(r.date).toLocaleString()} | Room ID: <span class="font-mono text-purple-300">${r.roomId}</span></p>
-              <div class="flex justify-between items-center text-emerald-400">
-                <span class="flex items-center gap-1.5"><i class="fa-solid fa-trophy text-amber-400"></i> Winner: <strong class="text-white">${r.winner}</strong></span>
-                <span class="bg-emerald-950 px-2 py-0.5 rounded border border-emerald-800">🔫 Kills: ${r.kills}</span>
-              </div>
-           </div>`;
-        });
-        resBox.innerHTML = h;
-    });
+    // MONTHLY WITHDRAWAL CALCULATION FOR PROFILE
+    db.ref('withdrawals').on('value', snap => {
+      const data = snap.val() || {};
+      
+      // Calculate my monthly withdrawal
+      if(currentUser.phone && currentUser.phone !== "Not Verified") {
+         let myMthWith = 0;
+         const now = new Date();
+         Object.keys(data).forEach(k => {
+            let w = data[k];
+            if(w.phone === currentUser.phone && w.status === 'approved' && w.time) {
+               const wDate = new Date(w.time);
+               if(wDate.getMonth() === now.getMonth() && wDate.getFullYear() === now.getFullYear()) {
+                  myMthWith += Number(w.amount);
+               }
+            }
+         });
+         document.getElementById('monthly-withdraw').textContent = `₹${myMthWith}`;
+      }
 
-    db.ref('tournaments').on('value', snap => { 
-      renderTournaments(snap.val());
-      const adBox = document.getElementById('admin-match-manage-box');
-      if(!adBox) return;
-      if(!snap.val()){ adBox.innerHTML = "No matches."; return; }
-      adBox.innerHTML = Object.keys(snap.val()).map(k => `<div class="p-2 bg-black/40 border border-purple-900 flex justify-between items-center mb-1 rounded"><div><p class="text-white text-xs font-bold">${snap.val()[k].title}</p><span class="text-[9px] text-amber-300">Key: ${k}</span></div><div class="flex gap-1"><button onclick="endMatchAndDeclare('${k}')" class="px-2 py-1 bg-emerald-600 rounded text-[9px] font-bold text-white shadow">Result</button></div></div>`).join('');
+      // Admin Box Logic
+      if(!document.getElementById('admin-withdrawals-box')) return;
+      let h = Object.keys(data).filter(k => data[k].status === 'pending').map(k => {
+        let w = data[k];
+        return `
+          <div class="p-2 border border-emerald-900 bg-black/50 text-xs text-white rounded mb-2 shadow-lg">
+            <div class="flex justify-between items-center mb-1">
+              <span class="font-black text-emerald-400 text-sm">₹${w.amount}</span>
+              <span class="text-[10px] text-slate-300 font-mono">${w.phone}</span>
+            </div>
+            <p class="text-[11px] text-amber-300 mb-2 bg-black/40 p-1.5 rounded font-mono break-all border border-amber-900/50">UPI: ${w.upi}</p>
+            <div class="flex gap-2">
+              <button onclick="approveWithdrawal('${k}', '${w.phone}', ${w.amount})" class="flex-1 py-1.5 bg-emerald-600 rounded text-white font-bold shadow">✅ Paid (Approve)</button>
+              <button onclick="rejectWithdrawal('${k}', '${w.phone}', ${w.amount})" class="flex-1 py-1.5 bg-red-600 rounded text-white font-bold shadow">❌ Refund (Reject)</button>
+            </div>
+          </div>`;
+      }).join('');
+      document.getElementById('admin-withdrawals-box').innerHTML = h || `<p class="text-slate-500 italic">No pending withdrawals.</p>`;
+    });
+    
+    db.ref('analytics/visitors').on('value', snap => {
+      if(document.getElementById('admin-visitor-count')) document.getElementById('admin-visitor-count').textContent = snap.val() || 0;
     });
   </script>
 </body>
