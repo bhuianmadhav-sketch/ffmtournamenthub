@@ -489,7 +489,7 @@
     </div>
   </div>
 
-  <!-- SLOT PICKER MODAL (CS vs Normal) -->
+  <!-- SLOT PICKER MODAL -->
   <div id="slot-modal" class="modal-box">
     <div class="bg-[#0f0728] border border-purple-600/50 rounded-2xl w-full max-w-sm p-4 relative shadow-2xl flex flex-col max-h-[85vh]">
       <button onclick="closeModal('slot-modal')" class="absolute top-3 right-3 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
@@ -604,7 +604,7 @@
         <button onclick="dispatchRoomPass()" class="w-full mt-2 py-1.5 bg-cyan-600 font-bold text-xs rounded-lg text-white">Send Pass</button>
       </div>
 
-      <!-- USER FEEDBACK VIEWER (NEW) -->
+      <!-- USER FEEDBACK VIEWER -->
       <div class="p-3 bg-slate-900 rounded-xl border border-blue-800">
         <h4 class="text-xs font-black text-blue-400 uppercase mb-2 flex items-center gap-1.5"><i class="fa-solid fa-star"></i> User App Feedback & Ideas</h4>
         <div id="admin-feedback-box" class="space-y-2 text-xs max-h-48 overflow-y-auto">
@@ -612,23 +612,24 @@
         </div>
       </div>
 
+      <!-- DEPOSITS VERIFICATION (FIXED WITH APPROVE/REJECT & IMAGE) -->
+      <div class="p-3 bg-slate-900 rounded-xl border border-amber-800">
+        <h4 class="text-xs font-black text-amber-400 mb-2">DEPOSITS VERIFICATION</h4>
+        <div id="admin-deposits-box" class="space-y-2 text-xs max-h-[400px] overflow-y-auto"></div>
+      </div>
+
+      <!-- WITHDRAWAL REQUESTS (FIXED WITH APPROVE/REJECT) -->
+      <div class="p-3 bg-slate-900 rounded-xl border border-emerald-800">
+        <h4 class="text-xs font-black text-emerald-400 mb-2">WITHDRAWAL REQUESTS</h4>
+        <div id="admin-withdrawals-box" class="space-y-2 text-xs max-h-56 overflow-y-auto"></div>
+      </div>
+      
       <!-- KILL PROOFS VERIFICATION -->
       <div class="p-3 bg-slate-900 rounded-xl border border-cyan-800">
         <h4 class="text-xs font-black text-cyan-400 mb-2">Screenshot Submissions (Kill Proofs)</h4>
         <div id="admin-proofs-box" class="space-y-2 text-xs max-h-48 overflow-y-auto"></div>
       </div>
 
-      <!-- DEPOSITS -->
-      <div class="p-3 bg-slate-900 rounded-xl border border-amber-800">
-        <h4 class="text-xs font-black text-amber-400 mb-2">DEPOSITS VERIFICATION</h4>
-        <div id="admin-deposits-box" class="space-y-2 text-xs max-h-56 overflow-y-auto"></div>
-      </div>
-
-      <!-- WITHDRAWALS -->
-      <div class="p-3 bg-slate-900 rounded-xl border border-emerald-800">
-        <h4 class="text-xs font-black text-emerald-400 mb-2">WITHDRAWAL REQUESTS</h4>
-        <div id="admin-withdrawals-box" class="space-y-2 text-xs max-h-48 overflow-y-auto"></div>
-      </div>
     </div>
   </div>
 
@@ -680,7 +681,7 @@
       } catch(e) { console.warn("Audio blocked by browser:", e); }
     }
 
-    // 1. BAN CHECK & UNBAN LOGIC
+    // 1. BAN CHECK & UNBAN LOGIC 
     if (currentUser.isBanned) {
       document.getElementById('ban-screen').style.display = 'flex';
     }
@@ -751,7 +752,7 @@
       document.getElementById('profile-tier-badge').textContent = rank;
     }
 
-    // APP FEEDBACK SYSTEM (NEW)
+    // APP FEEDBACK SYSTEM
     let appRating = 0;
     function setAppRating(stars) {
       playSFX('click');
@@ -775,9 +776,7 @@
       }).then(() => {
         playSFX('booyah');
         alert("Thanks for your feedback & ideas! App improve ho jayegi.");
-        document.getElementById('feedback-text').value = '';
-        setAppRating(0);
-        closeModal('feedback-popup');
+        document.getElementById('feedback-text').value = ''; setAppRating(0); closeModal('feedback-popup');
       });
     }
 
@@ -792,7 +791,6 @@
       const entered = prompt("Enter Master Security PIN:");
       if (!entered) return; 
 
-      // BUG FIX: Removed hardcoded || "8690" backdoor. Only checks active PIN.
       const activePin = localStorage.getItem('apex_pin') || "8690";
       if (entered.trim() === activePin) {
         currentUser.adminWarnings = 0; localStorage.setItem('apex_user', JSON.stringify(currentUser));
@@ -1073,7 +1071,7 @@
       if (!depositBase64Image) { alert("Screenshot attach karna compulsory hai!"); return; }
       db.ref('deposits/' + utr).once('value').then(s => {
         if(s.exists()) { alert("Duplicate UTR!"); return; }
-        db.ref('deposits/' + utr).set({phone: currentUser.phone, ign: currentUser.ign, amount: amt, utr: utr, screenshot: depositBase64Image, status: "pending"}).then(() => { alert("Request sent!"); closeModal('deposit-popup'); });
+        db.ref('deposits/' + utr).set({phone: currentUser.phone, ign: currentUser.ign, amount: amt, utr: utr, screenshot: depositBase64Image, status: "pending"}).then(() => { alert("Request sent!"); closeModal('deposit-popup'); depositBase64Image = null; document.getElementById('deposit-img-preview').classList.add('hidden');});
       });
     }
     function submitWithdrawRequest() {
@@ -1081,10 +1079,11 @@
       if (amt < 50) { alert("Min ₹50"); return; }
       if (amt > 999) { alert("Daily limit ₹999"); return; }
       if (amt > currentUser.balance) { alert("Insufficient balance"); return; }
-      db.ref('withdrawals/W'+Date.now()).set({phone: currentUser.phone, amount: amt, status: "pending"}).then(() => { currentUser.balance -= amt; syncUI(); alert("Sent!"); closeModal('withdraw-popup'); });
+      const wid = 'W'+Date.now().toString().slice(-5);
+      db.ref('withdrawals/'+wid).set({phone: currentUser.phone, amount: amt, upi: document.getElementById('withdraw-upi-input').value, status: "pending"}).then(() => { currentUser.balance -= amt; syncUI(); alert("Sent!"); closeModal('withdraw-popup'); });
     }
 
-    // 10. ADMIN PANEL: UPI, AUTO-REFUND
+    // 10. ADMIN PANEL: ACTIONS (FIXED DEPOSITS & WITHDRAWALS APPROVE/REJECT)
     function adminAddUPI() { const v = document.getElementById('admin-add-upi').value; if(v.includes('@')) { systemUPIs.push(v); db.ref('settings/upis').set(systemUPIs); document.getElementById('admin-add-upi').value=""; } }
     function removeUPI(idx) { systemUPIs.splice(idx, 1); db.ref('settings/upis').set(systemUPIs); }
     
@@ -1107,6 +1106,27 @@
       db.ref('tournaments/' + document.getElementById('room-match-id').value + '/roomId').set(document.getElementById('room-id-val').value);
       db.ref('tournaments/' + document.getElementById('room-match-id').value + '/roomPass').set(document.getElementById('room-pass-val').value);
       alert("Room Details Sent!");
+    }
+
+    // NEW DEPOSIT & WITHDRAWAL APPROVAL LOGIC
+    function approveDeposit(utr, phone, amt) {
+      if(!confirm(`Approve ₹${amt} deposit for ${phone}?`)) return;
+      db.ref('players/' + phone + '/balance').transaction(curr => (curr || 0) + Number(amt), (error, committed) => {
+        if(committed) { db.ref('deposits/' + utr).update({status: 'approved'}); alert("Deposit Approved! Balance Added."); }
+      });
+    }
+    function rejectDeposit(utr) {
+      if(confirm("Reject this deposit request?")) db.ref('deposits/' + utr).update({status: 'rejected'});
+    }
+
+    function approveWithdrawal(wId) {
+      if(confirm("Mark this withdrawal as PAID?")) db.ref('withdrawals/' + wId).update({status: 'approved'});
+    }
+    function rejectWithdrawal(wId, phone, amt) {
+      if(!confirm(`Reject and refund ₹${amt} back to user wallet?`)) return;
+      db.ref('players/' + phone + '/balance').transaction(curr => (curr || 0) + Number(amt), (err, committed) => {
+        if(committed) db.ref('withdrawals/' + wId).update({status: 'rejected'});
+      });
     }
 
     // LEADERBOARD & DB LISTENERS
@@ -1179,7 +1199,7 @@
       Object.keys(data).forEach(k => {
         const f = data[k];
         let stars = "⭐".repeat(f.rating);
-        h += `<div class="p-2 border border-blue-900 bg-black/50 text-xs text-white rounded">
+        h += `<div class="p-2 border border-blue-900 bg-black/50 text-xs text-white rounded mb-2">
           <div class="flex justify-between"><span class="font-bold text-amber-300">${f.ign} (${f.phone})</span><span>${stars}</span></div>
           <p class="text-slate-300 mt-1 italic">"${f.text}"</p>
           <p class="text-[9px] text-slate-500 mt-1">${f.time}</p>
@@ -1188,11 +1208,55 @@
       document.getElementById('admin-feedback-box').innerHTML = h || `<p class="text-slate-500 italic">No feedback yet.</p>`;
     });
 
+    // RENDER DEPOSITS WITH APPROVE/REJECT BUTTONS & IMAGE PREVIEW
     db.ref('deposits').on('value', snap => {
       if(!document.getElementById('admin-deposits-box')) return;
       const data = snap.val() || {};
-      document.getElementById('admin-deposits-box').innerHTML = Object.keys(data).filter(k=>data[k].status==='pending').map(k => `<div class="p-2 border border-amber-900 bg-black/50 text-xs text-white">UTR: ${data[k].utr} - ₹${data[k].amount} <button onclick="window.open('${data[k].screenshot}')" class="text-cyan-400 underline ml-2">View Proof</button></div>`).join('');
+      let h = Object.keys(data).filter(k => data[k].status === 'pending').map(k => {
+        let d = data[k];
+        return `
+          <div class="p-2 border border-amber-900 bg-black/50 text-xs text-white rounded mb-2">
+            <div class="flex justify-between items-center mb-1">
+              <span class="font-bold text-amber-300">${d.ign} <span class="text-slate-400">(${d.phone})</span></span>
+              <span class="font-black text-emerald-400 text-sm">₹${d.amount}</span>
+            </div>
+            <p class="text-[10px] text-slate-400 font-mono mb-2">UTR: ${d.utr}</p>
+            <div class="w-full bg-black/80 rounded border border-amber-800/50 p-1 mb-2">
+               <img src="${d.screenshot}" class="w-full max-h-32 object-contain" alt="Payment Proof" />
+            </div>
+            <div class="flex gap-2">
+              <button onclick="approveDeposit('${k}', '${d.phone}', ${d.amount})" class="flex-1 py-1.5 bg-emerald-600 rounded text-white font-bold">✅ Approve</button>
+              <button onclick="rejectDeposit('${k}')" class="flex-1 py-1.5 bg-red-600 rounded text-white font-bold">❌ Reject</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+      document.getElementById('admin-deposits-box').innerHTML = h || `<p class="text-slate-500 italic">No pending deposits.</p>`;
     });
+
+    // RENDER WITHDRAWALS WITH APPROVE/REJECT BUTTONS
+    db.ref('withdrawals').on('value', snap => {
+      if(!document.getElementById('admin-withdrawals-box')) return;
+      const data = snap.val() || {};
+      let h = Object.keys(data).filter(k => data[k].status === 'pending').map(k => {
+        let w = data[k];
+        return `
+          <div class="p-2 border border-emerald-900 bg-black/50 text-xs text-white rounded mb-2">
+            <div class="flex justify-between items-center mb-1">
+              <span class="font-black text-emerald-400 text-sm">₹${w.amount}</span>
+              <span class="text-[10px] text-slate-300 font-mono">${w.phone}</span>
+            </div>
+            <p class="text-[11px] text-amber-300 mb-2 bg-black/40 p-1.5 rounded font-mono break-all border border-amber-900/50">UPI: ${w.upi}</p>
+            <div class="flex gap-2">
+              <button onclick="approveWithdrawal('${k}')" class="flex-1 py-1.5 bg-emerald-600 rounded text-white font-bold">✅ Paid (Approve)</button>
+              <button onclick="rejectWithdrawal('${k}', '${w.phone}', ${w.amount})" class="flex-1 py-1.5 bg-red-600 rounded text-white font-bold">❌ Refund</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+      document.getElementById('admin-withdrawals-box').innerHTML = h || `<p class="text-slate-500 italic">No pending withdrawals.</p>`;
+    });
+
     db.ref('matchProofs').on('value', snap => {
       if(!document.getElementById('admin-proofs-box')) return;
       const data = snap.val() || {};
@@ -1200,11 +1264,6 @@
         if(data[mId][pId].status==='pending') h+=`<div class="p-2 border border-cyan-800 bg-black/50 text-xs text-white">${data[mId][pId].ign} - Kills: ${data[mId][pId].kills} <button onclick="window.open('${data[mId][pId].screenshot}')" class="text-cyan-400 underline ml-2">View Screenshot</button></div>`;
       }));
       document.getElementById('admin-proofs-box').innerHTML = h || "No pending proofs.";
-    });
-    db.ref('withdrawals').on('value', snap => {
-      if(!document.getElementById('admin-withdrawals-box')) return;
-      const data = snap.val() || {};
-      document.getElementById('admin-withdrawals-box').innerHTML = Object.keys(data).filter(k=>data[k].status==='pending').map(k => `<div class="p-2 border border-emerald-900 bg-black/50 text-xs text-white">₹${data[k].amount} -> ${data[k].upi}</div>`).join('');
     });
   </script>
 </body>
