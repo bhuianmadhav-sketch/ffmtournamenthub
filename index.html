@@ -7,6 +7,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
+  <!-- Google Firebase SDKs (v9 Compat) -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
@@ -68,13 +69,22 @@
     .intro-logo { animation: pulseNeon 2s infinite ease-in-out; }
     .cyborg-scanner { animation: scanMove 2.2s infinite ease-in-out; }
     #wheel-canvas { transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99); }
+
+    /* SPLASH SCREEN INTRO */
+    #splash-screen {
+      position: fixed; inset: 0; z-index: 100; background: #060114;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      transition: opacity 0.6s ease, visibility 0.6s;
+    }
+    #splash-screen.fade-out { opacity: 0; visibility: hidden; pointer-events: none; }
     
     [data-netlify-drawer], .netlify-badge, netlify-drawer, iframe[src*="netlify"] { display: none !important; }
   </style>
 </head>
 <body class="w-full flex justify-center bg-freefire-theme">
 
-  <div id="ban-screen" class="hidden fixed inset-0 z-[999] bg-red-950 flex items-center justify-center p-6 text-center text-white">
+  <!-- ACCOUNT BANNED OVERLAY (Safe Inline Display) -->
+  <div id="ban-screen" class="fixed inset-0 z-[999] bg-red-950 flex-col items-center justify-center p-6 text-center text-white" style="display: none;">
     <div>
       <i onclick="unbanMe()" class="fa-solid fa-triangle-exclamation text-6xl text-red-500 mb-4 animate-bounce cursor-pointer"></i>
       <h1 class="text-2xl font-black text-red-500 uppercase">ACCOUNT BANNED</h1>
@@ -82,11 +92,13 @@
     </div>
   </div>
 
+  <!-- LIVE FAKE WITHDRAWAL TOAST -->
   <div id="live-toast" class="fake-toast">
     <i class="fa-solid fa-money-bill-wave text-white"></i> <span id="toast-msg">Rahul just withdrew ₹250</span>
   </div>
 
-  <div id="splash-screen" class="fixed inset-0 z-[100] bg-[#060114] flex flex-col items-center justify-center transition-all duration-700">
+  <!-- SPLASH SCREEN INTRO -->
+  <div id="splash-screen">
     <div class="intro-logo w-24 h-24 rounded-3xl bg-gradient-to-tr from-purple-600 via-pink-600 to-amber-500 flex items-center justify-center text-white shadow-2xl mb-4">
       <i class="fa-solid fa-gamepad text-5xl"></i>
     </div>
@@ -94,6 +106,7 @@
     <p class="text-xs text-purple-400 font-mono tracking-widest mt-1">OFFICIAL ESPORTS ARENA</p>
   </div>
 
+  <!-- ROBOT KELLY AI MODAL -->
   <div id="kelly-welcome-modal" class="modal-box">
     <div class="bg-[#08021c] border-2 border-cyan-400 rounded-3xl w-full max-w-sm p-5 relative shadow-[0_0_40px_rgba(34,211,238,0.45)] text-center overflow-hidden">
       <div class="flex justify-between items-center text-[10px] font-mono text-cyan-400 mb-2 border-b border-cyan-900 pb-1.5">
@@ -102,7 +115,7 @@
       </div>
       <div class="relative w-44 h-52 mx-auto rounded-2xl border-2 border-cyan-400/80 p-1 bg-black/80 shadow-inner overflow-hidden">
         <div class="cyborg-scanner absolute inset-x-0 h-1 bg-gradient-to-r from-transparent via-cyan-300 to-transparent shadow-[0_0_12px_#22d3ee] z-20"></div>
-        <img src="59527.webp" onerror="this.src='https://images.alphacoders.com/100/1004169.jpg'" class="object-cover h-full w-full rounded-xl filter drop-shadow-[0_0_10px_rgba(34,211,238,0.7)]" alt="Kelly" />
+        <img id="kelly-img" src="59527.webp" onerror="this.src='https://images.alphacoders.com/100/1004169.jpg'" class="object-cover h-full w-full rounded-xl filter contrast-110 drop-shadow-[0_0_10px_rgba(34,211,238,0.7)]" alt="Kelly" />
       </div>
       <h3 class="text-base font-black text-cyan-300 mt-3 flex items-center justify-center gap-1.5 tracking-wide">
         <i class="fa-solid fa-microchip text-cyan-400 animate-spin"></i> WARRIOR: <span id="kelly-user-name" class="text-amber-300">Player</span>
@@ -114,8 +127,10 @@
     </div>
   </div>
 
+  <!-- MAIN APP WRAPPER -->
   <div class="w-full max-w-md h-full relative flex flex-col backdrop-blur-[2px]">
     
+    <!-- HEADER -->
     <header class="fixed top-0 left-0 right-0 max-w-md mx-auto h-16 bg-[#070216]/95 backdrop-blur-md px-4 flex justify-between items-center border-b border-purple-900/50 z-40 shadow-md">
       <div class="flex items-center gap-2.5">
         <div id="master-admin-trigger" onclick="handleAdminSecretTap()" class="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 via-indigo-600 to-purple-500 flex items-center justify-center text-white shadow-lg shadow-purple-600/30 cursor-pointer active:scale-90">
@@ -137,8 +152,10 @@
       </div>
     </header>
 
+    <!-- BODY CONTENT -->
     <div class="app-scroll-container px-4 space-y-4">
       
+      <!-- PROFILE STRIP -->
       <div class="p-3.5 bg-gradient-to-r from-purple-950/70 via-slate-900/90 to-purple-950/70 rounded-2xl border border-purple-800/50 flex justify-between items-center shadow-lg">
         <div class="flex items-center gap-3">
           <div class="relative">
@@ -160,6 +177,7 @@
         </button>
       </div>
 
+      <!-- BROADCAST BAR -->
       <div class="bg-purple-950/40 border border-purple-900/40 rounded-xl px-3 py-2 flex items-center gap-2 text-xs shadow-inner">
         <span class="bg-red-500/20 text-red-400 px-1.5 py-0.5 rounded text-[10px] font-black uppercase flex items-center gap-1 shrink-0">
           <span class="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse"></span> LIVE
@@ -169,6 +187,7 @@
         </div>
       </div>
 
+      <!-- REWARDS ROW: SPIN WHEEL & CHECKIN -->
       <div class="grid grid-cols-2 gap-2.5">
         <div onclick="playSFX('click'); openModal('spin-popup')" class="p-3 bg-gradient-to-r from-purple-900/40 to-indigo-950/60 border border-purple-700/50 rounded-2xl flex items-center gap-2.5 cursor-pointer active:scale-95 transition-all">
           <div class="w-9 h-9 rounded-xl bg-purple-600/30 border border-purple-400/40 flex items-center justify-center text-purple-300 text-lg">
@@ -190,6 +209,7 @@
         </div>
       </div>
 
+      <!-- REFER & EARN BANNER -->
       <div onclick="playSFX('click'); openModal('refer-popup')" class="p-3 rounded-2xl bg-gradient-to-r from-amber-600/20 via-purple-950/60 to-emerald-600/20 border border-amber-500/40 flex justify-between items-center cursor-pointer active:scale-98 transition-all">
         <div class="flex items-center gap-2.5">
           <div class="w-9 h-9 rounded-xl bg-amber-500/20 border border-amber-500/50 flex items-center justify-center text-amber-400 text-lg">
@@ -203,7 +223,9 @@
         <i class="fa-solid fa-chevron-right text-slate-400 text-xs"></i>
       </div>
 
+      <!-- MAIN TABS -->
       <main class="space-y-4">
+        <!-- BATTLES TAB -->
         <section id="screen-battles" class="space-y-4">
           <div class="flex items-center justify-between">
             <h2 class="text-sm font-black uppercase tracking-wider text-slate-200">ACTIVE TOURNAMENTS</h2>
@@ -213,6 +235,7 @@
           </div>
         </section>
 
+        <!-- ROOM PASS TAB -->
         <section id="screen-room-pass" class="hidden space-y-4">
           <div class="p-4 rounded-2xl bg-gradient-to-b from-purple-950/70 to-slate-900/90 border border-purple-800/40 text-center">
             <i class="fa-solid fa-key text-3xl text-purple-400 mb-2"></i>
@@ -221,6 +244,7 @@
           </div>
         </section>
 
+        <!-- DYNAMIC LEADERBOARD -->
         <section id="screen-gamers" class="hidden space-y-3">
           <div class="p-4 bg-gradient-to-r from-amber-600/20 to-purple-900/40 border border-amber-500/30 rounded-2xl text-center mb-3">
             <h3 class="text-sm font-black text-amber-400 uppercase">Next Champion Tum Ban Sakte Ho!</h3>
@@ -235,6 +259,7 @@
           </div>
         </section>
 
+        <!-- PROFILE TAB -->
         <section id="screen-profile" class="hidden space-y-4">
           <div class="p-5 rounded-2xl bg-slate-900/90 border border-purple-900/60 text-center shadow-lg relative">
             <h3 class="font-extrabold text-lg text-white" id="prof-ign">Player</h3>
@@ -258,6 +283,7 @@
       </main>
     </div>
 
+    <!-- BOTTOM NAV -->
     <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto h-16 bg-[#070216]/95 backdrop-blur-md border-t border-purple-900/50 px-6 flex justify-between items-center z-40 shadow-lg">
       <button onclick="playSFX('click'); goTab('battles')" class="nav-btn active flex flex-col items-center gap-1 text-purple-400" data-nav="battles">
         <i class="fa-solid fa-crosshairs text-lg"></i> <span class="text-[10px] font-bold">Battles</span>
@@ -277,6 +303,9 @@
     </nav>
   </div>
 
+  <!-- ================= POPUPS & MODALS ================= -->
+
+  <!-- MAIN WALLET UI -->
   <div id="main-wallet-popup" class="modal-box">
     <div class="bg-[#0f0728] border border-purple-600/50 rounded-2xl w-full max-w-sm p-5 relative shadow-2xl text-center">
       <button onclick="closeModal('main-wallet-popup')" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
@@ -298,6 +327,7 @@
     </div>
   </div>
 
+  <!-- DEPOSIT POPUP -->
   <div id="deposit-popup" class="modal-box">
     <div class="bg-[#0f0728] border border-emerald-600/50 rounded-2xl w-full max-w-sm p-4 relative text-center shadow-2xl max-h-[90vh] overflow-y-auto">
       <button onclick="closeModal('deposit-popup')" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
@@ -307,7 +337,8 @@
       <div class="mt-3 text-left">
         <label class="text-[10px] font-bold text-slate-400 uppercase">Select UPI to Pay</label>
         <select id="upi-selector" onchange="updateWalletQR()" class="w-full mt-1 bg-black/50 border border-purple-900 rounded-xl px-2 py-2 text-xs text-white">
-          </select>
+          <!-- Populated by JS -->
+        </select>
       </div>
 
       <div class="mt-3 p-2 bg-black/50 rounded-xl border border-purple-900/60 flex flex-col items-center">
@@ -329,6 +360,7 @@
     </div>
   </div>
 
+  <!-- WITHDRAWAL POPUP -->
   <div id="withdraw-popup" class="modal-box">
     <div class="bg-[#0f0728] border border-purple-600/50 rounded-2xl w-full max-w-sm p-5 relative shadow-2xl">
       <button onclick="closeModal('withdraw-popup')" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
@@ -343,6 +375,7 @@
     </div>
   </div>
 
+  <!-- SPIN WHEEL -->
   <div id="spin-popup" class="modal-box">
     <div class="bg-[#0f0624] border border-purple-600/60 rounded-3xl w-full max-w-sm p-5 relative shadow-2xl text-center">
       <button onclick="closeModal('spin-popup')" class="absolute top-3 right-3 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
@@ -355,6 +388,7 @@
     </div>
   </div>
 
+  <!-- CHECKIN -->
   <div id="checkin-popup" class="modal-box">
     <div class="bg-[#0f0624] border border-amber-600/60 rounded-3xl w-full max-w-sm p-5 relative shadow-2xl text-center">
       <button onclick="closeModal('checkin-popup')" class="absolute top-3 right-3 text-slate-400"><i class="fa-solid fa-xmark text-lg"></i></button>
@@ -364,6 +398,7 @@
     </div>
   </div>
 
+  <!-- RESULT PROOF UPLOAD -->
   <div id="result-proof-modal" class="modal-box">
     <div class="bg-[#0f0624] border border-cyan-600/60 rounded-3xl w-full max-w-sm p-5 relative shadow-2xl text-center">
       <button onclick="closeModal('result-proof-modal')" class="absolute top-3 right-3 text-slate-400"><i class="fa-solid fa-xmark text-lg"></i></button>
@@ -377,6 +412,7 @@
     </div>
   </div>
 
+  <!-- REFER & EARN POPUP -->
   <div id="refer-popup" class="modal-box">
     <div class="bg-[#0f0728] border border-amber-500/50 rounded-2xl w-full max-w-sm p-4 relative shadow-2xl text-center">
       <button onclick="closeModal('refer-popup')" class="absolute top-3 right-3 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
@@ -393,6 +429,7 @@
     </div>
   </div>
 
+  <!-- COMPLAINT POPUP -->
   <div id="complaint-popup" class="modal-box">
     <div class="bg-[#0f0728] border border-rose-600/50 rounded-2xl w-full max-w-sm p-5 relative shadow-2xl">
       <button onclick="closeModal('complaint-popup')" class="absolute top-4 right-4 text-slate-400"><i class="fa-solid fa-xmark text-lg"></i></button>
@@ -405,6 +442,7 @@
     </div>
   </div>
 
+  <!-- REGISTRATION -->
   <div id="auth-popup" class="modal-box">
     <div class="bg-[#0f0728] border border-purple-600/50 rounded-2xl w-full max-w-sm p-5 relative shadow-2xl">
       <button onclick="closeModal('auth-popup')" class="absolute top-4 right-4 text-slate-400"><i class="fa-solid fa-xmark"></i></button>
@@ -424,6 +462,7 @@
     </div>
   </div>
 
+  <!-- SLOT PICKER MODAL (CS vs Normal) -->
   <div id="slot-modal" class="modal-box">
     <div class="bg-[#0f0728] border border-purple-600/50 rounded-2xl w-full max-w-sm p-4 relative shadow-2xl flex flex-col max-h-[85vh]">
       <button onclick="closeModal('slot-modal')" class="absolute top-3 right-3 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
@@ -447,6 +486,7 @@
     </div>
   </div>
 
+  <!-- ADMIN CONTROL DESK -->
   <div id="admin-panel-screen" class="admin-panel">
     <div class="max-w-3xl mx-auto p-4 sm:p-6 pb-24 space-y-4">
       <div class="flex justify-between items-center border-b border-purple-900 pb-3">
@@ -457,6 +497,7 @@
         <button onclick="closeAdminDesk()" class="px-3 py-1 bg-red-600/30 border border-red-500/50 rounded-xl text-red-200 text-xs font-bold">Close</button>
       </div>
 
+      <!-- ANALYTICS -->
       <div class="grid grid-cols-2 gap-2 text-center text-xs">
         <div class="p-3 bg-indigo-950/40 border border-indigo-800 rounded-xl">
           <p class="text-[10px] text-indigo-300 uppercase">Total Visitors</p>
@@ -468,6 +509,7 @@
         </div>
       </div>
 
+      <!-- MULTIPLE UPI MANAGER -->
       <div class="p-3 bg-slate-900 rounded-xl border border-purple-900">
         <h4 class="text-xs font-black text-purple-300 uppercase mb-2">Manage UPI IDs (Deposit QRs)</h4>
         <div class="flex gap-2">
@@ -477,6 +519,7 @@
         <div id="admin-upi-list" class="mt-3 space-y-1.5 text-xs"></div>
       </div>
 
+      <!-- MATCH CREATOR -->
       <div class="p-3 bg-slate-900 rounded-xl border border-purple-900">
         <h4 class="text-xs font-black text-amber-300 uppercase mb-2">Publish Match (With 3D Flip & CS Detection)</h4>
         <div class="grid grid-cols-2 gap-2 text-xs">
@@ -494,11 +537,13 @@
         <button onclick="createLiveMatch()" class="w-full mt-2.5 py-2 bg-indigo-600 font-bold text-xs rounded-xl text-white">Publish Match</button>
       </div>
 
+      <!-- MATCH MANAGER & AUTO REFUND -->
       <div class="p-3 bg-slate-900 rounded-xl border border-purple-900">
         <h4 class="text-xs font-black text-rose-400 uppercase mb-2">Live Matches & Mass Refund Engine</h4>
         <div id="admin-match-manage-box" class="space-y-2 text-xs max-h-48 overflow-y-auto"></div>
       </div>
 
+      <!-- PUSH CREDENTIALS -->
       <div class="p-3 bg-slate-900 rounded-xl border border-purple-900">
         <h4 class="text-xs font-black text-cyan-400 uppercase mb-2">Push Room ID & Pass</h4>
         <div class="grid grid-cols-3 gap-2 text-xs">
@@ -509,16 +554,19 @@
         <button onclick="dispatchRoomPass()" class="w-full mt-2 py-1.5 bg-cyan-600 font-bold text-xs rounded-lg text-white">Send Pass</button>
       </div>
 
+      <!-- KILL PROOFS VERIFICATION -->
       <div class="p-3 bg-slate-900 rounded-xl border border-cyan-800">
         <h4 class="text-xs font-black text-cyan-400 mb-2">Screenshot Submissions (Kill Proofs)</h4>
         <div id="admin-proofs-box" class="space-y-2 text-xs max-h-48 overflow-y-auto"></div>
       </div>
 
+      <!-- DEPOSITS -->
       <div class="p-3 bg-slate-900 rounded-xl border border-amber-800">
         <h4 class="text-xs font-black text-amber-400 mb-2">DEPOSITS VERIFICATION</h4>
         <div id="admin-deposits-box" class="space-y-2 text-xs max-h-56 overflow-y-auto"></div>
       </div>
 
+      <!-- WITHDRAWALS -->
       <div class="p-3 bg-slate-900 rounded-xl border border-emerald-800">
         <h4 class="text-xs font-black text-emerald-400 mb-2">WITHDRAWAL REQUESTS</h4>
         <div id="admin-withdrawals-box" class="space-y-2 text-xs max-h-48 overflow-y-auto"></div>
@@ -539,17 +587,44 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    let currentUser = JSON.parse(localStorage.getItem('apex_user')) || {
-      ign: "Guest", uid: "", phone: "", balance: 0, stars: 0, matchesPlayed: 0, adminWarnings: 0, isBanned: false
-    };
+    let currentUser;
+    try {
+      currentUser = JSON.parse(localStorage.getItem('apex_user'));
+      if (!currentUser || typeof currentUser !== 'object') throw new Error("reset");
+    } catch(e) {
+      currentUser = { ign: "Guest", uid: "", phone: "", balance: 0, stars: 0, matchesPlayed: 0, adminWarnings: 0, isBanned: false };
+    }
 
     let allTournaments = {}; let activeSelectingMatchId = null; let activeSelectingFee = 0; let selectedSlotNumber = null;
     let depositBase64Image = null; let proofBase64Image = null; let activeProofMatchId = null;
     let systemUPIs = ["fftournamenthub@ibl"];
 
-    // 1. BAN CHECK & UNBAN LOGIC
+    let audioCtx = null;
+    function playSFX(type='click') {
+      try {
+        if (!audioCtx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (AudioContext) audioCtx = new AudioContext();
+        }
+        if (!audioCtx) return;
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator(); 
+        const gain = audioCtx.createGain();
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        if(type==='click') {
+          osc.frequency.setValueAtTime(450, audioCtx.currentTime); gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05); osc.start(); osc.stop(audioCtx.currentTime + 0.05);
+        } else {
+          osc.type = 'triangle'; osc.frequency.setValueAtTime(320, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.35);
+          gain.gain.setValueAtTime(0.2, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.45);
+          osc.start(); osc.stop(audioCtx.currentTime + 0.45);
+        }
+      } catch(e) { console.warn("Audio blocked by browser:", e); }
+    }
+
+    // 1. BAN CHECK & UNBAN LOGIC (Safe Inline Style)
     if (currentUser.isBanned) {
-      document.getElementById('ban-screen').classList.remove('hidden');
+      document.getElementById('ban-screen').style.display = 'flex';
     }
 
     function unbanMe() {
@@ -558,24 +633,23 @@
         currentUser.isBanned = false; currentUser.adminWarnings = 0;
         localStorage.setItem('apex_user', JSON.stringify(currentUser));
         if(currentUser.phone) db.ref('players/' + currentUser.phone).update({isBanned: false});
-        alert("Account Recovered!");
-        location.reload();
+        alert("Account Recovered!"); location.reload();
       }
     }
 
-    // VISITOR ANALYTICS
+    // 2. LIVE ANALYTICS & TOAST
     window.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => { const s = document.getElementById('splash-screen'); if (s) s.classList.add('fade-out'); }, 2200);
+
       if (!currentUser.isBanned) {
         if (!localStorage.getItem('has_visited')) {
           db.ref('analytics/visitors').transaction(curr => (curr || 0) + 1);
           localStorage.setItem('has_visited', 'true');
         }
-        setTimeout(() => { const s = document.getElementById('splash-screen'); if (s) s.classList.add('fade-out'); playSFX('booyah'); }, 2200);
         syncUI(); startFakeWithdrawToasts(); drawSpinWheel(); checkSpinLockStatus(); renderCheckinGrid();
       }
     });
 
-    // FAKE TOASTS
     const fakeNames = ["Rahul", "Priya", "Amit", "Vikash", "Devil", "Rohan", "Sneha"];
     function startFakeWithdrawToasts() {
       setInterval(() => {
@@ -588,21 +662,6 @@
       }, 25000);
     }
 
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    function playSFX(type='click') {
-      if (audioCtx.state === 'suspended') audioCtx.resume();
-      const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
-      osc.connect(gain); gain.connect(audioCtx.destination);
-      if(type==='click') {
-        osc.frequency.setValueAtTime(450, audioCtx.currentTime); gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05); osc.start(); osc.stop(audioCtx.currentTime + 0.05);
-      } else {
-        osc.type = 'triangle'; osc.frequency.setValueAtTime(320, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.35);
-        gain.gain.setValueAtTime(0.2, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.45);
-        osc.start(); osc.stop(audioCtx.currentTime + 0.45);
-      }
-    }
-
     function openModal(id) { document.getElementById(id).classList.add('active'); }
     function closeModal(id) { document.getElementById(id).classList.remove('active'); }
     function goTab(name) {
@@ -610,6 +669,7 @@
       document.getElementById('screen-' + name).classList.remove('hidden');
     }
 
+    // UI SYNC
     function syncUI() {
       document.getElementById('top-wallet-val').textContent = currentUser.balance || 0;
       document.getElementById('wallet-main-bal').textContent = currentUser.balance || 0;
@@ -634,25 +694,20 @@
       document.getElementById('profile-tier-badge').textContent = rank;
     }
 
-    // STRICT BAN ADMIN ACCESS
+    // 3. ADMIN AUTO-BAN SECURITY
     let adminTapCount = 0; let adminTapTimer = null;
     function handleAdminSecretTap() {
-      adminTapCount++;
-      clearTimeout(adminTapTimer);
+      adminTapCount++; clearTimeout(adminTapTimer);
       adminTapTimer = setTimeout(() => { adminTapCount = 0; }, 2000);
-      if (adminTapCount >= 5) {
-        adminTapCount = 0; triggerSecureAdminPrompt();
-      }
+      if (adminTapCount >= 5) { adminTapCount = 0; triggerSecureAdminPrompt(); }
     }
-
     function triggerSecureAdminPrompt() {
       const entered = prompt("Enter Master Security PIN:");
-      if (!entered) return; // FIX: If cancel is pressed, do nothing.
+      if (!entered) return; 
 
       const activePin = localStorage.getItem('apex_pin') || "8690";
       if (entered.trim() === activePin || entered.trim() === "8690") {
-        currentUser.adminWarnings = 0; 
-        localStorage.setItem('apex_user', JSON.stringify(currentUser));
+        currentUser.adminWarnings = 0; localStorage.setItem('apex_user', JSON.stringify(currentUser));
         document.getElementById('admin-panel-screen').classList.add('active');
       } else {
         currentUser.adminWarnings = (currentUser.adminWarnings || 0) + 1;
@@ -669,7 +724,45 @@
     }
     function closeAdminDesk() { document.getElementById('admin-panel-screen').classList.remove('active'); }
 
-    // RENDER MATCHES WITH 3D CARDS
+    // 4. KELLY TTS & REGISTRATION
+    function triggerKellyWelcomeSpeech(userName) {
+      document.getElementById('kelly-user-name').textContent = userName;
+      openModal('kelly-welcome-modal');
+      const speechLine = `Hey ${userName}, welcome to Free Fire Max Tournament Hub. Now you are ready to play and please win all challenges.`;
+      
+      const captionEl = document.getElementById('kelly-caption-text');
+      captionEl.textContent = ""; let charIdx = 0;
+      const typeTimer = setInterval(() => {
+        if (charIdx < speechLine.length) { captionEl.textContent += speechLine.charAt(charIdx); charIdx++; } 
+        else { clearInterval(typeTimer); }
+      }, 35);
+
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(speechLine);
+        utterance.rate = 0.88; utterance.pitch = 1.4;
+        const voices = window.speechSynthesis.getVoices();
+        const robotVoice = voices.find(v => v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('zira'));
+        if (robotVoice) utterance.voice = robotVoice;
+        window.speechSynthesis.speak(utterance);
+      }
+    }
+
+    function generateSecureToken() {
+      document.getElementById('step-number-box').classList.add('hidden');
+      document.getElementById('step-otp-box').classList.remove('hidden');
+      document.getElementById('disp-gen-token').textContent = "123456"; 
+    }
+    function verifyPlayerToken() {
+      currentUser.ign = document.getElementById('input-ign').value;
+      currentUser.uid = document.getElementById('input-ff-uid').value;
+      currentUser.phone = document.getElementById('input-phone').value;
+      db.ref('players/' + currentUser.phone).set(currentUser);
+      localStorage.setItem('apex_user', JSON.stringify(currentUser));
+      syncUI(); closeModal('auth-popup'); triggerKellyWelcomeSpeech(currentUser.ign);
+    }
+
+    // 5. RENDER MATCHES & FLIP CARDS
     function toggleCardFlip(key) { playSFX('click'); document.getElementById(`flipper-${key}`).classList.toggle('flipped'); }
 
     function renderTournaments(data) {
@@ -677,80 +770,61 @@
       const box = document.getElementById('tournaments-container');
       const roomBox = document.getElementById('room-pass-list');
       const keys = Object.keys(allTournaments);
-
-      if (keys.length === 0) {
-        box.innerHTML = `<p class="text-xs text-slate-400 text-center py-8">No active matches.</p>`;
-        roomBox.innerHTML = `<p class="text-xs text-slate-400 text-center py-6">No joined matches.</p>`;
-        return;
-      }
+      if (keys.length === 0) { box.innerHTML = `<p class="text-xs text-slate-400 text-center py-8">No active matches.</p>`; return; }
 
       let h = ""; let myJoinedHtml = "";
       keys.forEach(k => {
         const m = allTournaments[k];
         const max = m.maxSlots || 48; const booked = m.bookedSlots || {}; const filled = Object.keys(booked).length;
+        const rules = m.rules || "Standard fair-play rules.";
         const rawTimestamp = m.datetime ? new Date(m.datetime).getTime() : 0;
-        const rules = m.rules || "Standard fair-play rules apply.";
 
         let isJoined = false; let mySlot = null;
         Object.keys(booked).forEach(s => { if(booked[s].phone === currentUser.phone) { isJoined = true; mySlot = s; } });
 
         let btn = "";
-        if (isJoined) {
-          btn = `<button disabled class="w-full mt-3 py-2.5 bg-emerald-950 text-emerald-400 text-xs font-bold rounded-xl border border-emerald-800"><i class="fa-solid fa-circle-check"></i> Already Joined (Slot #${mySlot})</button>`;
+        if(isJoined) {
+          btn = `<button disabled class="w-full mt-3 py-2 bg-emerald-950 text-emerald-400 text-xs font-bold rounded-xl">Already Joined (Slot #${mySlot})</button>`;
           myJoinedHtml += `
             <div class="p-3 bg-black/60 border border-purple-800/60 rounded-xl space-y-2 mb-2">
               <div class="flex justify-between items-start">
                 <div><h4 class="font-bold text-white text-xs">${m.title}</h4><p class="text-[10px] text-purple-300">${m.mode}</p></div>
                 <span class="px-2 py-0.5 bg-purple-900 border border-purple-500 rounded text-[10px] text-amber-300">SLOT #${mySlot}</span>
               </div>
-              <div class="p-2 bg-purple-950/40 rounded-lg text-xs flex justify-between items-center">
-                <div>
-                  <span class="text-[9px] text-slate-400 uppercase">Room Credentials</span>
-                  <p class="font-mono text-emerald-400 font-bold">${m.roomId ? `ID: ${m.roomId} \vert{} PASS:${m.roomPass}` : 'Match se 15 min pehle'}</p>
-                </div>
-                ${m.roomId ? `<button onclick="copyRoomPass('${m.roomId}','${m.roomPass}')" class="px-2 py-1 bg-purple-600 rounded text-[10px] font-bold text-white">Copy</button>` : ''}
+              <div class="p-2 bg-purple-950/40 rounded-lg text-xs">
+                <span class="text-[9px] text-slate-400 uppercase">Room Credentials</span>
+                <p class="font-mono text-emerald-400 font-bold">${m.roomId ? `ID: ${m.roomId} \vert{} PASS:${m.roomPass}` : 'Match se 15 min pehle'}</p>
               </div>
               <button onclick="openResultProofModal('${k}', '${m.title}')" class="w-full py-1.5 bg-cyan-600 rounded-lg text-white font-bold text-xs"><i class="fa-solid fa-cloud-arrow-up"></i> Submit Kill Proof</button>
             </div>`;
-        } else if (filled >= max) {
-          btn = `<button disabled class="w-full mt-3 py-2.5 bg-red-950 text-red-400 text-xs font-bold rounded-xl border border-red-800">Match Full (${max}/${max})</button>`;
-        } else {
-          btn = `<button onclick="openSlotPicker('${k}', ${m.entry})" class="w-full mt-3 py-2.5 bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-600 hover:opacity-90 rounded-xl text-white font-extrabold text-xs shadow-md active:scale-95 transition-all">Choose Slot & Join (₹${m.entry})</button>`;
-        }
+        } else if (filled >= max) { btn = `<button disabled class="w-full mt-3 py-2 bg-red-950 text-red-400 text-xs font-bold rounded-xl">Match Full</button>`; } 
+        else { btn = `<button onclick="openSlotPicker('${k}', ${m.entry})" class="w-full mt-3 py-2 bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-600 hover:opacity-90 rounded-xl text-white font-bold text-xs shadow-md active:scale-95 transition-all">Choose Slot (₹${m.entry})</button>`; }
 
         h += `
           <div class="card-flip-container w-full min-h-[220px]">
             <div id="flipper-${k}" class="card-flipper w-full h-full">
               <div class="card-front p-4 rounded-2xl bg-gradient-to-r from-purple-950/50 via-slate-900/80 to-purple-950/40 border border-purple-800/40 shadow-lg">
                 <div class="flex justify-between items-center text-xs">
-                  <span class="px-2 py-0.5 rounded bg-purple-900/80 border border-purple-700/50 text-purple-300 font-extrabold uppercase">${m.mode}</span>
-                  <button onclick="toggleCardFlip('${k}')" class="text-[10px] text-amber-300 hover:underline font-bold flex items-center gap-1"><i class="fa-solid fa-scroll text-amber-400"></i> Rules ↷</button>
+                  <span class="px-2 py-0.5 bg-purple-900/80 rounded text-purple-300 font-bold uppercase">${m.mode}</span>
+                  <button onclick="toggleCardFlip('${k}')" class="text-[10px] text-amber-300 font-bold"><i class="fa-solid fa-scroll"></i> Rules ↷</button>
                 </div>
                 <h3 class="font-extrabold text-sm text-white mt-2">${m.title}</h3>
                 <div class="mt-1 flex items-center justify-between text-[11px] font-mono">
                   <span class="text-emerald-400 font-bold" id="timer-${k}" data-time="${rawTimestamp}">Calculating...</span>
                 </div>
-                <div class="grid grid-cols-3 gap-2 mt-2 pt-2 border-t border-purple-950/80 text-xs text-center">
-                  <div><span class="text-[9px] text-slate-400 uppercase">Prize Pool</span><p class="font-black text-amber-300">₹${m.prize}</p></div>
-                  <div><span class="text-[9px] text-slate-400 uppercase">Per Kill</span><p class="font-black text-cyan-300">N/A</p></div>
-                  <div><span class="text-[9px] text-slate-400 uppercase">Entry Fee</span><p class="font-black text-white">₹${m.entry}</p></div>
-                </div>
-                <div class="mt-2 text-[10px] text-slate-400 flex justify-between">
-                  <span>Slots: <strong class="text-purple-300">${filled}/${max}</strong> filled</span>
-                  <span class="font-mono text-purple-400 font-bold">Key: ${k}</span>
+                <div class="flex justify-between text-xs mt-2 pt-2 border-t border-purple-900/50">
+                  <span class="text-amber-300">Prize: ₹${m.prize}</span>
+                  <span class="text-slate-400">Slots: ${filled}/${max}</span>
                 </div>
                 ${btn}
               </div>
               <div class="card-back p-4 rounded-2xl bg-[#0e0724] border border-amber-600/50 shadow-xl flex flex-col justify-between">
                 <div>
-                  <div class="flex justify-between items-center border-b border-purple-900/60 pb-1.5 mb-2">
-                    <span class="text-xs font-black text-amber-300 uppercase flex items-center gap-1"><i class="fa-solid fa-gavel"></i> Tournament Rules</span>
-                    <button onclick="toggleCardFlip('${k}')" class="text-[10px] text-purple-300 font-bold hover:underline">↶ Back</button>
+                  <div class="flex justify-between items-center border-b border-purple-900/60 pb-1 mb-2">
+                    <span class="text-xs font-black text-amber-300">Rules</span>
+                    <button onclick="toggleCardFlip('${k}')" class="text-[10px] text-purple-300">↶ Back</button>
                   </div>
-                  <div class="text-[11px] text-slate-300 space-y-1 overflow-y-auto max-h-28 pr-1 font-mono leading-relaxed whitespace-pre-line">${rules}</div>
-                </div>
-                <div class="pt-2 border-t border-purple-950 text-[10px] text-slate-400 flex justify-between items-center">
-                  <button onclick="toggleCardFlip('${k}')" class="px-3 py-1 bg-purple-700/80 rounded-lg text-white font-bold text-[10px]">Understood</button>
+                  <div class="text-[11px] text-slate-300 whitespace-pre-line">${rules}</div>
                 </div>
               </div>
             </div>
@@ -771,21 +845,13 @@
       });
     }, 1000);
 
-    function copyRoomPass(id, p) { navigator.clipboard.writeText(`ID: ${id} | Pass: ${p}`); alert("Copied!"); }
-
-    // CLASH SQUAD (8) VS BR (48) SLOT PICKER
+    // 6. CLASH SQUAD (8) VS BR (48) SLOT PICKER
     function openSlotPicker(matchId, fee) {
-      if (!currentUser.phone || currentUser.phone === "Not Verified") { alert("Pehle Account verify karein!"); return; }
-      if (currentUser.balance < fee) { 
-        if(confirm(`Balance kam hai! ₹${fee - currentUser.balance} aur chahiye. Deposit karein?`)) {
-           openModal('main-wallet-popup');
-        }
-        return; 
-      }
+      if (!currentUser.phone) { alert("Verify Account!"); return; }
+      if (currentUser.balance < fee) { alert(`Balance kam hai! ₹${fee} required.`); openModal('main-wallet-popup'); return; }
 
       activeSelectingMatchId = matchId; activeSelectingFee = fee; selectedSlotNumber = null;
       document.getElementById('confirm-slot-btn').disabled = true;
-      document.getElementById('confirm-slot-btn').className = "px-5 py-2 bg-purple-900/50 text-slate-500 font-extrabold text-xs rounded-xl cursor-not-allowed";
       document.getElementById('rules-agree-check').checked = false;
       
       const m = allTournaments[matchId];
@@ -795,172 +861,47 @@
       let html = "";
 
       if (isCS) {
-        // CS 8 Slots
         grid.className = "grid grid-cols-2 gap-4 p-2";
-        html += `
-          <div class="space-y-1.5 border border-cyan-800/50 bg-cyan-950/20 p-2 rounded-xl">
-            <h4 class="text-[10px] text-cyan-400 font-black text-center mb-2 border-b border-cyan-800 pb-1">TEAM A</h4>
-            <div class="grid grid-cols-2 gap-1">${[1,2,3,4].map(i => generateSlotHTML(i, booked[i])).join('')}</div>
-          </div>
-          <div class="space-y-1.5 border border-rose-800/50 bg-rose-950/20 p-2 rounded-xl">
-            <h4 class="text-[10px] text-rose-400 font-black text-center mb-2 border-b border-rose-800 pb-1">TEAM B</h4>
-            <div class="grid grid-cols-2 gap-1">${[5,6,7,8].map(i => generateSlotHTML(i, booked[i])).join('')}</div>
-          </div>
-        `;
+        html += `<div class="space-y-1.5 border border-cyan-800 bg-cyan-950/20 p-2 rounded-xl"><h4 class="text-[10px] text-cyan-400 text-center">TEAM A</h4>${[1,2,3,4].map(i => generateSlotHTML(i, booked[i])).join('')}</div>
+                 <div class="space-y-1.5 border border-rose-800 bg-rose-950/20 p-2 rounded-xl"><h4 class="text-[10px] text-rose-400 text-center">TEAM B</h4>${[5,6,7,8].map(i => generateSlotHTML(i, booked[i])).join('')}</div>`;
       } else {
-        // BR 48 Slots
         grid.className = "grid grid-cols-6 gap-1.5 p-1";
-        for (let i = 1; i <= 48; i++) {
-          html += generateSlotHTML(i, booked[i]);
-        }
+        for (let i = 1; i <= 48; i++) html += generateSlotHTML(i, booked[i]);
       }
-      grid.innerHTML = html;
-      openModal('slot-modal');
+      grid.innerHTML = html; openModal('slot-modal');
     }
-
     function generateSlotHTML(i, isBooked) {
-      if (isBooked) {
-        return `<div class="p-1.5 rounded bg-red-950/80 border border-red-700/80 text-center opacity-50 cursor-not-allowed"><span class="text-[10px] font-bold text-red-200">#${i}</span></div>`;
-      }
-      return `<div onclick="selectSlot(${i})" id="slot-card-${i}" class="slot-item p-1.5 rounded bg-purple-950/40 border border-purple-700/50 text-center cursor-pointer hover:border-purple-400 active:scale-95 transition-all"><span class="text-[10px] font-bold text-white">#${i}</span></div>`;
+      if (isBooked) return `<div class="p-1.5 rounded bg-red-950/80 border border-red-700 opacity-50"><span class="text-[10px] text-red-200">#${i}</span></div>`;
+      return `<div onclick="selectSlot(${i})" id="slot-card-${i}" class="slot-item p-1.5 rounded bg-purple-950/40 border border-purple-700 text-center cursor-pointer active:scale-95 transition-all"><span class="text-[10px] text-white">#${i}</span></div>`;
     }
-
     function selectSlot(slotNum) {
       playSFX('click');
-      selectedSlotNumber = slotNum;
-      document.getElementById('selected-slot-num').textContent = `#${slotNum}`;
+      selectedSlotNumber = slotNum; document.getElementById('selected-slot-num').textContent = `#${slotNum}`;
       document.querySelectorAll('.slot-item').forEach(el => el.classList.remove('bg-emerald-600', 'border-emerald-400'));
       document.getElementById(`slot-card-${slotNum}`).classList.add('bg-emerald-600', 'border-emerald-400');
       validateSlotAgreement();
     }
-
     function validateSlotAgreement() {
       const isChecked = document.getElementById('rules-agree-check').checked;
-      const confirmBtn = document.getElementById('confirm-slot-btn');
+      const btn = document.getElementById('confirm-slot-btn');
       if (selectedSlotNumber && isChecked) {
-        confirmBtn.disabled = false;
-        confirmBtn.className = "px-5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs rounded-xl shadow-lg cursor-pointer active:scale-95 transition-all";
+        btn.disabled = false; btn.className = "px-5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs rounded-xl shadow-lg transition-all";
       } else {
-        confirmBtn.disabled = true;
-        confirmBtn.className = "px-5 py-2 bg-purple-900/50 text-slate-500 font-extrabold text-xs rounded-xl cursor-not-allowed";
+        btn.disabled = true; btn.className = "px-5 py-2 bg-purple-900/50 text-slate-500 font-extrabold text-xs rounded-xl cursor-not-allowed";
       }
     }
-
     function confirmSlotBooking() {
       db.ref(`tournaments/${activeSelectingMatchId}/bookedSlots/${selectedSlotNumber}`).once('value').then(snap => {
-        if (snap.exists()) { alert("Yeh slot abhi-abhi kisi ne book kar liya!"); return; }
-        
-        currentUser.balance -= activeSelectingFee;
-        currentUser.matchesPlayed += 1;
+        if (snap.exists()) { alert("Slot booked!"); return; }
+        currentUser.balance -= activeSelectingFee; currentUser.matchesPlayed += 1;
         localStorage.setItem('apex_user', JSON.stringify(currentUser));
         if(currentUser.phone) db.ref('players/' + currentUser.phone).update({balance: currentUser.balance, matchesPlayed: currentUser.matchesPlayed});
-
-        db.ref(`tournaments/${activeSelectingMatchId}/bookedSlots/${selectedSlotNumber}`).set({
-          ign: currentUser.ign, uid: currentUser.uid, phone: currentUser.phone
-        });
-
-        syncUI(); closeModal('slot-modal'); playSFX('booyah');
-        alert("Match Confirmed! Room details Room Pass tab me milengi!");
+        db.ref(`tournaments/${activeSelectingMatchId}/bookedSlots/${selectedSlotNumber}`).set({ign: currentUser.ign, phone: currentUser.phone});
+        syncUI(); closeModal('slot-modal'); playSFX('booyah'); alert("Match Joined!");
       });
     }
 
-    // MULTIPLE UPI MANAGEMENT & DEPOSIT LIMITS (Min ₹49)
-    function updateWalletQR() {
-      const selected = document.getElementById('upi-selector').value;
-      if (selected) {
-        document.getElementById('qr-upi-label').textContent = selected;
-        document.getElementById('qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=${selected}&pn=FF%20TOURNAMENT`;
-      }
-    }
-
-    function previewDepositImage(e) {
-      const f = e.target.files[0]; if(!f) return;
-      const r = new FileReader();
-      r.onload = ev => { 
-        depositBase64Image = ev.target.result; 
-        document.getElementById('deposit-img-preview').src = depositBase64Image;
-        document.getElementById('deposit-img-preview').classList.remove('hidden');
-      }
-      r.readAsDataURL(f);
-    }
-
-    function sendDepositUTR() {
-      const amt = Number(document.getElementById('deposit-amt').value);
-      const utr = document.getElementById('deposit-utr-code').value.trim();
-
-      if (amt < 49) { alert("⚠️ Strict Rule: Deposit ₹49 se kam nahi ho sakta!"); return; }
-      if (utr.length !== 12) { alert("12 Digit UTR enter karein!"); return; }
-      if (!depositBase64Image) { alert("Screenshot attach karna compulsory hai!"); return; }
-
-      db.ref('deposits/' + utr).once('value').then(snap => {
-        if(snap.exists()) { alert("DUPLICATE UTR! Yeh pehle use ho chuka hai."); return; }
-        db.ref('deposits/' + utr).set({
-          phone: currentUser.phone, ign: currentUser.ign, amount: amt, utr: utr, screenshot: depositBase64Image, status: "pending"
-        }).then(() => {
-          alert("Deposit request sent with screenshot!"); closeModal('deposit-popup');
-          depositBase64Image = null; document.getElementById('deposit-img-preview').classList.add('hidden');
-        });
-      });
-    }
-
-    // WITHDRAWAL LIMITS (Max ₹999/day)
-    function submitWithdrawRequest() {
-      const amt = Number(document.getElementById('withdraw-amt').value);
-      if (amt < 50) { alert("Min withdrawal ₹50 hai!"); return; }
-      if (amt > 999) { alert("⚠️ Security Rule: Daily withdrawal limit ₹999 hai!"); return; }
-      if (amt > currentUser.balance) { alert("Insufficient balance!"); return; }
-
-      const id = "W" + Date.now().toString().slice(-4);
-      db.ref('withdrawals/' + id).set({
-        phone: currentUser.phone, amount: amt, upi: document.getElementById('withdraw-upi-input').value, status: "pending"
-      }).then(() => {
-        currentUser.balance -= amt; localStorage.setItem('apex_user', JSON.stringify(currentUser)); syncUI();
-        alert("Withdrawal sent to admin!"); closeModal('withdraw-popup');
-      });
-    }
-
-    // SCREENSHOT PROOF UPLOADER
-    function openResultProofModal(mId, title) { activeProofMatchId = mId; proofBase64Image = null; document.getElementById('proof-img-preview').classList.add('hidden'); openModal('result-proof-modal'); }
-    function previewProofImage(e) { const r = new FileReader(); r.onload = ev => { proofBase64Image = ev.target.result; document.getElementById('proof-img-preview').src = proofBase64Image; document.getElementById('proof-img-preview').classList.remove('hidden'); }; r.readAsDataURL(e.target.files[0]); }
-    function submitResultProof() {
-      const k = document.getElementById('proof-kills-count').value;
-      if(!k || !proofBase64Image) { alert("Screenshot aur kills zaroori hai!"); return; }
-      db.ref(`matchProofs/${activeProofMatchId}/PRF${Date.now()}`).set({ign: currentUser.ign, phone: currentUser.phone, kills: k, screenshot: proofBase64Image, status: "pending"}).then(() => { alert("Proof Sent for Verification!"); closeModal('result-proof-modal'); });
-    }
-
-    // AUTH & KELLY ROBOT SPEECH
-    function generateSecureToken() {
-      document.getElementById('step-number-box').classList.add('hidden');
-      document.getElementById('step-otp-box').classList.remove('hidden');
-      document.getElementById('disp-gen-token').textContent = "123456"; 
-    }
-    function verifyPlayerToken() {
-      const ign = document.getElementById('input-ign').value;
-      const uid = document.getElementById('input-ff-uid').value;
-      const phone = document.getElementById('input-phone').value;
-      const ref = document.getElementById('input-refer-code').value;
-
-      let bonus = ref ? 20 : 0;
-      currentUser.ign = ign; currentUser.uid = uid; currentUser.phone = phone; 
-      currentUser.balance = (currentUser.balance || 0) + bonus;
-
-      if(ref) {
-        db.ref('players').once('value').then(snap => {
-          const allP = snap.val() || {};
-          Object.keys(allP).forEach(pPhone => {
-            const p = allP[pPhone];
-            const myRef = "REF-" + (p.ign.toUpperCase().slice(0, 4)) + String(p.uid).slice(-4);
-            if (myRef === ref && pPhone !== phone) { db.ref('players/' + pPhone + '/balance').transaction(c => (c || 0) + 30); }
-          });
-        });
-      }
-
-      db.ref('players/' + currentUser.phone).set(currentUser);
-      localStorage.setItem('apex_user', JSON.stringify(currentUser));
-      syncUI(); closeModal('auth-popup'); triggerKellyWelcomeSpeech(currentUser.ign);
-    }
-
-    // SPIN WHEEL 24H & CHECKIN
+    // 7. SPIN WHEEL 24H & CHECKIN
     const wheelSegments = ["₹5", "1 Star", "₹10", "Better Luck", "₹20", "2 Stars", "₹2", "Booyah"];
     const wheelColors = ["#7c3aed", "#eab308", "#2563eb", "#dc2626", "#059669", "#d97706", "#9333ea", "#0891b2"];
     let currRot = 0; let isSpin = false;
@@ -979,10 +920,10 @@
       if (now - lastSpin < oneDay) {
         const rem = oneDay - (now - lastSpin); const h = Math.floor(rem/(1000*60*60)); const m = Math.floor((rem%(1000*60*60))/(1000*60));
         btn.disabled = true; btn.className = "w-full py-2.5 bg-slate-800 text-slate-400 font-black text-xs rounded-xl";
-        btn.textContent = `LOCKED (${h}h : ${m}m)`;
+        btn.textContent = `LOCKED (${h}h : ${m}m)`; document.getElementById('spin-badge-status').textContent = `Wait ${h}h`;
       } else {
         btn.disabled = false; btn.className = "w-full py-2.5 bg-gradient-to-r from-purple-600 to-amber-500 text-white font-black text-xs rounded-xl";
-        btn.textContent = "SPIN NOW (FREE)"; 
+        btn.textContent = "SPIN NOW"; document.getElementById('spin-badge-status').textContent = "Spin Ready ✅";
       }
     }
     setInterval(checkSpinLockStatus, 1000);
@@ -1014,28 +955,50 @@
       localStorage.setItem('apex_user', JSON.stringify(currentUser)); syncUI(); renderCheckinGrid(); alert("₹5 Check-in claimed!");
     }
 
-    // ADMIN UPI ADD & MATCH CREATION
-    function adminAddUPI() {
-      const val = document.getElementById('admin-add-upi').value.trim();
-      if(val.includes('@')) { systemUPIs.push(val); db.ref('settings/upis').set(systemUPIs); document.getElementById('admin-add-upi').value = ""; }
+    // 8. SCREENSHOT PROOF UPLOADER
+    function openResultProofModal(mId, title) { activeProofMatchId = mId; proofBase64Image = null; document.getElementById('proof-img-preview').classList.add('hidden'); openModal('result-proof-modal'); }
+    function previewProofImage(e) { const r = new FileReader(); r.onload = ev => { proofBase64Image = ev.target.result; document.getElementById('proof-img-preview').src = proofBase64Image; document.getElementById('proof-img-preview').classList.remove('hidden'); }; r.readAsDataURL(e.target.files[0]); }
+    function submitResultProof() {
+      const k = document.getElementById('proof-kills-count').value;
+      if(!k || !proofBase64Image) { alert("Screenshot aur kills zaroori hai!"); return; }
+      db.ref(`matchProofs/${activeProofMatchId}/PRF${Date.now()}`).set({ign: currentUser.ign, phone: currentUser.phone, kills: k, screenshot: proofBase64Image, status: "pending"}).then(() => { alert("Proof Sent!"); closeModal('result-proof-modal'); });
     }
+
+    // 9. MULTIPLE UPI, DEPOSIT (Min ₹49) & WITHDRAW (Max ₹999)
+    function updateWalletQR() {
+      const s = document.getElementById('upi-selector').value;
+      if (s) { document.getElementById('qr-upi-label').textContent = s; document.getElementById('qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=${s}&pn=FF%20HUB`; }
+    }
+    function previewDepositImage(e) { const r = new FileReader(); r.onload = ev => { depositBase64Image = ev.target.result; document.getElementById('deposit-img-preview').src = depositBase64Image; document.getElementById('deposit-img-preview').classList.remove('hidden'); }; r.readAsDataURL(e.target.files[0]); }
+    function sendDepositUTR() {
+      const amt = Number(document.getElementById('deposit-amt').value); const utr = document.getElementById('deposit-utr-code').value;
+      if (amt < 49) { alert("Deposit ₹49 se kam nahi ho sakta!"); return; }
+      if (!depositBase64Image) { alert("Screenshot attach karna compulsory hai!"); return; }
+      db.ref('deposits/' + utr).once('value').then(s => {
+        if(s.exists()) { alert("Duplicate UTR!"); return; }
+        db.ref('deposits/' + utr).set({phone: currentUser.phone, ign: currentUser.ign, amount: amt, utr: utr, screenshot: depositBase64Image, status: "pending"}).then(() => { alert("Request sent!"); closeModal('deposit-popup'); });
+      });
+    }
+    function submitWithdrawRequest() {
+      const amt = Number(document.getElementById('withdraw-amt').value);
+      if (amt < 50) { alert("Min ₹50"); return; }
+      if (amt > 999) { alert("Daily limit ₹999"); return; }
+      if (amt > currentUser.balance) { alert("Insufficient balance"); return; }
+      db.ref('withdrawals/W'+Date.now()).set({phone: currentUser.phone, amount: amt, status: "pending"}).then(() => { currentUser.balance -= amt; syncUI(); alert("Sent!"); closeModal('withdraw-popup'); });
+    }
+
+    // 10. ADMIN PANEL: UPI, AUTO-REFUND & ANALYTICS
+    function adminAddUPI() { const v = document.getElementById('admin-add-upi').value; if(v.includes('@')) { systemUPIs.push(v); db.ref('settings/upis').set(systemUPIs); } }
     function removeUPI(idx) { systemUPIs.splice(idx, 1); db.ref('settings/upis').set(systemUPIs); }
     
     function createLiveMatch() {
       const m = document.getElementById('new-match-mode').value;
-      db.ref('tournaments/M'+Date.now()).set({
-        title: document.getElementById('new-match-title').value, mode: m, maxSlots: m.includes("CS") ? 8 : 48, 
-        entry: document.getElementById('new-match-fee').value, prize: document.getElementById('new-match-prize').value,
-        datetime: document.getElementById('new-match-datetime').value, rules: document.getElementById('new-match-rules').value
-      }); 
-      alert("Match Published!");
+      db.ref('tournaments/M'+Date.now()).set({title: document.getElementById('new-match-title').value, mode: m, maxSlots: m.includes("CS") ? 8 : 48, entry: document.getElementById('new-match-fee').value, prize: document.getElementById('new-match-prize').value, datetime: document.getElementById('new-match-datetime').value, rules: document.getElementById('new-match-rules').value}); alert("Published!");
     }
 
-    // MASS REFUND (#19)
     function cancelMatchAndMassRefund(matchKey) {
       const m = allTournaments[matchKey]; if (!m) return;
-      if (!confirm(`Kya aap sach me "${m.title}" cancel karke sabko refund karna chahte hain?`)) return;
-
+      if (!confirm(`Cancel & refund "${m.title}"?`)) return;
       const booked = m.bookedSlots || {}; const slotKeys = Object.keys(booked);
       slotKeys.forEach(slotNum => {
         const p = booked[slotNum]; const refundAmt = Number(m.entry) || 20;
@@ -1049,15 +1012,14 @@
       alert("Room Details Sent!");
     }
 
-    // REALTIME DB LISTENERS
+    // LEADERBOARD & DB LISTENERS
     db.ref('settings/upis').on('value', snap => {
       systemUPIs = snap.val() || ["fftournamenthub@ibl"];
-      document.getElementById('admin-upi-list').innerHTML = systemUPIs.map((u,i)=>`<div class="flex justify-between bg-black p-1 rounded"><span>${u}</span> <button onclick="removeUPI(${i})" class="text-red-400">X</button></div>`).join('');
+      document.getElementById('admin-upi-list').innerHTML = systemUPIs.map((u,i)=>`<div class="flex justify-between bg-black p-1 rounded"><span>${u}</span><button onclick="removeUPI(${i})" class="text-red-400">X</button></div>`).join('');
       document.getElementById('upi-selector').innerHTML = systemUPIs.map(u => `<option value="${u}">${u}</option>`).join(''); updateWalletQR();
     });
     db.ref('tournaments').on('value', snap => { 
       renderTournaments(snap.val());
-      // Admin Match Manager render
       const adBox = document.getElementById('admin-match-manage-box');
       if(!adBox) return;
       if(!snap.val()){ adBox.innerHTML = "No matches."; return; }
@@ -1070,7 +1032,6 @@
       const users = snap.val() || {};
       if(document.getElementById('admin-reg-count')) document.getElementById('admin-reg-count').textContent = Object.keys(users).length;
       
-      // REAL DYNAMIC LEADERBOARD LOGIC
       let arr = Object.values(users).filter(u => u.ign && u.stars);
       arr.sort((a,b) => b.stars - a.stars);
       let top3 = arr.slice(0, 3);
