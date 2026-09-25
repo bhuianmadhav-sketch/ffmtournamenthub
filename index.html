@@ -7,30 +7,24 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
+  <!-- Google Firebase SDKs (v9 Compat) -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
   <style>
     html, body { height: 100%; overflow: hidden; }
     body {
-      background-color: #050112;
-      color: #e2e8f0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      touch-action: manipulation;
-      user-select: none;
-      -webkit-tap-highlight-color: transparent;
+      background-color: #050112; color: #e2e8f0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      touch-action: manipulation; user-select: none; -webkit-tap-highlight-color: transparent;
     }
     .bg-freefire-theme {
       background-image: radial-gradient(circle at 50% 10%, rgba(35, 10, 70, 0.8) 0%, rgba(5, 1, 18, 0.98) 100%), url('https://images.alphacoders.com/100/1004169.jpg');
-      background-size: cover;
-      background-position: center top;
-      background-attachment: fixed;
+      background-size: cover; background-position: center top; background-attachment: fixed;
     }
-    .app-scroll-container {
-      height: 100vh; overflow-y: auto; -webkit-overflow-scrolling: touch;
-      padding-top: 4.5rem; padding-bottom: 5.5rem;
-    }
+    .app-scroll-container { height: 100vh; overflow-y: auto; padding-top: 4.5rem; padding-bottom: 5.5rem; }
     .app-scroll-container::-webkit-scrollbar { display: none; }
+    
     .modal-box {
       display: none; position: fixed; inset: 0; z-index: 60;
       background: rgba(0, 0, 0, 0.88); backdrop-filter: blur(12px);
@@ -40,12 +34,11 @@
     .modal-box.active { display: flex !important; }
     .admin-panel {
       display: none; position: fixed; inset: 0; z-index: 70;
-      background: #060214; overflow-y: auto;
-      animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      background: #060214; overflow-y: auto; animation: slideUp 0.3s forwards;
     }
     .admin-panel.active { display: block !important; }
 
-    /* FAKE TOAST NOTIFICATION */
+    /* FAKE TOAST */
     .fake-toast {
       position: fixed; top: -100px; left: 50%; transform: translateX(-50%); z-index: 100;
       background: rgba(5, 150, 105, 0.95); border: 1px solid #10b981; border-radius: 50px;
@@ -54,46 +47,75 @@
     }
     .fake-toast.show { top: 20px; }
 
-    /* 3D FLIP CARD */
+    /* SPLASH SCREEN & 3D FLIP */
+    #splash-screen {
+      position: fixed; inset: 0; z-index: 100; background: #060114;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      transition: opacity 0.6s ease, visibility 0.6s;
+    }
+    #splash-screen.fade-out { opacity: 0; visibility: hidden; pointer-events: none; }
+    .intro-logo { animation: pulseNeon 2s infinite ease-in-out; }
+    @keyframes pulseNeon { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 15px #a855f7); } 50% { transform: scale(1.08); filter: drop-shadow(0 0 35px #ec4899); } }
+    @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+    @keyframes scanMove { 0%, 100% { top: 0%; opacity: 0.8; } 50% { top: 95%; opacity: 1; } }
+    .cyborg-scanner { animation: scanMove 2.2s infinite ease-in-out; }
+    
     .card-flip-container { perspective: 1000px; }
     .card-flipper { transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); transform-style: preserve-3d; position: relative; }
     .card-flipper.flipped { transform: rotateY(180deg); }
     .card-front, .card-back { backface-visibility: hidden; width: 100%; }
     .card-back { transform: rotateY(180deg); position: absolute; top: 0; left: 0; height: 100%; }
+    #wheel-canvas { transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99); }
 
-    @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-    
     [data-netlify-drawer], .netlify-badge, netlify-drawer, iframe[src*="netlify"] { display: none !important; }
   </style>
 </head>
 <body class="w-full flex justify-center bg-freefire-theme">
 
+  <!-- FAKE LIVE WITHDRAWAL TOAST -->
   <div id="live-toast" class="fake-toast">
     <i class="fa-solid fa-money-bill-wave text-white"></i> <span id="toast-msg">Rahul just withdrew ₹250</span>
   </div>
 
+  <!-- SPLASH SCREEN -->
+  <div id="splash-screen">
+    <div class="intro-logo w-24 h-24 rounded-3xl bg-gradient-to-tr from-purple-600 via-pink-600 to-amber-500 flex items-center justify-center text-white shadow-2xl mb-4">
+      <i class="fa-solid fa-gamepad text-5xl"></i>
+    </div>
+    <h2 class="text-xl font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-purple-300 via-pink-300 to-amber-300 uppercase">FF TOURNAMENT HUB</h2>
+    <p class="text-xs text-purple-400 font-mono tracking-widest mt-1">OFFICIAL ESPORTS ARENA</p>
+    <div class="mt-6 flex items-center gap-1.5">
+      <span class="w-2 h-2 rounded-full bg-purple-500 animate-ping"></span>
+      <span class="text-[11px] text-slate-400">Loading Secure Battleground...</span>
+    </div>
+  </div>
+
+  <!-- CYBORG ROBOT KELLY AI MODAL -->
   <div id="kelly-welcome-modal" class="modal-box">
     <div class="bg-[#08021c] border-2 border-cyan-400 rounded-3xl w-full max-w-sm p-5 relative shadow-[0_0_40px_rgba(34,211,238,0.45)] text-center overflow-hidden">
       <div class="flex justify-between items-center text-[10px] font-mono text-cyan-400 mb-2 border-b border-cyan-900 pb-1.5">
         <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span> SYSTEM: ONLINE</span>
-        <span class="tracking-widest">CYBORG v2.6</span>
+        <span class="tracking-widest">CYBORG PROTOCOL v2.6</span>
       </div>
       <div class="relative w-44 h-52 mx-auto rounded-2xl border-2 border-cyan-400/80 p-1 bg-black/80 shadow-inner overflow-hidden">
-        <img id="kelly-img" src="59527.webp" onerror="this.src='https://images.alphacoders.com/100/1004169.jpg'" class="object-cover h-full w-full rounded-xl filter drop-shadow-[0_0_10px_rgba(34,211,238,0.7)]" alt="Kelly" />
+        <div class="cyborg-scanner absolute inset-x-0 h-1 bg-gradient-to-r from-transparent via-cyan-300 to-transparent shadow-[0_0_12px_#22d3ee] z-20"></div>
+        <img id="kelly-img" src="59527.webp" onerror="this.src='https://images.alphacoders.com/100/1004169.jpg'" class="object-cover h-full w-full rounded-xl filter contrast-110 drop-shadow-[0_0_10px_rgba(34,211,238,0.7)]" alt="Cyborg Kelly" />
+        <span class="absolute bottom-1.5 inset-x-2 bg-black/90 border border-cyan-500 text-cyan-300 font-mono font-black text-[9px] py-0.5 rounded uppercase tracking-wider z-30">⚙️ AI ROBOT KELLY</span>
       </div>
       <h3 class="text-base font-black text-cyan-300 mt-3 flex items-center justify-center gap-1.5 tracking-wide">
-        <i class="fa-solid fa-microchip text-cyan-400 animate-spin"></i> WARRIOR: <span id="kelly-user-name" class="text-amber-300">Player</span>
+        <i class="fa-solid fa-microchip text-cyan-400 animate-spin"></i> WARRIOR IDENTIFIED: <span id="kelly-user-name" class="text-amber-300">Warrior</span>
       </h3>
       <div class="mt-2.5 p-3 rounded-xl bg-black/90 border border-cyan-500/40 text-left min-h-[75px] shadow-inner">
-        <p class="text-xs text-cyan-200 font-mono leading-relaxed" id="kelly-caption-text">Connecting...</p>
+        <p class="text-xs text-cyan-200 font-mono leading-relaxed" id="kelly-caption-text">Initializing voice synthesizer...</p>
       </div>
-      <button onclick="closeModal('kelly-welcome-modal')" class="w-full mt-3.5 py-2.5 bg-gradient-to-r from-cyan-500 via-indigo-600 to-purple-600 text-white font-black text-xs rounded-xl shadow-lg active:scale-95">ENTER ARENA</button>
+      <button onclick="closeModal('kelly-welcome-modal')" class="w-full mt-3.5 py-2.5 bg-gradient-to-r from-cyan-500 via-indigo-600 to-purple-600 text-white font-black text-xs rounded-xl shadow-lg active:scale-95 tracking-wider">READY TO FIGHT • ENTER ARENA</button>
     </div>
   </div>
 
+  <!-- MAIN APP -->
   <div class="w-full max-w-md h-full relative flex flex-col backdrop-blur-[2px]">
-    
+    <!-- HEADER -->
     <header class="fixed top-0 left-0 right-0 max-w-md mx-auto h-16 bg-[#070216]/95 backdrop-blur-md px-4 flex justify-between items-center border-b border-purple-900/50 z-40 shadow-md">
       <div class="flex items-center gap-2.5">
         <div id="master-admin-trigger" onclick="handleAdminSecretTap()" class="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 via-indigo-600 to-purple-500 flex items-center justify-center text-white shadow-lg shadow-purple-600/30 cursor-pointer active:scale-90">
@@ -109,14 +131,14 @@
       </div>
       <div class="flex items-center gap-2">
         <button onclick="playSFX('click'); openModal('main-wallet-popup')" class="bg-purple-950/80 border border-purple-700/60 rounded-xl px-2.5 py-1.5 flex items-center gap-1.5 text-xs font-bold text-amber-300 active:scale-95 shadow">
-          <i class="fa-solid fa-wallet text-amber-400 text-xs"></i>
-          <span>₹<span id="top-wallet-val">0</span></span>
+          <i class="fa-solid fa-wallet text-amber-400 text-xs"></i> <span>₹<span id="top-wallet-val">0</span></span>
         </button>
       </div>
     </header>
 
+    <!-- BODY -->
     <div class="app-scroll-container px-4 space-y-4">
-      
+      <!-- PROFILE STRIP -->
       <div class="p-3.5 bg-gradient-to-r from-purple-950/70 via-slate-900/90 to-purple-950/70 rounded-2xl border border-purple-800/50 flex justify-between items-center shadow-lg">
         <div class="flex items-center gap-3">
           <div class="w-11 h-11 rounded-full border-2 border-amber-400 bg-purple-900 flex items-center justify-center font-bold text-white text-base">
@@ -133,7 +155,30 @@
         <button onclick="openModal('auth-popup')" class="text-xs bg-purple-600/40 border border-purple-500/50 px-3 py-1.5 rounded-xl font-bold text-purple-200 active:scale-95">Account</button>
       </div>
 
+      <!-- REWARDS ROW: SPIN WHEEL & CHECKIN -->
+      <div class="grid grid-cols-2 gap-2.5">
+        <div onclick="playSFX('click'); openModal('spin-popup')" class="p-3 bg-gradient-to-r from-purple-900/40 to-indigo-950/60 border border-purple-700/50 rounded-2xl flex items-center gap-2.5 cursor-pointer active:scale-95">
+          <div class="w-9 h-9 rounded-xl bg-purple-600/30 border border-purple-400/40 flex items-center justify-center text-purple-300 text-lg">
+            <i class="fa-solid fa-dharmachakra animate-spin" style="animation-duration: 6s;"></i>
+          </div>
+          <div>
+            <h4 class="text-xs font-black text-purple-200 uppercase">Lucky Spin</h4>
+            <p class="text-[9px] text-amber-300 font-bold" id="spin-badge-status">Free Spin 24H</p>
+          </div>
+        </div>
+        <div onclick="playSFX('click'); openModal('checkin-popup')" class="p-3 bg-gradient-to-r from-amber-900/30 to-purple-950/60 border border-amber-600/40 rounded-2xl flex items-center gap-2.5 cursor-pointer active:scale-95">
+          <div class="w-9 h-9 rounded-xl bg-amber-600/30 border border-amber-400/40 flex items-center justify-center text-amber-300 text-lg">
+            <i class="fa-solid fa-calendar-check"></i>
+          </div>
+          <div>
+            <h4 class="text-xs font-black text-amber-200 uppercase">Daily Check-In</h4>
+            <p class="text-[9px] text-emerald-400 font-bold">Claim 7 Days</p>
+          </div>
+        </div>
+      </div>
+
       <main class="space-y-4">
+        <!-- BATTLES TAB -->
         <section id="screen-battles" class="space-y-4">
           <div class="flex items-center justify-between">
             <h2 class="text-sm font-black uppercase tracking-wider text-slate-200">ACTIVE TOURNAMENTS</h2>
@@ -143,6 +188,7 @@
           </div>
         </section>
 
+        <!-- ROOM PASS TAB -->
         <section id="screen-room-pass" class="hidden space-y-4">
           <div class="p-4 rounded-2xl bg-gradient-to-b from-purple-950/70 to-slate-900/90 border border-purple-800/40 text-center">
             <i class="fa-solid fa-key text-3xl text-purple-400 mb-2"></i>
@@ -151,6 +197,7 @@
           </div>
         </section>
 
+        <!-- DYNAMIC LEADERBOARD -->
         <section id="screen-gamers" class="hidden space-y-3">
           <div class="p-4 bg-gradient-to-r from-amber-600/20 to-purple-900/40 border border-amber-500/30 rounded-2xl text-center mb-3">
             <h3 class="text-sm font-black text-amber-400 uppercase">Next Champion Tum Ban Sakte Ho!</h3>
@@ -160,11 +207,10 @@
             <h2 class="text-sm font-black uppercase tracking-wider text-slate-200">Apex Champions</h2>
             <span class="text-[11px] text-emerald-400 font-semibold">Live Rank Board</span>
           </div>
-          <div class="space-y-2" id="champions-list">
-            <p class="text-xs text-slate-400 text-center py-4">Loading real-time leaderboard...</p>
-          </div>
+          <div class="space-y-2" id="champions-list"></div>
         </section>
 
+        <!-- PROFILE TAB -->
         <section id="screen-profile" class="hidden space-y-4">
           <div class="p-5 rounded-2xl bg-slate-900/90 border border-purple-900/60 text-center shadow-lg relative">
             <h3 class="font-extrabold text-lg text-white" id="prof-ign">Player</h3>
@@ -184,6 +230,7 @@
       </main>
     </div>
 
+    <!-- BOTTOM NAV -->
     <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto h-16 bg-[#070216]/95 backdrop-blur-md border-t border-purple-900/50 px-6 flex justify-between items-center z-40 shadow-lg">
       <button onclick="goTab('battles')" class="nav-btn active flex flex-col items-center gap-1 text-purple-400" data-nav="battles">
         <i class="fa-solid fa-crosshairs text-lg"></i> <span class="text-[10px] font-bold">Battles</span>
@@ -195,76 +242,107 @@
         <i class="fa-solid fa-key text-lg"></i> <span class="text-[10px] font-bold">Pass</span>
       </button>
       <button onclick="goTab('gamers')" class="nav-btn flex flex-col items-center gap-1 text-slate-400" data-nav="gamers">
-        <i class="fa-solid fa-users text-lg"></i> <span class="text-[10px] font-bold">Leaderboard</span>
+        <i class="fa-solid fa-users text-lg"></i> <span class="text-[10px] font-bold">Ranks</span>
       </button>
     </nav>
   </div>
 
+  <!-- ================= POPUPS & MODALS ================= -->
+
+  <!-- SPIN WHEEL -->
+  <div id="spin-popup" class="modal-box">
+    <div class="bg-[#0f0624] border border-purple-600/60 rounded-3xl w-full max-w-sm p-5 relative shadow-2xl text-center">
+      <button onclick="closeModal('spin-popup')" class="absolute top-3 right-3 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+      <h3 class="text-base font-black text-amber-300">Lucky Spin Arena</h3>
+      <div class="relative w-56 h-56 mx-auto my-4 flex items-center justify-center">
+        <div class="absolute -top-2 z-10 w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[18px] border-t-amber-400 drop-shadow"></div>
+        <canvas id="wheel-canvas" width="220" height="220" class="rounded-full shadow-2xl border-4 border-purple-700/60"></canvas>
+      </div>
+      <button id="spin-btn" onclick="spinWheel()" class="w-full py-2.5 bg-gradient-to-r from-purple-600 to-amber-500 font-black text-xs text-white rounded-xl">SPIN NOW</button>
+    </div>
+  </div>
+
+  <!-- CHECKIN -->
+  <div id="checkin-popup" class="modal-box">
+    <div class="bg-[#0f0624] border border-amber-600/60 rounded-3xl w-full max-w-sm p-5 relative shadow-2xl text-center">
+      <button onclick="closeModal('checkin-popup')" class="absolute top-3 right-3 text-slate-400"><i class="fa-solid fa-xmark text-lg"></i></button>
+      <h3 class="text-base font-black text-amber-300">7-Day Login Rewards</h3>
+      <div class="grid grid-cols-4 gap-2 my-4 text-xs font-bold" id="checkin-days-grid"></div>
+      <button onclick="claimDailyReward()" class="w-full py-2.5 bg-gradient-to-r from-emerald-600 to-teal-500 font-black text-xs text-white rounded-xl">CLAIM TODAY'S REWARD</button>
+    </div>
+  </div>
+
+  <!-- RESULT PROOF -->
+  <div id="result-proof-modal" class="modal-box">
+    <div class="bg-[#0f0624] border border-cyan-600/60 rounded-3xl w-full max-w-sm p-5 relative shadow-2xl text-center">
+      <button onclick="closeModal('result-proof-modal')" class="absolute top-3 right-3 text-slate-400"><i class="fa-solid fa-xmark text-lg"></i></button>
+      <h3 class="text-sm font-black text-cyan-300">Submit Kill Screenshot</h3>
+      <div class="mt-3 text-left space-y-2 text-xs">
+        <input type="number" id="proof-kills-count" placeholder="Total Kills Made" class="w-full bg-black/50 border border-purple-900 rounded-xl px-3 py-2 text-white" />
+        <input type="file" id="proof-img-file" accept="image/*" onchange="previewProofImage(event)" class="w-full bg-black/50 border border-purple-900 rounded-xl px-3 py-1.5 text-slate-300 file:bg-cyan-600 file:text-white file:rounded file:border-0" />
+        <img id="proof-img-preview" src="" class="hidden h-20 mx-auto rounded border border-cyan-500 object-contain bg-black mt-1" />
+        <button onclick="submitResultProof()" class="w-full mt-2 py-2.5 bg-cyan-600 text-white font-black rounded-xl">Upload & Claim</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN WALLET (NEW UI) -->
   <div id="main-wallet-popup" class="modal-box">
     <div class="bg-[#0f0728] border border-purple-600/50 rounded-2xl w-full max-w-sm p-5 relative shadow-2xl text-center">
       <button onclick="closeModal('main-wallet-popup')" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
       <h3 class="text-sm font-black text-slate-300 uppercase">My Wallet</h3>
-      
       <div class="mt-4 p-5 bg-black/60 rounded-xl border border-purple-900 shadow-inner">
         <p class="text-[10px] text-slate-400 uppercase font-bold">Available Balance</p>
         <p class="text-4xl font-black text-amber-400 mt-1">₹<span id="wallet-main-bal">0</span></p>
       </div>
-
       <div class="mt-5 space-y-3">
-        <button onclick="closeModal('main-wallet-popup'); openModal('deposit-popup')" class="w-full py-3.5 bg-gradient-to-r from-emerald-600 to-teal-500 rounded-xl font-black text-white text-xs shadow-lg flex items-center justify-center gap-2 active:scale-95">
+        <button onclick="closeModal('main-wallet-popup'); openModal('deposit-popup')" class="w-full py-3.5 bg-gradient-to-r from-emerald-600 to-teal-500 rounded-xl font-black text-white text-xs shadow-lg flex justify-center gap-2">
           <i class="fa-solid fa-plus-circle"></i> ADD MONEY (Min ₹49)
         </button>
-        <button onclick="closeModal('main-wallet-popup'); openModal('withdraw-popup')" class="w-full py-3.5 bg-purple-900/60 border border-purple-700/50 rounded-xl font-black text-white text-xs shadow flex items-center justify-center gap-2 hover:bg-purple-800 active:scale-95">
+        <button onclick="closeModal('main-wallet-popup'); openModal('withdraw-popup')" class="w-full py-3.5 bg-purple-900/60 border border-purple-700/50 rounded-xl font-black text-white text-xs flex justify-center gap-2">
           <i class="fa-solid fa-money-bill-transfer"></i> WITHDRAW (Max ₹999/day)
         </button>
       </div>
     </div>
   </div>
 
+  <!-- DEPOSIT (Min ₹49 & Multiple UPI) -->
   <div id="deposit-popup" class="modal-box">
     <div class="bg-[#0f0728] border border-emerald-600/50 rounded-2xl w-full max-w-sm p-4 relative text-center shadow-2xl max-h-[90vh] overflow-y-auto">
       <button onclick="closeModal('deposit-popup')" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
       <h3 class="text-base font-black text-white">Deposit Cash</h3>
       <p class="text-[10px] text-rose-400 font-bold mt-0.5">Strict Minimum Deposit: ₹49</p>
-      
       <div class="mt-3 text-left">
-        <label class="text-[10px] font-bold text-slate-400 uppercase">Select UPI to Pay</label>
-        <select id="upi-selector" onchange="updateWalletQR()" class="w-full mt-1 bg-black/50 border border-purple-900 rounded-xl px-2 py-2 text-xs text-white">
-          </select>
+        <select id="upi-selector" onchange="updateWalletQR()" class="w-full bg-black/50 border border-purple-900 rounded-xl px-2 py-2 text-xs text-white"></select>
       </div>
-
       <div class="mt-3 p-2 bg-black/50 rounded-xl border border-purple-900/60 flex flex-col items-center">
         <img id="qr-img" src="" class="w-32 h-32 rounded bg-white p-1" />
         <p class="text-xs text-purple-300 font-mono mt-1.5 font-bold" id="qr-upi-label">Loading...</p>
       </div>
-
       <div class="mt-3 space-y-2 text-left">
-        <input type="number" id="deposit-amt" placeholder="Amount (Minimum ₹49)" class="w-full bg-black/50 border border-purple-900 rounded-xl px-3 py-2 text-xs text-white" />
+        <input type="number" id="deposit-amt" placeholder="Amount (Min ₹49)" class="w-full bg-black/50 border border-purple-900 rounded-xl px-3 py-2 text-xs text-white" />
         <input type="number" id="deposit-utr-code" placeholder="12-Digit UTR Number" class="w-full bg-black/50 border border-purple-900 rounded-xl px-3 py-2 text-xs text-white font-mono" />
-        
-        <div>
-          <label class="text-[10px] font-bold text-amber-300 uppercase flex items-center gap-1">Payment Screenshot *</label>
-          <input type="file" id="deposit-screenshot-file" accept="image/*" onchange="previewDepositImage(event)" class="w-full mt-0.5 bg-black/50 border border-purple-900 rounded-xl px-3 py-1.5 text-xs text-slate-300 file:bg-emerald-600 file:text-white file:border-0 file:rounded" />
-        </div>
-        <button onclick="sendDepositUTR()" class="w-full mt-2 py-2.5 rounded-xl bg-emerald-600 font-bold text-xs text-white shadow-lg active:scale-95">Submit Request</button>
+        <input type="file" id="deposit-screenshot-file" accept="image/*" onchange="previewDepositImage(event)" class="w-full bg-black/50 border border-purple-900 rounded-xl px-3 py-1.5 text-xs text-slate-300 file:bg-emerald-600 file:text-white file:border-0 file:rounded" />
+        <button onclick="sendDepositUTR()" class="w-full mt-2 py-2.5 rounded-xl bg-emerald-600 font-bold text-xs text-white">Submit Request</button>
       </div>
     </div>
   </div>
 
+  <!-- WITHDRAWAL (Max ₹999/day) -->
   <div id="withdraw-popup" class="modal-box">
     <div class="bg-[#0f0728] border border-purple-600/50 rounded-2xl w-full max-w-sm p-5 relative shadow-2xl">
-      <button onclick="closeModal('withdraw-popup')" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+      <button onclick="closeModal('withdraw-popup')" class="absolute top-4 right-4 text-slate-400"><i class="fa-solid fa-xmark text-lg"></i></button>
       <h3 class="text-base font-black text-white">Withdraw Winnings</h3>
       <p class="text-[10px] text-rose-400 font-bold mt-0.5">Min: ₹50 | Max Daily: ₹999</p>
-
       <div class="mt-4 space-y-3 text-xs">
         <input type="number" id="withdraw-amt" placeholder="Amount to withdraw" class="w-full bg-black/50 border border-purple-900 rounded-xl px-3 py-2 text-white" />
-        <input type="text" id="withdraw-upi-input" placeholder="Your UPI ID (e.g. name@ybl)" class="w-full bg-black/50 border border-purple-900 rounded-xl px-3 py-2 text-white" />
-        <button onclick="submitWithdrawRequest()" class="w-full py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 font-bold text-white text-xs">Send Cashout Request</button>
+        <input type="text" id="withdraw-upi-input" placeholder="Your UPI ID (name@ybl)" class="w-full bg-black/50 border border-purple-900 rounded-xl px-3 py-2 text-white" />
+        <button onclick="submitWithdrawRequest()" class="w-full py-2.5 rounded-xl bg-purple-600 font-bold text-white text-xs">Send Cashout Request</button>
       </div>
     </div>
   </div>
 
+  <!-- AUTH REGISTRATION -->
   <div id="auth-popup" class="modal-box">
     <div class="bg-[#0f0728] border border-purple-600/50 rounded-2xl w-full max-w-sm p-5 relative shadow-2xl">
       <button onclick="closeModal('auth-popup')" class="absolute top-4 right-4 text-slate-400"><i class="fa-solid fa-xmark"></i></button>
@@ -283,14 +361,13 @@
     </div>
   </div>
 
+  <!-- SLOT PICKER (CS 8 vs BR 48) -->
   <div id="slot-modal" class="modal-box">
     <div class="bg-[#0f0728] border border-purple-600/50 rounded-2xl w-full max-w-sm p-4 relative shadow-2xl flex flex-col max-h-[85vh]">
-      <button onclick="closeModal('slot-modal')" class="absolute top-3 right-3 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+      <button onclick="closeModal('slot-modal')" class="absolute top-3 right-3 text-slate-400"><i class="fa-solid fa-xmark text-lg"></i></button>
       <h3 class="text-sm font-black text-white">Choose Your Slot</h3>
-      <p class="text-[11px] text-slate-400 mt-1" id="slot-modal-subtitle">Entry: ₹20</p>
-      
+      <p class="text-[11px] text-slate-400 mt-1" id="slot-modal-subtitle">Entry: ₹0</p>
       <div id="slots-grid-box" class="overflow-y-auto p-1 my-2 max-h-60 border border-purple-900/40 rounded-xl bg-black/40"></div>
-
       <div class="mt-2 flex justify-between items-center">
         <div>
           <span class="text-[10px] text-slate-400">Selected:</span>
@@ -301,16 +378,17 @@
     </div>
   </div>
 
+  <!-- ADMIN DESK (Auto-Ban, Analytics, UPI Manager) -->
   <div id="admin-panel-screen" class="admin-panel">
     <div class="max-w-3xl mx-auto p-4 sm:p-6 pb-24 space-y-4">
       <div class="flex justify-between items-center border-b border-purple-900 pb-3">
         <div>
           <h2 class="text-base font-black text-amber-300 uppercase">ADMIN DESK</h2>
-          <p class="text-[11px] text-slate-400">Restricted Area</p>
         </div>
         <button onclick="closeAdminDesk()" class="px-3 py-1 bg-red-600/30 border border-red-500/50 rounded-xl text-red-200 text-xs font-bold">Close</button>
       </div>
 
+      <!-- ANALYTICS -->
       <div class="grid grid-cols-2 gap-2 text-center text-xs">
         <div class="p-3 bg-indigo-950/40 border border-indigo-800 rounded-xl">
           <p class="text-[10px] text-indigo-300 uppercase">Total Visitors</p>
@@ -322,15 +400,17 @@
         </div>
       </div>
 
+      <!-- MULTIPLE UPI MANAGER -->
       <div class="p-3 bg-slate-900 rounded-xl border border-purple-900">
-        <h4 class="text-xs font-black text-purple-300 uppercase mb-2">Manage UPI IDs (Deposit QRs)</h4>
+        <h4 class="text-xs font-black text-purple-300 uppercase mb-2">Manage UPI IDs</h4>
         <div class="flex gap-2">
           <input type="text" id="admin-add-upi" placeholder="newupi@ybl" class="flex-1 bg-black/50 border border-purple-800 rounded-lg px-2 text-xs text-white" />
-          <button onclick="adminAddUPI()" class="px-3 py-1.5 bg-emerald-600 rounded-lg text-white font-bold text-xs">Add UPI</button>
+          <button onclick="adminAddUPI()" class="px-3 py-1.5 bg-emerald-600 rounded-lg text-white font-bold text-xs">Add</button>
         </div>
         <div id="admin-upi-list" class="mt-3 space-y-1.5 text-xs"></div>
       </div>
 
+      <!-- MATCH CREATOR -->
       <div class="p-3 bg-slate-900 rounded-xl border border-purple-900">
         <h4 class="text-xs font-black text-amber-300 uppercase mb-2">Publish Match</h4>
         <div class="grid grid-cols-2 gap-2 text-xs">
@@ -342,26 +422,44 @@
           </select>
           <input type="number" id="new-match-fee" placeholder="Entry (₹)" class="bg-black/50 border border-purple-900 rounded-xl px-2 py-1.5 text-white" />
           <input type="number" id="new-match-prize" placeholder="Prize (₹)" class="bg-black/50 border border-purple-900 rounded-xl px-2 py-1.5 text-white" />
+          <input type="datetime-local" id="new-match-datetime" class="col-span-2 bg-black/50 border border-purple-900 rounded-xl px-2 py-1.5 text-white" />
+          <textarea id="new-match-rules" rows="2" placeholder="Rules & Regulations..." class="col-span-2 bg-black/50 border border-purple-900 rounded-xl px-2 py-1.5 text-white"></textarea>
         </div>
-        <button onclick="createLiveMatch()" class="w-full mt-2.5 py-2 bg-indigo-600 font-bold text-xs rounded-xl text-white">Publish Match</button>
+        <button onclick="createLiveMatch()" class="w-full mt-2.5 py-2 bg-indigo-600 font-bold text-xs rounded-xl text-white">Publish</button>
       </div>
 
+      <!-- MANAGE & REFUND -->
       <div class="p-3 bg-slate-900 rounded-xl border border-purple-900">
-        <div class="flex justify-between items-center mb-2">
-          <h4 class="text-xs font-black text-amber-400">DEPOSITS</h4>
+        <h4 class="text-xs font-black text-rose-400 uppercase mb-2">Live Matches & Auto-Refund</h4>
+        <div id="admin-match-manage-box" class="space-y-2 text-xs max-h-48 overflow-y-auto"></div>
+      </div>
+      <div class="p-3 bg-slate-900 rounded-xl border border-purple-900">
+        <h4 class="text-xs font-black text-cyan-400 uppercase mb-2">Push Room ID & Pass</h4>
+        <div class="grid grid-cols-3 gap-2 text-xs">
+          <input type="text" id="room-match-id" placeholder="Match Key" class="bg-black/50 border border-purple-900 rounded-lg px-2 py-1.5 text-white" />
+          <input type="text" id="room-id-val" placeholder="Room ID" class="bg-black/50 border border-purple-900 rounded-lg px-2 py-1.5 text-white" />
+          <input type="text" id="room-pass-val" placeholder="Password" class="bg-black/50 border border-purple-900 rounded-lg px-2 py-1.5 text-white" />
         </div>
+        <button onclick="dispatchRoomPass()" class="w-full mt-2 py-1.5 bg-cyan-600 font-bold text-xs rounded-lg text-white">Send Pass</button>
+      </div>
+
+      <!-- VERIFICATIONS -->
+      <div class="p-3 bg-slate-900 rounded-xl border border-cyan-800">
+        <h4 class="text-xs font-black text-cyan-400 mb-2">Screenshot Submissions (Proofs)</h4>
+        <div id="admin-proofs-box" class="space-y-2 text-xs max-h-48 overflow-y-auto"></div>
+      </div>
+      <div class="p-3 bg-slate-900 rounded-xl border border-purple-900">
+        <h4 class="text-xs font-black text-amber-400 mb-2">DEPOSITS</h4>
         <div id="admin-deposits-box" class="space-y-2 text-xs max-h-56 overflow-y-auto"></div>
       </div>
-
       <div class="p-3 bg-slate-900 rounded-xl border border-purple-900">
-        <div class="flex justify-between items-center mb-2">
-          <h4 class="text-xs font-black text-emerald-400">WITHDRAWALS</h4>
-        </div>
+        <h4 class="text-xs font-black text-emerald-400 mb-2">WITHDRAWALS</h4>
         <div id="admin-withdrawals-box" class="space-y-2 text-xs max-h-48 overflow-y-auto"></div>
       </div>
     </div>
   </div>
 
+  <!-- SCRIPT LOGIC -->
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyAKbUGfddlEzVBB66wpXqCnunBavUIolII",
@@ -376,41 +474,41 @@
     const db = firebase.database();
 
     let currentUser = JSON.parse(localStorage.getItem('apex_user')) || {
-      ign: "Guest", uid: "", phone: "", balance: 0, stars: 0, matchesPlayed: 0, adminWarnings: 0, isBanned: false
+      ign: "Guest", uid: "", phone: "", balance: 0, stars: 0, matchesPlayed: 0, 
+      lastCheckin: 0, checkinDay: 0, adminWarnings: 0, isBanned: false
     };
 
-    let allTournaments = {};
-    let activeSelectingMatchId = null;
-    let activeSelectingFee = 0;
-    let selectedSlotNumber = null;
-    let depositBase64Image = null;
-    let systemUPIs = ["fftournamenthub@ibl"]; // Default
+    let allTournaments = {}; let activeSelectingMatchId = null; let activeSelectingFee = 0; let selectedSlotNumber = null;
+    let depositBase64Image = null; let proofBase64Image = null; let activeProofMatchId = null;
+    let systemUPIs = ["fftournamenthub@ibl"];
 
-    // BAN CHECK ON LOAD
+    // 1. BAN SECURITY CHECK ON LOAD
     if (currentUser.isBanned) {
       document.body.innerHTML = `
         <div class="h-screen w-full flex items-center justify-center bg-red-950 p-6 text-center text-white">
           <div>
             <i class="fa-solid fa-triangle-exclamation text-6xl text-red-500 mb-4 animate-bounce"></i>
             <h1 class="text-2xl font-black text-red-500 uppercase">ACCOUNT BANNED</h1>
-            <p class="mt-2 text-sm text-slate-300 leading-relaxed">Tumne bina permission ke unauthorized cheez kholne ki try ki aur rules break kiye. Security system ne tumhe permanent ban kar diya hai.</p>
+            <p class="mt-2 text-sm text-slate-300">Tumne bina permission ke unauthorized cheez kholne ki try ki. Tumhara account permanent ban kar diya gaya hai.</p>
           </div>
         </div>
       `;
       throw new Error("Banned");
     }
 
-    // VISITOR ANALYTICS
+    // 2. LIVE ANALYTICS & TOAST
     window.addEventListener('DOMContentLoaded', () => {
       if (!localStorage.getItem('has_visited')) {
         db.ref('analytics/visitors').transaction(curr => (curr || 0) + 1);
         localStorage.setItem('has_visited', 'true');
       }
-      syncUI();
-      startFakeWithdrawToasts();
+      setTimeout(() => {
+        const splash = document.getElementById('splash-screen');
+        if (splash) splash.classList.add('fade-out');
+      }, 2200);
+      syncUI(); startFakeWithdrawToasts(); drawSpinWheel(); checkSpinLockStatus(); renderCheckinGrid();
     });
 
-    // FAKE TOASTS
     const fakeNames = ["Rahul", "Priya", "Amit", "Vikash", "Devil", "Rohan", "Sneha"];
     function startFakeWithdrawToasts() {
       setInterval(() => {
@@ -424,15 +522,18 @@
     }
 
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    function playSFX() {
+    function playSFX(type='click') {
       if (audioCtx.state === 'suspended') audioCtx.resume();
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
+      const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
       osc.connect(gain); gain.connect(audioCtx.destination);
-      osc.frequency.setValueAtTime(450, audioCtx.currentTime);
-      gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
-      osc.start(); osc.stop(audioCtx.currentTime + 0.05);
+      if(type==='click') {
+        osc.frequency.setValueAtTime(450, audioCtx.currentTime); gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05); osc.start(); osc.stop(audioCtx.currentTime + 0.05);
+      } else {
+        osc.type = 'triangle'; osc.frequency.setValueAtTime(320, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.35);
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.45);
+        osc.start(); osc.stop(audioCtx.currentTime + 0.45);
+      }
     }
 
     function openModal(id) { document.getElementById(id).classList.add('active'); }
@@ -442,6 +543,7 @@
       document.getElementById('screen-' + name).classList.remove('hidden');
     }
 
+    // UI SYNC
     function syncUI() {
       document.getElementById('top-wallet-val').textContent = currentUser.balance || 0;
       document.getElementById('wallet-main-bal').textContent = currentUser.balance || 0;
@@ -452,36 +554,27 @@
       document.getElementById('prof-matches-played').textContent = currentUser.matchesPlayed || 0;
       document.getElementById('prof-win-stars').textContent = (currentUser.stars || 0) + " ★";
       document.getElementById('player-total-stars').textContent = (currentUser.stars || 0) + " Stars";
-
+      
       let rank = "BRONZE";
       if (currentUser.stars >= 5) rank = "GOLD";
       if (currentUser.stars >= 10) rank = "DIAMOND";
       if (currentUser.stars >= 20) rank = "HEROIC";
-      
       document.getElementById('header-rank-txt').textContent = rank;
       document.getElementById('profile-tier-badge').textContent = rank;
     }
 
-    // STRICT BAN ADMIN ACCESS
+    // 3. ADMIN AUTO-BAN SECURITY
     let adminTapCount = 0; let adminTapTimer = null;
     function handleAdminSecretTap() {
-      adminTapCount++;
-      clearTimeout(adminTapTimer);
+      adminTapCount++; clearTimeout(adminTapTimer);
       adminTapTimer = setTimeout(() => { adminTapCount = 0; }, 2000);
-      if (adminTapCount >= 5) {
-        adminTapCount = 0;
-        triggerSecureAdminPrompt();
-      }
+      if (adminTapCount >= 5) { adminTapCount = 0; triggerSecureAdminPrompt(); }
     }
-
     function triggerSecureAdminPrompt() {
       const entered = prompt("Enter Master Security PIN:");
       if (!entered) return;
-
-      const activePin = localStorage.getItem('apex_pin') || "8690";
-      if (entered.trim() === activePin || entered.trim() === "8690") {
-        currentUser.adminWarnings = 0; 
-        localStorage.setItem('apex_user', JSON.stringify(currentUser));
+      if (entered.trim() === "8690") {
+        currentUser.adminWarnings = 0; localStorage.setItem('apex_user', JSON.stringify(currentUser));
         document.getElementById('admin-panel-screen').classList.add('active');
       } else {
         currentUser.adminWarnings = (currentUser.adminWarnings || 0) + 1;
@@ -489,7 +582,7 @@
           currentUser.isBanned = true;
           localStorage.setItem('apex_user', JSON.stringify(currentUser));
           if(currentUser.phone) db.ref('players/' + currentUser.phone).update({isBanned: true});
-          location.reload(); // Will trigger red ban screen
+          location.reload(); 
         } else {
           localStorage.setItem('apex_user', JSON.stringify(currentUser));
           alert("⚠️ WARNING: Unauthorized access detected! Ek aur galat attempt par aapka account permanent ban ho jayega.");
@@ -498,59 +591,133 @@
     }
     function closeAdminDesk() { document.getElementById('admin-panel-screen').classList.remove('active'); }
 
-    // RENDER MATCHES
+    // 4. KELLY TTS & REGISTRATION
+    function triggerKellyWelcomeSpeech(userName) {
+      document.getElementById('kelly-user-name').textContent = userName;
+      openModal('kelly-welcome-modal');
+      const speechLine = `Hey ${userName}, welcome to Free Fire Max Tournament Hub. Now you are ready to play and please win all challenges.`;
+      
+      const captionEl = document.getElementById('kelly-caption-text');
+      captionEl.textContent = ""; let charIdx = 0;
+      const typeTimer = setInterval(() => {
+        if (charIdx < speechLine.length) { captionEl.textContent += speechLine.charAt(charIdx); charIdx++; } 
+        else { clearInterval(typeTimer); }
+      }, 35);
+
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(speechLine);
+        utterance.rate = 0.88; utterance.pitch = 1.4;
+        const voices = window.speechSynthesis.getVoices();
+        const robotVoice = voices.find(v => v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('zira'));
+        if (robotVoice) utterance.voice = robotVoice;
+        window.speechSynthesis.speak(utterance);
+      }
+    }
+
+    function generateSecureToken() {
+      document.getElementById('step-number-box').classList.add('hidden');
+      document.getElementById('step-otp-box').classList.remove('hidden');
+      document.getElementById('disp-gen-token').textContent = "123456"; 
+    }
+    function verifyPlayerToken() {
+      currentUser.ign = document.getElementById('input-ign').value;
+      currentUser.uid = document.getElementById('input-ff-uid').value;
+      currentUser.phone = document.getElementById('input-phone').value;
+      db.ref('players/' + currentUser.phone).set(currentUser);
+      localStorage.setItem('apex_user', JSON.stringify(currentUser));
+      syncUI(); closeModal('auth-popup'); triggerKellyWelcomeSpeech(currentUser.ign);
+    }
+
+    // 5. RENDER MATCHES & FLIP CARDS
+    function toggleCardFlip(key) { playSFX('click'); document.getElementById(`flipper-${key}`).classList.toggle('flipped'); }
+
     function renderTournaments(data) {
       allTournaments = data || {};
       const box = document.getElementById('tournaments-container');
+      const roomBox = document.getElementById('room-pass-list');
       const keys = Object.keys(allTournaments);
+      if (keys.length === 0) { box.innerHTML = `<p class="text-xs text-slate-400 text-center py-8">No active matches.</p>`; return; }
 
-      if (keys.length === 0) {
-        box.innerHTML = `<p class="text-xs text-slate-400 text-center py-8">No active matches.</p>`;
-        return;
-      }
-
-      let h = "";
+      let h = ""; let myJoinedHtml = "";
       keys.forEach(k => {
         const m = allTournaments[k];
-        const entryFee = m.entry || 20;
-        const max = m.maxSlots || 48;
-        const booked = m.bookedSlots || {};
-        const filled = Object.keys(booked).length;
+        const max = m.maxSlots || 48; const booked = m.bookedSlots || {}; const filled = Object.keys(booked).length;
+        const rules = m.rules || "Standard fair-play rules.";
+        const rawTimestamp = m.datetime ? new Date(m.datetime).getTime() : 0;
 
-        let isJoined = Object.values(booked).some(p => p.phone === currentUser.phone);
-        let joinBtn = "";
-        
-        if (isJoined) {
-          joinBtn = `<button disabled class="w-full mt-3 py-2 bg-emerald-950 text-emerald-400 text-xs font-bold rounded-xl">Already Joined</button>`;
-        } else if (filled >= max) {
-          joinBtn = `<button disabled class="w-full mt-3 py-2 bg-red-950 text-red-400 text-xs font-bold rounded-xl">Match Full</button>`;
-        } else {
-          joinBtn = `<button onclick="openSlotPicker('${k}', ${entryFee})" class="w-full mt-3 py-2 bg-purple-600 text-white font-bold text-xs rounded-xl active:scale-95">Choose Slot (₹${entryFee})</button>`;
-        }
+        let isJoined = false; let mySlot = null;
+        Object.keys(booked).forEach(s => { if(booked[s].phone === currentUser.phone) { isJoined = true; mySlot = s; } });
+
+        let btn = "";
+        if(isJoined) {
+          btn = `<button disabled class="w-full mt-3 py-2 bg-emerald-950 text-emerald-400 text-xs font-bold rounded-xl">Already Joined (Slot #${mySlot})</button>`;
+          myJoinedHtml += `
+            <div class="p-3 bg-black/60 border border-purple-800/60 rounded-xl space-y-2 mb-2">
+              <div class="flex justify-between items-start">
+                <div><h4 class="font-bold text-white text-xs">${m.title}</h4><p class="text-[10px] text-purple-300">${m.mode}</p></div>
+                <span class="px-2 py-0.5 bg-purple-900 border border-purple-500 rounded text-[10px] text-amber-300">SLOT #${mySlot}</span>
+              </div>
+              <div class="p-2 bg-purple-950/40 rounded-lg text-xs">
+                <span class="text-[9px] text-slate-400 uppercase">Room Credentials</span>
+                <p class="font-mono text-emerald-400 font-bold">${m.roomId ? `ID: ${m.roomId} \vert{} PASS:${m.roomPass}` : 'Match se 15 min pehle aayega'}</p>
+              </div>
+              <button onclick="openResultProofModal('${k}', '${m.title}')" class="w-full py-1.5 bg-cyan-600 rounded-lg text-white font-bold text-xs"><i class="fa-solid fa-cloud-arrow-up"></i> Submit Kill Proof</button>
+            </div>`;
+        } else if (filled >= max) { btn = `<button disabled class="w-full mt-3 py-2 bg-red-950 text-red-400 text-xs font-bold rounded-xl">Match Full</button>`; } 
+        else { btn = `<button onclick="openSlotPicker('${k}', ${m.entry})" class="w-full mt-3 py-2 bg-purple-600 text-white font-bold text-xs rounded-xl">Choose Slot (₹${m.entry})</button>`; }
 
         h += `
-          <div class="p-4 rounded-2xl bg-black/40 border border-purple-800/40 shadow-lg">
-            <span class="text-[10px] text-purple-300 font-bold uppercase bg-purple-900/50 px-2 py-0.5 rounded">${m.mode}</span>
-            <h3 class="font-extrabold text-white mt-1">${m.title}</h3>
-            <div class="flex justify-between text-xs mt-2 pt-2 border-t border-purple-900/50">
-              <span class="text-amber-300">Prize: ₹${m.prize}</span>
-              <span class="text-slate-400">Slots: ${filled}/${max}</span>
+          <div class="card-flip-container w-full min-h-[220px]">
+            <div id="flipper-${k}" class="card-flipper w-full h-full">
+              <div class="card-front p-4 rounded-2xl bg-black/40 border border-purple-800/40 shadow-lg">
+                <div class="flex justify-between items-center text-xs">
+                  <span class="px-2 py-0.5 bg-purple-900/80 rounded text-purple-300 font-bold">${m.mode}</span>
+                  <button onclick="toggleCardFlip('${k}')" class="text-[10px] text-amber-300 font-bold"><i class="fa-solid fa-scroll"></i> Rules ↷</button>
+                </div>
+                <h3 class="font-extrabold text-sm text-white mt-2">${m.title}</h3>
+                <div class="mt-1 flex items-center justify-between text-[11px] font-mono">
+                  <span class="text-emerald-400 font-bold" id="timer-${k}" data-time="${rawTimestamp}">Calculating...</span>
+                </div>
+                <div class="flex justify-between text-xs mt-2 pt-2 border-t border-purple-900/50">
+                  <span class="text-amber-300">Prize: ₹${m.prize}</span>
+                  <span class="text-slate-400">Slots: ${filled}/${max}</span>
+                </div>
+                ${btn}
+              </div>
+              <div class="card-back p-4 rounded-2xl bg-[#0e0724] border border-amber-600/50 shadow-xl flex flex-col justify-between">
+                <div>
+                  <div class="flex justify-between items-center border-b border-purple-900/60 pb-1 mb-2">
+                    <span class="text-xs font-black text-amber-300">Rules</span>
+                    <button onclick="toggleCardFlip('${k}')" class="text-[10px] text-purple-300">↶ Back</button>
+                  </div>
+                  <div class="text-[11px] text-slate-300 whitespace-pre-line">${rules}</div>
+                </div>
+              </div>
             </div>
-            ${joinBtn}
-          </div>
-        `;
+          </div>`;
       });
-      box.innerHTML = h;
+      box.innerHTML = h; roomBox.innerHTML = myJoinedHtml || `<p class="text-xs text-slate-400 text-center py-6">No joined matches.</p>`;
     }
 
-    // CLASH SQUAD VS BR SLOT PICKER
-    function openSlotPicker(matchId, fee) {
-      if (!currentUser.phone) { alert("Pehle Account verify karein!"); return; }
-      if (currentUser.balance < fee) { alert(`Balance kam hai! ₹${fee} required.`); openModal('main-wallet-popup'); return; }
+    setInterval(() => {
+      document.querySelectorAll('[id^="timer-"]').forEach(el => {
+        const time = Number(el.getAttribute('data-time')); if (!time) return;
+        const diff = time - Date.now();
+        if (diff <= 0) { el.textContent = "🔴 LIVE NOW"; el.className = "text-rose-400 font-bold animate-pulse"; } 
+        else {
+          const h = Math.floor(diff / (1000 * 60 * 60)); const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)); const s = Math.floor((diff % (1000 * 60)) / 1000);
+          el.textContent = `Starts in ${h}h : ${m}m : ${s}s`;
+        }
+      });
+    }, 1000);
 
+    // 6. CLASH SQUAD (8) VS BR (48) SLOT PICKER
+    function openSlotPicker(matchId, fee) {
+      if (!currentUser.phone) { alert("Verify Account!"); return; }
+      if (currentUser.balance < fee) { alert(`Balance kam hai! ₹${fee} required.`); openModal('main-wallet-popup'); return; }
       activeSelectingMatchId = matchId; activeSelectingFee = fee; selectedSlotNumber = null;
       document.getElementById('confirm-slot-btn').disabled = true;
-      document.getElementById('confirm-slot-btn').className = "px-5 py-2 bg-purple-900/50 text-slate-500 font-extrabold text-xs rounded-xl cursor-not-allowed";
       
       const m = allTournaments[matchId];
       const isCS = m.mode.includes("CS") || m.mode.includes("Clash");
@@ -559,205 +726,145 @@
       let html = "";
 
       if (isCS) {
-        // CS 8 Slots (Team A vs Team B)
         grid.className = "grid grid-cols-2 gap-4 p-2";
-        html += `
-          <div class="space-y-1.5 border border-cyan-800/50 bg-cyan-950/20 p-2 rounded-xl">
-            <h4 class="text-[10px] text-cyan-400 font-black text-center mb-2 border-b border-cyan-800 pb-1">TEAM A</h4>
-            ${[1,2,3,4].map(i => generateSlotHTML(i, booked[i])).join('')}
-          </div>
-          <div class="space-y-1.5 border border-rose-800/50 bg-rose-950/20 p-2 rounded-xl">
-            <h4 class="text-[10px] text-rose-400 font-black text-center mb-2 border-b border-rose-800 pb-1">TEAM B</h4>
-            ${[5,6,7,8].map(i => generateSlotHTML(i, booked[i])).join('')}
-          </div>
-        `;
+        html += `<div class="space-y-1.5 border border-cyan-800 bg-cyan-950/20 p-2 rounded-xl"><h4 class="text-[10px] text-cyan-400 text-center">TEAM A</h4>${[1,2,3,4].map(i => generateSlotHTML(i, booked[i])).join('')}</div>
+                 <div class="space-y-1.5 border border-rose-800 bg-rose-950/20 p-2 rounded-xl"><h4 class="text-[10px] text-rose-400 text-center">TEAM B</h4>${[5,6,7,8].map(i => generateSlotHTML(i, booked[i])).join('')}</div>`;
       } else {
-        // BR 48 Slots
         grid.className = "grid grid-cols-6 gap-1.5 p-1";
-        for (let i = 1; i <= 48; i++) {
-          html += generateSlotHTML(i, booked[i]);
-        }
+        for (let i = 1; i <= 48; i++) html += generateSlotHTML(i, booked[i]);
       }
-      grid.innerHTML = html;
-      openModal('slot-modal');
+      grid.innerHTML = html; openModal('slot-modal');
     }
-
     function generateSlotHTML(i, isBooked) {
-      if (isBooked) {
-        return `<div class="p-1.5 rounded bg-red-950/80 border border-red-700/80 text-center opacity-50 cursor-not-allowed"><span class="text-[10px] font-bold text-red-200">#${i}</span></div>`;
-      }
-      return `<div onclick="selectSlot(${i})" id="slot-card-${i}" class="slot-item p-1.5 rounded bg-purple-950/40 border border-purple-700/50 text-center cursor-pointer active:scale-95"><span class="text-[10px] font-bold text-white">#${i}</span></div>`;
+      if (isBooked) return `<div class="p-1.5 rounded bg-red-950/80 border border-red-700 opacity-50"><span class="text-[10px] text-red-200">#${i}</span></div>`;
+      return `<div onclick="selectSlot(${i})" id="slot-card-${i}" class="slot-item p-1.5 rounded bg-purple-950/40 border border-purple-700 text-center cursor-pointer active:scale-95"><span class="text-[10px] text-white">#${i}</span></div>`;
     }
-
     function selectSlot(slotNum) {
-      selectedSlotNumber = slotNum;
-      document.getElementById('selected-slot-num').textContent = `#${slotNum}`;
+      selectedSlotNumber = slotNum; document.getElementById('selected-slot-num').textContent = `#${slotNum}`;
       document.querySelectorAll('.slot-item').forEach(el => el.classList.remove('bg-emerald-600', 'border-emerald-400'));
       document.getElementById(`slot-card-${slotNum}`).classList.add('bg-emerald-600', 'border-emerald-400');
-      
-      const btn = document.getElementById('confirm-slot-btn');
-      btn.disabled = false; btn.className = "px-5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs rounded-xl shadow-lg";
+      document.getElementById('confirm-slot-btn').disabled = false;
+      document.getElementById('confirm-slot-btn').className = "px-5 py-2 bg-emerald-600 text-white font-extrabold text-xs rounded-xl";
     }
-
     function confirmSlotBooking() {
       db.ref(`tournaments/${activeSelectingMatchId}/bookedSlots/${selectedSlotNumber}`).once('value').then(snap => {
-        if (snap.exists()) { alert("Slot just booked by someone else!"); return; }
-        
-        currentUser.balance -= activeSelectingFee;
-        currentUser.matchesPlayed += 1;
+        if (snap.exists()) { alert("Slot booked!"); return; }
+        currentUser.balance -= activeSelectingFee; currentUser.matchesPlayed += 1;
         localStorage.setItem('apex_user', JSON.stringify(currentUser));
         if(currentUser.phone) db.ref('players/' + currentUser.phone).update({balance: currentUser.balance, matchesPlayed: currentUser.matchesPlayed});
-
-        db.ref(`tournaments/${activeSelectingMatchId}/bookedSlots/${selectedSlotNumber}`).set({
-          ign: currentUser.ign, uid: currentUser.uid, phone: currentUser.phone
-        });
-
-        syncUI(); closeModal('slot-modal');
-        alert("Match Joined! Check Room Pass Tab.");
+        db.ref(`tournaments/${activeSelectingMatchId}/bookedSlots/${selectedSlotNumber}`).set({ign: currentUser.ign, phone: currentUser.phone});
+        syncUI(); closeModal('slot-modal'); playSFX('booyah'); alert("Match Joined!");
       });
     }
 
-    // MULTIPLE UPI MANAGEMENT & DEPOSIT LIMITS (Min ₹49)
-    function updateWalletQR() {
-      const selected = document.getElementById('upi-selector').value;
-      if (selected) {
-        document.getElementById('qr-upi-label').textContent = selected;
-        document.getElementById('qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=${selected}&pn=FF%20TOURNAMENT`;
+    // 7. SPIN WHEEL 24H & CHECKIN
+    const wheelSegments = ["₹5", "1 Star", "₹10", "Better Luck", "₹20", "2 Stars", "₹2", "Booyah"];
+    const wheelColors = ["#7c3aed", "#eab308", "#2563eb", "#dc2626", "#059669", "#d97706", "#9333ea", "#0891b2"];
+    let currRot = 0; let isSpin = false;
+
+    function drawSpinWheel() {
+      const c = document.getElementById('wheel-canvas'); if (!c) return; const ctx = c.getContext('2d');
+      const r = c.width/2; const arc = (2*Math.PI)/8;
+      for(let i=0; i<8; i++){
+        ctx.beginPath(); ctx.fillStyle = wheelColors[i]; ctx.moveTo(r,r); ctx.arc(r,r,r, i*arc, (i+1)*arc); ctx.fill(); ctx.stroke();
+        ctx.save(); ctx.translate(r,r); ctx.rotate(i*arc + arc/2); ctx.textAlign="right"; ctx.fillStyle="#fff"; ctx.font="bold 12px sans-serif"; ctx.fillText(wheelSegments[i], r-15, 5); ctx.restore();
       }
     }
+    function checkSpinLockStatus() {
+      const lastSpin = Number(localStorage.getItem('apex_last_spin')) || 0; const now = Date.now(); const oneDay = 24*60*60*1000;
+      const btn = document.getElementById('spin-btn'); if(!btn) return;
+      if (now - lastSpin < oneDay) {
+        const rem = oneDay - (now - lastSpin); const h = Math.floor(rem/(1000*60*60)); const m = Math.floor((rem%(1000*60*60))/(1000*60));
+        btn.disabled = true; btn.className = "w-full py-2.5 bg-slate-800 text-slate-400 font-black text-xs rounded-xl";
+        btn.textContent = `LOCKED (${h}h : ${m}m)`; document.getElementById('spin-badge-status').textContent = `Wait ${h}h`;
+      } else {
+        btn.disabled = false; btn.className = "w-full py-2.5 bg-gradient-to-r from-purple-600 to-amber-500 text-white font-black text-xs rounded-xl";
+        btn.textContent = "SPIN NOW"; document.getElementById('spin-badge-status').textContent = "Spin Ready ✅";
+      }
+    }
+    setInterval(checkSpinLockStatus, 1000);
 
-    function previewDepositImage(e) {
-      const f = e.target.files[0]; if(!f) return;
-      const r = new FileReader();
-      r.onload = ev => { depositBase64Image = ev.target.result; }
-      r.readAsDataURL(f);
+    function spinWheel() {
+      if(isSpin) return; isSpin = true; playSFX('booyah');
+      currRot += 1440 + Math.floor(Math.random()*360); document.getElementById('wheel-canvas').style.transform = `rotate(${currRot}deg)`;
+      localStorage.setItem('apex_last_spin', Date.now()); checkSpinLockStatus();
+      setTimeout(() => {
+        isSpin = false; const seg = Math.floor((360 - (currRot%360))/45)%8; const won = wheelSegments[seg];
+        if(won.includes('₹')){ currentUser.balance += Number(won.replace('₹','')); alert(`Jeete ₹${won.replace('₹','')}`); }
+        else if(won.includes('Star')) { currentUser.stars += 1; alert("+1 Star!"); }
+        localStorage.setItem('apex_user', JSON.stringify(currentUser)); syncUI();
+      }, 4100);
     }
 
+    function renderCheckinGrid() {
+      const g = document.getElementById('checkin-days-grid'); if(!g) return; let h = ""; const cd = currentUser.checkinDay || 0;
+      for(let i=1; i<=7; i++) {
+        const claim = i<=cd; const today = i===(cd+1);
+        h+=`<div class="p-2 rounded-xl border ${claim?'bg-emerald-950 border-emerald-600 text-emerald-300':today?'bg-amber-950 border-amber-500 text-amber-300':'bg-black/40 text-slate-500'}"><span class="text-[9px]">Day ${i}</span><span class="text-[8px] block">${claim?'Claimed':'Ready'}</span></div>`;
+      } g.innerHTML = h;
+    }
+    function claimDailyReward() {
+      const now = Date.now(); const last = currentUser.lastCheckin||0; const oneDay = 24*60*60*1000;
+      if(now-last < oneDay) { alert("Aaj claim ho chuka hai."); return; }
+      playSFX('booyah'); let c = (currentUser.checkinDay||0)+1; if(c>7) c=1;
+      currentUser.balance += 5; currentUser.checkinDay = c; currentUser.lastCheckin = now;
+      localStorage.setItem('apex_user', JSON.stringify(currentUser)); syncUI(); renderCheckinGrid(); alert("₹5 Check-in claimed!");
+    }
+
+    // 8. SCREENSHOT PROOF UPLOADER
+    function openResultProofModal(mId, title) { activeProofMatchId = mId; proofBase64Image = null; openModal('result-proof-modal'); }
+    function previewProofImage(e) { const r = new FileReader(); r.onload = ev => { proofBase64Image = ev.target.result; document.getElementById('proof-img-preview').src = proofBase64Image; document.getElementById('proof-img-preview').classList.remove('hidden'); }; r.readAsDataURL(e.target.files[0]); }
+    function submitResultProof() {
+      const k = document.getElementById('proof-kills-count').value;
+      if(!k || !proofBase64Image) { alert("Screenshot aur kills zaroori hai!"); return; }
+      db.ref(`matchProofs/${activeProofMatchId}/PRF${Date.now()}`).set({ign: currentUser.ign, phone: currentUser.phone, kills: k, screenshot: proofBase64Image, status: "pending"}).then(() => { alert("Proof Sent!"); closeModal('result-proof-modal'); });
+    }
+
+    // 9. MULTIPLE UPI, DEPOSIT (Min ₹49) & WITHDRAW (Max ₹999)
+    function updateWalletQR() {
+      const s = document.getElementById('upi-selector').value;
+      if (s) { document.getElementById('qr-upi-label').textContent = s; document.getElementById('qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=${s}&pn=FF%20HUB`; }
+    }
+    function previewDepositImage(e) { const r = new FileReader(); r.onload = ev => { depositBase64Image = ev.target.result; }; r.readAsDataURL(e.target.files[0]); }
     function sendDepositUTR() {
-      const amt = Number(document.getElementById('deposit-amt').value);
-      const utr = document.getElementById('deposit-utr-code').value.trim();
-
-      if (amt < 49) { alert("⚠️ Strict Rule: Deposit ₹49 se kam nahi ho sakta!"); return; }
-      if (utr.length !== 12) { alert("12 Digit UTR enter karein!"); return; }
+      const amt = Number(document.getElementById('deposit-amt').value); const utr = document.getElementById('deposit-utr-code').value;
+      if (amt < 49) { alert("Deposit ₹49 se kam nahi ho sakta!"); return; }
       if (!depositBase64Image) { alert("Screenshot attach karna compulsory hai!"); return; }
-
-      db.ref('deposits/' + utr).once('value').then(snap => {
-        if(snap.exists()) { alert("DUPLICATE UTR! Yeh pehle use ho chuka hai."); return; }
-        db.ref('deposits/' + utr).set({
-          phone: currentUser.phone, ign: currentUser.ign, amount: amt, utr: utr, screenshot: depositBase64Image, status: "pending"
-        }).then(() => {
-          alert("Deposit request sent!"); closeModal('deposit-popup');
-        });
+      db.ref('deposits/' + utr).once('value').then(s => {
+        if(s.exists()) { alert("Duplicate UTR!"); return; }
+        db.ref('deposits/' + utr).set({phone: currentUser.phone, ign: currentUser.ign, amount: amt, utr: utr, screenshot: depositBase64Image, status: "pending"}).then(() => { alert("Request sent!"); closeModal('deposit-popup'); });
       });
     }
-
-    // WITHDRAWAL LIMITS (Max ₹999/day)
     function submitWithdrawRequest() {
       const amt = Number(document.getElementById('withdraw-amt').value);
-      if (amt < 50) { alert("Min withdrawal ₹50 hai!"); return; }
-      if (amt > 999) { alert("⚠️ Security Rule: Daily withdrawal limit ₹999 hai!"); return; }
-      if (amt > currentUser.balance) { alert("Insufficient balance!"); return; }
-
-      const id = "W" + Date.now().toString().slice(-4);
-      db.ref('withdrawals/' + id).set({
-        phone: currentUser.phone, amount: amt, upi: document.getElementById('withdraw-upi-input').value, status: "pending"
-      }).then(() => {
-        currentUser.balance -= amt; localStorage.setItem('apex_user', JSON.stringify(currentUser)); syncUI();
-        alert("Withdrawal sent!"); closeModal('withdraw-popup');
-      });
+      if (amt < 50) { alert("Min ₹50"); return; }
+      if (amt > 999) { alert("Daily limit ₹999"); return; }
+      if (amt > currentUser.balance) { alert("Insufficient balance"); return; }
+      db.ref('withdrawals/W'+Date.now()).set({phone: currentUser.phone, amount: amt, status: "pending"}).then(() => { currentUser.balance -= amt; syncUI(); alert("Sent!"); closeModal('withdraw-popup'); });
     }
 
-    // AUTH
-    function generateSecureToken() {
-      document.getElementById('step-number-box').classList.add('hidden');
-      document.getElementById('step-otp-box').classList.remove('hidden');
-      document.getElementById('disp-gen-token').textContent = "123456"; // Auto OTP for demo
-    }
-    function verifyPlayerToken() {
-      currentUser.ign = document.getElementById('input-ign').value;
-      currentUser.uid = document.getElementById('input-ff-uid').value;
-      currentUser.phone = document.getElementById('input-phone').value;
-      db.ref('players/' + currentUser.phone).set(currentUser);
-      localStorage.setItem('apex_user', JSON.stringify(currentUser));
-      syncUI(); closeModal('auth-popup');
-    }
-
-    // ADMIN UPI ADD
-    function adminAddUPI() {
-      const val = document.getElementById('admin-add-upi').value.trim();
-      if(val.includes('@')) {
-        systemUPIs.push(val);
-        db.ref('settings/upis').set(systemUPIs);
-        document.getElementById('admin-add-upi').value = "";
-      }
-    }
-    function removeUPI(idx) {
-      systemUPIs.splice(idx, 1);
-      db.ref('settings/upis').set(systemUPIs);
-    }
-
-    // ADMIN CREATE MATCH
+    // 10. ADMIN PANEL: UPI, AUTO-REFUND & ANALYTICS
+    function adminAddUPI() { const v = document.getElementById('admin-add-upi').value; if(v.includes('@')) { systemUPIs.push(v); db.ref('settings/upis').set(systemUPIs); } }
+    function removeUPI(idx) { systemUPIs.splice(idx, 1); db.ref('settings/upis').set(systemUPIs); }
+    
     function createLiveMatch() {
-      const title = document.getElementById('new-match-title').value;
-      const mode = document.getElementById('new-match-mode').value;
-      const key = "M" + Date.now().toString().slice(-4);
-      
-      let maxSlots = mode.includes("CS") ? 8 : 48; // Dynamic Slots calculation
-      
-      db.ref('tournaments/' + key).set({
-        title: title, mode: mode, maxSlots: maxSlots,
-        entry: document.getElementById('new-match-fee').value,
-        prize: document.getElementById('new-match-prize').value
-      });
-      alert("Match Published!");
+      const m = document.getElementById('new-match-mode').value;
+      db.ref('tournaments/M'+Date.now()).set({title: document.getElementById('new-match-title').value, mode: m, maxSlots: m.includes("CS") ? 8 : 48, entry: document.getElementById('new-match-fee').value, prize: document.getElementById('new-match-prize').value}); alert("Published!");
     }
 
-    // REALTIME DB LISTENERS
+    // LEADERBOARD & DB LISTENERS
     db.ref('settings/upis').on('value', snap => {
       systemUPIs = snap.val() || ["fftournamenthub@ibl"];
-      // Update Admin UI
-      let adHtml = "";
-      systemUPIs.forEach((u, i) => {
-        adHtml += `<div class="flex justify-between bg-black/40 p-1.5 rounded border border-purple-800"><span>${u}</span> <button onclick="removeUPI(${i})" class="text-red-400">X</button></div>`;
-      });
-      document.getElementById('admin-upi-list').innerHTML = adHtml;
-      // Update User Wallet Dropdown
-      const sel = document.getElementById('upi-selector');
-      sel.innerHTML = systemUPIs.map(u => `<option value="${u}">${u}</option>`).join('');
-      updateWalletQR();
+      document.getElementById('admin-upi-list').innerHTML = systemUPIs.map((u,i)=>`<div class="flex justify-between bg-black p-1 rounded"><span>${u}</span><button onclick="removeUPI(${i})">X</button></div>`).join('');
+      document.getElementById('upi-selector').innerHTML = systemUPIs.map(u => `<option value="${u}">${u}</option>`).join(''); updateWalletQR();
     });
-
     db.ref('tournaments').on('value', snap => renderTournaments(snap.val()));
-
-    db.ref('analytics/visitors').on('value', snap => {
-      if(document.getElementById('admin-visitor-count')) document.getElementById('admin-visitor-count').textContent = snap.val() || 0;
-    });
-
+    db.ref('analytics/visitors').on('value', snap => { if(document.getElementById('admin-visitor-count')) document.getElementById('admin-visitor-count').textContent = snap.val()||0; });
     db.ref('players').on('value', snap => {
       const users = snap.val() || {};
       if(document.getElementById('admin-reg-count')) document.getElementById('admin-reg-count').textContent = Object.keys(users).length;
-      
-      // REAL DYNAMIC LEADERBOARD LOGIC
-      let arr = Object.values(users).filter(u => u.ign && u.stars);
-      arr.sort((a,b) => b.stars - a.stars);
-      let top3 = arr.slice(0, 3);
-      let leadHTML = "";
-      top3.forEach((p, i) => {
-        let dynamicCash = p.stars * 150; // Dynamic earning formula
-        leadHTML += `
-          <div class="p-3 bg-purple-950/40 rounded-xl border border-purple-900 flex justify-between items-center text-xs">
-            <div>
-              <p class="font-bold text-white">#${i+1} ${p.ign}</p>
-              <p class="text-[9px] text-purple-400">UID: ${p.uid}</p>
-            </div>
-            <div class="text-right">
-              <span class="text-amber-300 font-bold">₹${dynamicCash} Won</span>
-              <p class="text-[9px] text-emerald-400">${p.stars} Stars</p>
-            </div>
-          </div>
-        `;
-      });
-      document.getElementById('champions-list').innerHTML = leadHTML;
+      let arr = Object.values(users).filter(u => u.ign && u.stars).sort((a,b) => b.stars - a.stars).slice(0, 3);
+      document.getElementById('champions-list').innerHTML = arr.map((p,i) => `<div class="p-3 bg-purple-950/40 rounded border border-purple-900 flex justify-between text-xs"><div><p class="font-bold text-white">#${i+1} ${p.ign}</p></div><div><span class="text-amber-300 font-bold">₹${p.stars*150}</span><p class="text-[9px] text-emerald-400">${p.stars} Stars</p></div></div>`).join('');
     });
   </script>
 </body>
