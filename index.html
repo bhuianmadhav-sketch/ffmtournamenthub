@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>FF TOURNAMENT HUB | Official Esports Arena</title>
-  
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
@@ -15,16 +14,9 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap');
     
-    html, body { 
-      height: 100%; overflow: hidden; background-color: #050112; 
-      color: #e2e8f0; font-family: 'Montserrat', sans-serif; 
-      touch-action: manipulation; user-select: none; -webkit-tap-highlight-color: transparent; 
-    }
+    html, body { height: 100%; overflow: hidden; background-color: #050112; color: #e2e8f0; font-family: 'Montserrat', sans-serif; touch-action: manipulation; user-select: none; -webkit-tap-highlight-color: transparent; }
     
-    .bg-freefire-theme { 
-      background-image: radial-gradient(circle at 50% 10%, rgba(35, 10, 70, 0.8) 0%, rgba(5, 1, 18, 0.98) 100%), url('https://images.alphacoders.com/100/1004169.jpg'); 
-      background-size: cover; background-position: center top; background-attachment: fixed; 
-    }
+    .bg-freefire-theme { background-image: radial-gradient(circle at 50% 10%, rgba(35, 10, 70, 0.8) 0%, rgba(5, 1, 18, 0.98) 100%), url('https://images.alphacoders.com/100/1004169.jpg'); background-size: cover; background-position: center top; background-attachment: fixed; }
     
     .glow-text { text-shadow: 0 0 10px rgba(168, 85, 247, 0.8); }
     .glow-box { box-shadow: 0 0 15px rgba(168, 85, 247, 0.4); }
@@ -32,12 +24,13 @@
     #auth-gate-screen { position: fixed; inset: 0; z-index: 9999; background: #050112; display: flex; flex-direction: column; align-items: center; justify-content: center; background-image: radial-gradient(circle at 50% 10%, rgba(35, 10, 70, 0.9) 0%, #050112 100%); overflow-y: auto; padding: 2rem 0; }
     .auth-box { background: rgba(10, 4, 25, 0.88); border: 1px solid rgba(139, 92, 246, 0.35); backdrop-filter: blur(12px); width: 90%; max-width: 24rem; border-radius: 1.5rem; padding: 1.5rem; box-shadow: 0 10px 30px rgba(0,0,0,0.6); margin: auto; }
     
-    .app-wrapper { display: none; width: 100%; max-width: 28rem; margin: 0 auto; height: 100%; position: relative; flex-direction: column; }
+    .app-wrapper { display: none; width: 100%; max-width: 28rem; margin: 0 auto; height: 100%; position: relative; flex-direction: column; background: #0f1423; }
     .app-scroll-container { height: 100vh; overflow-y: auto; padding-top: 4.5rem; padding-bottom: 5.5rem; }
     .app-scroll-container::-webkit-scrollbar { display: none; }
     
     .modal-box { display: none; position: fixed; inset: 0; z-index: 60; background: rgba(0, 0, 0, 0.9); backdrop-filter: blur(5px); align-items: center; justify-content: center; padding: 1rem; animation: fadeIn 0.2s forwards; }
     .modal-box.active { display: flex !important; }
+    
     .admin-panel { display: none; position: fixed; inset: 0; z-index: 70; background: #060214; overflow-y: auto; animation: slideUp 0.3s forwards; }
     .admin-panel.active { display: block !important; }
 
@@ -62,9 +55,6 @@
 
     #splash-screen { position: fixed; inset: 0; z-index: 10000; background: #060114; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.6s; }
     #splash-screen.fade-out { opacity: 0; pointer-events: none; }
-    
-    /* Smooth Wheel Spin Transition */
-    #wheel-canvas { transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99); }
   </style>
 </head>
 <body class="bg-freefire-theme">
@@ -139,7 +129,6 @@
     </div>
   </div>
 
-  <!-- GLOBAL OVERLAYS -->
   <div id="ban-screen" class="fixed inset-0 z-[999] bg-red-950 flex-col items-center justify-center p-6 text-center text-white hidden">
     <div>
       <i onclick="unbanMe()" class="fa-solid fa-triangle-exclamation text-6xl text-red-500 mb-4 animate-bounce cursor-pointer"></i>
@@ -148,10 +137,7 @@
     </div>
   </div>
 
-  <div id="live-toast" class="fake-toast">
-    <i class="fa-solid fa-money-bill-wave text-white"></i> 
-    <span id="toast-msg">Rahul just withdrew ₹250</span>
-  </div>
+  <div id="live-toast" class="fake-toast"><i class="fa-solid fa-money-bill-wave text-white"></i> <span id="toast-msg">Rahul just withdrew ₹250</span></div>
 
   <div id="image-preview-modal" class="modal-box z-[9999]" onclick="closeModal('image-preview-modal')">
     <div class="relative w-full max-w-md p-2 bg-[#060214] rounded-2xl border-2 border-purple-600 shadow-2xl text-center flex flex-col items-center justify-center max-h-screen overflow-auto">
@@ -159,7 +145,7 @@
         <i class="fa-solid fa-xmark"></i>
       </button>
       <img id="enlarged-img" src="" class="w-full object-contain rounded-xl bg-black" style="min-height: 50vh;" />
-      <p class="text-xs text-amber-300 mt-2">Pinch to zoom in your browser if needed</p>
+      <p class="text-xs text-amber-300 mt-2">Pinch to zoom</p>
     </div>
   </div>
 
@@ -186,44 +172,40 @@
   <!-- ================= MAIN APP WRAPPER ================= -->
   <div id="main-app-wrapper" class="app-wrapper bg-transparent">
     
-    <!-- HEADER -->
-    <header class="fixed top-0 left-0 right-0 max-w-md mx-auto h-16 bg-[#070216]/95 backdrop-blur-md px-4 flex justify-between items-center border-b border-purple-900/50 z-40 shadow-md">
-      <div class="flex items-center gap-2.5">
-        <div onclick="handleAdminSecretTap()" class="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 via-indigo-600 to-purple-500 flex items-center justify-center text-white shadow-lg cursor-pointer active:scale-90">
-          <i class="fa-solid fa-gamepad text-lg animate-pulse"></i>
+    <header class="fixed top-0 left-0 right-0 max-w-md mx-auto h-16 bg-[#0b0f19] px-4 flex justify-between items-center z-40 border-b border-white/5 shadow-md">
+      <div class="flex items-center gap-2">
+        <div class="w-9 h-9 bg-black border border-red-500 rounded-full flex items-center justify-center glow-box cursor-pointer" onclick="handleAdminSecretTap()">
+          <i class="fa-solid fa-fire text-red-500 text-sm"></i>
         </div>
         <div>
-          <h1 class="text-sm font-black tracking-wider uppercase text-transparent bg-clip-text bg-gradient-to-r from-purple-300 via-pink-300 to-indigo-200">FF TOURNAMENT HUB</h1>
-          <div class="flex items-center gap-1.5 text-[9px] text-purple-400 font-semibold tracking-wider">
-            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span><span>RANK: <strong id="header-rank-txt" class="text-amber-300">BRONZE</strong></span>
-          </div>
+          <h1 class="text-[10px] font-bold text-slate-400 uppercase">Welcome Back,</h1>
+          <p class="text-sm font-black text-emerald-400 tracking-widest uppercase" id="header-ign-txt">PLAYER</p>
         </div>
       </div>
-      <div class="flex items-center gap-3">
-        <!-- BELL ICON NOTIFICATION -->
-        <div class="relative cursor-pointer p-1" onclick="openModal('notifications-modal')">
-          <i class="fa-solid fa-bell text-slate-300 text-xl hover:text-amber-400 transition-colors"></i>
+      <div class="flex items-center gap-4">
+        <i class="fa-solid fa-headset text-slate-300 text-lg cursor-pointer hover:text-white" onclick="openModal('complaint-popup')"></i>
+        <div class="relative cursor-pointer" onclick="openModal('notifications-modal')">
+          <i class="fa-solid fa-bell text-slate-300 text-lg hover:text-amber-400 transition-colors"></i>
           <span id="bell-badge" class="bell-badge"></span>
         </div>
-        <button onclick="playSFX('click'); openModal('main-wallet-popup')" class="bg-purple-950/80 border border-purple-700/60 rounded-xl px-3 py-1.5 flex items-center gap-1.5 text-xs font-bold text-amber-300 shadow active:scale-95">
-          <i class="fa-solid fa-wallet text-amber-400"></i><span>₹<span id="top-wallet-val">0</span></span>
-        </button>
+        <div class="bg-gradient-to-r from-orange-600 to-amber-500 rounded-lg px-3 py-1.5 flex items-center gap-1.5 font-black text-white text-xs shadow-md cursor-pointer active:scale-95" onclick="openModal('main-wallet-popup')">
+          <i class="fa-solid fa-wallet text-[10px]"></i> ₹<span id="top-wallet-val">0</span>
+        </div>
       </div>
     </header>
 
-    <div class="app-scroll-container px-4 space-y-4">
-      <!-- MAIN TABS -->
+    <div class="app-scroll-container space-y-4">
       <main id="main-content-area" class="pb-10">
         
-        <!-- ================= HOME SCREEN ================= -->
-        <section id="screen-home" class="space-y-4 block">
+        <!-- HOME SCREEN -->
+        <section id="screen-home" class="px-4 space-y-5 block">
           
-          <div class="bg-black/60 rounded-xl border border-purple-800/50 flex justify-between items-center p-4 text-center shadow-lg backdrop-blur-sm">
-            <div class="flex-1 border-r border-purple-800/50">
-              <p class="text-purple-300 font-black text-xl" id="stat-matches">0</p>
+          <div class="bg-[#161b2c] rounded-xl flex justify-between items-center p-4 border border-white/5 text-center shadow-lg">
+            <div class="flex-1 border-r border-white/10">
+              <p class="text-amber-400 font-black text-xl" id="stat-matches">0</p>
               <p class="text-[9px] text-slate-400 font-bold mt-0.5 uppercase tracking-wider">Matches</p>
             </div>
-            <div class="flex-1 border-r border-purple-800/50">
+            <div class="flex-1 border-r border-white/10">
               <p class="text-emerald-400 font-black text-xl" id="stat-kills">0</p>
               <p class="text-[9px] text-slate-400 font-bold mt-0.5 uppercase tracking-wider">Total Kills</p>
             </div>
@@ -233,37 +215,57 @@
             </div>
           </div>
 
-          <!-- REWARDS ROW -->
-          <div class="grid grid-cols-2 gap-2.5">
-            <div onclick="playSFX('click'); openModal('spin-popup'); setTimeout(drawSpinWheel, 250);" class="p-3 bg-gradient-to-r from-purple-900/40 to-indigo-950/60 border border-purple-700/50 rounded-2xl flex items-center gap-2.5 cursor-pointer active:scale-95 shadow-md">
-              <div class="w-9 h-9 rounded-xl bg-purple-600/30 border border-purple-400/40 flex items-center justify-center text-purple-300 text-lg"><i class="fa-solid fa-dharmachakra animate-spin" style="animation-duration: 6s;"></i></div>
-              <div><h4 class="text-xs font-black text-purple-200 uppercase">Lucky Spin</h4><p class="text-[9px] text-amber-300 font-bold" id="spin-badge-status">Free Spin 24H</p></div>
+          <div class="grid grid-cols-4 gap-2 text-center">
+            <div onclick="goTab('profile')" class="flex flex-col items-center gap-1.5 cursor-pointer">
+              <div class="w-12 h-12 rounded-xl bg-blue-600/20 text-blue-400 text-xl flex items-center justify-center border border-blue-500/30 transition-transform active:scale-90"><i class="fa-solid fa-user"></i></div>
+              <span class="text-[9px] font-bold text-slate-300">My Profile</span>
             </div>
-            <div onclick="playSFX('click'); openModal('checkin-popup'); renderCheckinGrid();" class="p-3 bg-gradient-to-r from-amber-900/30 to-purple-950/60 border border-amber-600/40 rounded-2xl flex items-center gap-2.5 cursor-pointer active:scale-95 shadow-md">
-              <div class="w-9 h-9 rounded-xl bg-amber-600/30 border border-amber-400/40 flex items-center justify-center text-amber-300 text-lg"><i class="fa-solid fa-calendar-check"></i></div>
-              <div><h4 class="text-xs font-black text-amber-200 uppercase">Daily Check-In</h4><p class="text-[9px] text-emerald-400 font-bold">Claim 7 Days</p></div>
+            <div onclick="openModal('main-wallet-popup')" class="flex flex-col items-center gap-1.5 cursor-pointer">
+              <div class="w-12 h-12 rounded-xl bg-emerald-600/20 text-emerald-400 text-xl flex items-center justify-center border border-emerald-500/30 transition-transform active:scale-90"><i class="fa-solid fa-wallet"></i></div>
+              <span class="text-[9px] font-bold text-slate-300">My Wallet</span>
+            </div>
+            <div onclick="goTab('ranking')" class="flex flex-col items-center gap-1.5 cursor-pointer">
+              <div class="w-12 h-12 rounded-xl bg-amber-600/20 text-amber-400 text-xl flex items-center justify-center border border-amber-500/30 transition-transform active:scale-90"><i class="fa-solid fa-trophy"></i></div>
+              <span class="text-[9px] font-bold text-slate-300">Top Player</span>
+            </div>
+            <div onclick="openModal('refer-popup')" class="flex flex-col items-center gap-1.5 cursor-pointer">
+              <div class="w-12 h-12 rounded-xl bg-rose-600/20 text-rose-400 text-xl flex items-center justify-center border border-rose-500/30 transition-transform active:scale-90"><i class="fa-solid fa-user-plus"></i></div>
+              <span class="text-[9px] font-bold text-slate-300">Refer & Earn</span>
             </div>
           </div>
 
-          <!-- GAME CATEGORIES -->
+          <div>
+            <div class="flex justify-between items-center bg-[#161b2c] p-3 rounded-t-xl border-b border-white/5">
+              <span class="text-xs font-bold text-white flex items-center gap-2"><i class="fa-solid fa-circle-question text-slate-400"></i> How to Use Our App</span>
+            </div>
+            <div class="relative rounded-b-xl overflow-hidden h-36 bg-slate-900 border border-white/5 border-t-0 shadow-lg">
+               <img src="https://images.alphacoders.com/100/1004169.jpg" class="w-full h-full object-cover opacity-50" />
+               <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-4">
+                 <h3 class="text-xl font-black text-white italic glow-text tracking-widest uppercase">PLAYT24 ESPORTS</h3>
+                 <p class="text-xs text-amber-300 font-bold bg-black/60 px-3 py-1 mt-2 rounded-lg border border-amber-500/30">Daily Tournaments & Checkins</p>
+               </div>
+            </div>
+          </div>
+
+          <!-- FIXED MAP BANNERS -->
           <div>
             <h3 class="text-sm font-black text-white uppercase tracking-wider mb-3 border-l-4 border-amber-500 pl-2">Available Modes <span class="bg-red-600 text-white px-1.5 py-0.5 text-[8px] rounded ml-1 animate-pulse">LIVE</span></h3>
             <div class="grid grid-cols-2 gap-3">
               <div onclick="goTab('battles'); setModeFilter('FULL_MAP')" class="relative rounded-xl overflow-hidden h-36 cursor-pointer border border-amber-500/50 shadow-lg group bg-gradient-to-tr from-amber-900 to-black">
                 <span class="absolute top-0 left-0 bg-amber-500 text-black font-black text-[9px] px-2 py-0.5 z-10 rounded-br-lg shadow">ALL SIZES</span>
-                <img src="60271.png" onerror="this.style.display='none'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90" alt="Full Map" />
-                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
-                <div class="absolute bottom-2 left-2 right-2 flex justify-between items-end">
-                   <h4 class="font-black text-white text-sm drop-shadow-md">FULL MAP</h4>
-                   <span class="bg-white/20 backdrop-blur-sm text-white text-[9px] border border-white/40 font-black px-2 py-1 rounded shadow">▶ JOIN</span>
+                <img src="60271_2.png" class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-500" alt="Full Map" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+                <div class="absolute bottom-3 left-3 right-3 flex justify-between items-end">
+                   <h4 class="font-black text-white text-lg drop-shadow-md">FULL MAP</h4>
+                   <span class="bg-amber-500 text-black text-[10px] font-black px-3 py-1.5 rounded shadow">▶ JOIN</span>
                 </div>
               </div>
               <div onclick="goTab('battles'); setModeFilter('CS')" class="relative rounded-xl overflow-hidden h-36 cursor-pointer border border-cyan-500/50 shadow-lg group bg-gradient-to-tr from-cyan-900 to-black">
-                <img src="60272.png" onerror="this.style.display='none'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90" alt="Clash Squad" />
-                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
-                <div class="absolute bottom-2 left-2 right-2 flex justify-between items-end">
-                   <h4 class="font-black text-white text-sm drop-shadow-md leading-tight">CLASH<br>SQUAD</h4>
-                   <span class="bg-white/20 backdrop-blur-sm text-white text-[9px] border border-white/40 font-black px-2 py-1 rounded shadow">▶ JOIN</span>
+                <img src="60272_2.png" class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-500" alt="Clash Squad" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+                <div class="absolute bottom-3 left-3 right-3 flex justify-between items-end">
+                   <h4 class="font-black text-white text-lg drop-shadow-md">CLASH SQUAD</h4>
+                   <span class="bg-cyan-500 text-black text-[10px] font-black px-3 py-1.5 rounded shadow">▶ JOIN</span>
                 </div>
               </div>
             </div>
@@ -288,8 +290,8 @@
           </div>
         </section>
 
-        <!-- ================= BATTLES (TOURNAMENTS) SCREEN ================= -->
-        <section id="screen-battles" class="hidden space-y-4">
+        <!-- BATTLES SCREEN -->
+        <section id="screen-battles" class="hidden space-y-4 px-4">
           <div class="flex items-center gap-3 border-b border-purple-900/50 pb-3">
              <i class="fa-solid fa-arrow-left text-white text-lg cursor-pointer hover:text-amber-400" onclick="goTab('home')"></i>
              <h2 class="text-base font-black text-white tracking-wider">Tournaments</h2>
@@ -302,11 +304,11 @@
           </div>
 
           <div class="flex gap-2 overflow-x-auto pb-2 text-[10px] no-scrollbar">
-            <button onclick="setModeFilter('ALL')" class="mode-pill px-3 py-1.5 rounded-lg bg-purple-600 border border-purple-400 text-white font-bold whitespace-nowrap active:scale-95 shadow" data-mode="ALL">All Matches</button>
-            <button onclick="setModeFilter('FULL_MAP')" class="mode-pill px-3 py-1.5 rounded-lg bg-black/40 border border-white/10 text-slate-400 font-semibold whitespace-nowrap active:scale-95" data-mode="FULL_MAP">Full Map</button>
-            <button onclick="setModeFilter('CS')" class="mode-pill px-3 py-1.5 rounded-lg bg-black/40 border border-white/10 text-slate-400 font-semibold whitespace-nowrap active:scale-95" data-mode="CS">Clash Squad</button>
-            <button onclick="setModeFilter('1v1')" class="mode-pill px-3 py-1.5 rounded-lg bg-black/40 border border-white/10 text-slate-400 font-semibold whitespace-nowrap active:scale-95" data-mode="1v1">1v1 Solo</button>
-            <button onclick="setModeFilter('SQUAD')" class="mode-pill px-3 py-1.5 rounded-lg bg-black/40 border border-white/10 text-slate-400 font-semibold whitespace-nowrap active:scale-95" data-mode="SQUAD">BR Squad</button>
+            <button onclick="setModeFilter('ALL')" class="mode-pill px-3 py-1.5 rounded-lg bg-indigo-600 border border-indigo-400 text-white font-bold whitespace-nowrap active:scale-95 shadow" data-mode="ALL">All Matches</button>
+            <button onclick="setModeFilter('FULL_MAP')" class="mode-pill px-3 py-1.5 rounded-lg bg-[#161b2c] border border-white/10 text-slate-400 font-semibold whitespace-nowrap active:scale-95" data-mode="FULL_MAP">Full Map</button>
+            <button onclick="setModeFilter('CS')" class="mode-pill px-3 py-1.5 rounded-lg bg-[#161b2c] border border-white/10 text-slate-400 font-semibold whitespace-nowrap active:scale-95" data-mode="CS">Clash Squad</button>
+            <button onclick="setModeFilter('1v1')" class="mode-pill px-3 py-1.5 rounded-lg bg-[#161b2c] border border-white/10 text-slate-400 font-semibold whitespace-nowrap active:scale-95" data-mode="1v1">1v1 Solo</button>
+            <button onclick="setModeFilter('SQUAD')" class="mode-pill px-3 py-1.5 rounded-lg bg-[#161b2c] border border-white/10 text-slate-400 font-semibold whitespace-nowrap active:scale-95" data-mode="SQUAD">BR Squad</button>
           </div>
 
           <div id="tournaments-container" class="space-y-4 pb-10">
@@ -314,9 +316,9 @@
           </div>
         </section>
 
-        <!-- ================= RANKING SCREEN ================= -->
-        <section id="screen-ranking" class="hidden space-y-4">
-           <div class="bg-gradient-to-r from-amber-600/20 via-black/50 to-black/50 border border-amber-500/30 rounded-2xl p-4 shadow-lg flex justify-between items-center backdrop-blur-sm">
+        <!-- RANKING SCREEN -->
+        <section id="screen-ranking" class="hidden px-4 space-y-4">
+           <div class="bg-gradient-to-r from-amber-600/20 via-[#161b2c] to-[#161b2c] border border-amber-500/30 rounded-2xl p-4 shadow-lg flex justify-between items-center">
              <div>
                <h3 class="text-sm font-black text-amber-400 uppercase tracking-widest">Top 100 Ranking</h3>
                <p class="text-[10px] text-slate-300 mt-1">Live leaderboard & champion ratings</p>
@@ -324,8 +326,8 @@
              <i class="fa-solid fa-trophy text-3xl text-amber-400 drop-shadow-[0_0_10px_rgba(251,191,36,0.5)]"></i>
            </div>
            
-           <div class="bg-black/50 rounded-xl p-3 border border-purple-800/40 shadow-lg backdrop-blur-sm">
-              <div class="flex justify-between text-[10px] text-slate-400 font-bold px-2 mb-3 border-b border-purple-900/50 pb-2 uppercase tracking-wider">
+           <div class="bg-[#161b2c] rounded-xl p-3 border border-white/5 shadow-lg">
+              <div class="flex justify-between text-[10px] text-slate-400 font-bold px-2 mb-3 border-b border-white/10 pb-2 uppercase tracking-wider">
                  <span># USER</span><span>RATING</span>
               </div>
               <div id="champions-list" class="space-y-1.5 pb-6">
@@ -334,14 +336,14 @@
            </div>
         </section>
 
-        <!-- ================= MY MATCHES / ROOM PASS SCREEN ================= -->
-        <section id="screen-room-pass" class="hidden space-y-4">
-          <div class="flex items-center gap-3 border-b border-purple-900/50 pb-3">
+        <!-- MY MATCHES / ROOM PASS SCREEN -->
+        <section id="screen-room-pass" class="hidden px-4 space-y-4">
+          <div class="flex items-center gap-3 border-b border-white/10 pb-3">
              <i class="fa-solid fa-arrow-left text-white text-lg cursor-pointer hover:text-amber-400" onclick="goTab('home')"></i>
              <h2 class="text-base font-black text-white tracking-wider">My Registered Matches</h2>
           </div>
           
-          <div class="bg-indigo-900/20 border border-indigo-500/30 rounded-xl p-3 text-center mb-4 backdrop-blur-sm">
+          <div class="bg-indigo-900/20 border border-indigo-500/30 rounded-xl p-3 text-center mb-4">
              <i class="fa-solid fa-key text-2xl text-indigo-400 mb-2"></i>
              <p class="text-xs text-indigo-200">Room ID and Password will appear here 10-15 minutes before the match starts.</p>
           </div>
@@ -349,10 +351,11 @@
           <div id="room-pass-list" class="space-y-3 pb-10"></div>
         </section>
 
-        <!-- ================= PROFILE / MENU SCREEN ================= -->
-        <section id="screen-profile" class="hidden space-y-3 pb-10">
-           <!-- User Info Card -->
-           <div class="p-5 bg-gradient-to-br from-black/80 to-purple-950/40 rounded-2xl border border-purple-800/50 shadow-xl flex items-center justify-between mb-4 relative overflow-hidden backdrop-blur-sm">
+        <!-- PROFILE / MENU SCREEN -->
+        <section id="screen-profile" class="hidden px-4 space-y-2 pb-10">
+           <div class="p-5 bg-gradient-to-r from-[#161b2c] to-[#0f1423] rounded-2xl border border-white/10 shadow-xl flex items-center justify-between mb-6 relative overflow-hidden">
+             <div class="absolute -right-4 -top-4 text-white/5 text-9xl"><i class="fa-solid fa-user"></i></div>
+             
              <div class="flex items-center gap-4 relative z-10">
                 <div class="relative w-16 h-16 rounded-full border-2 border-amber-400 bg-black flex items-center justify-center font-black text-white text-2xl overflow-hidden shadow-[0_0_15px_rgba(251,191,36,0.3)] cursor-pointer group" onclick="document.getElementById('profile-img-upload').click()">
                    <img id="prof-page-avatar" src="" class="hidden w-full h-full object-cover" />
@@ -370,44 +373,43 @@
              <input type="file" id="profile-img-upload" accept="image/*" onchange="uploadProfileImage(event)" class="hidden" />
            </div>
 
-           <!-- Menu Options -->
            <div class="space-y-2">
-             <div onclick="openModal('main-wallet-popup')" class="p-4 bg-black/50 backdrop-blur-sm rounded-xl border border-purple-900/40 flex justify-between items-center cursor-pointer hover:bg-purple-950/50 transition-colors shadow-sm">
+             <div onclick="openModal('main-wallet-popup')" class="p-4 bg-[#161b2c] rounded-xl border border-white/5 flex justify-between items-center cursor-pointer hover:bg-[#1e2333] transition-colors shadow-sm">
                 <div class="flex items-center gap-4"><div class="w-8 h-8 rounded-lg bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-sm"><i class="fa-solid fa-wallet"></i></div><span class="text-sm font-bold text-slate-200">My Wallet</span></div>
                 <div class="flex items-center gap-3"><span class="text-xs font-black text-amber-400 font-mono" id="menu-wallet-val">₹0</span><i class="fa-solid fa-chevron-right text-slate-500 text-xs"></i></div>
              </div>
              
-             <div onclick="goTab('room-pass')" class="p-4 bg-black/50 backdrop-blur-sm rounded-xl border border-purple-900/40 flex justify-between items-center cursor-pointer hover:bg-purple-950/50 transition-colors shadow-sm">
-                <div class="flex items-center gap-4"><div class="w-8 h-8 rounded-lg bg-blue-500/20 text-blue-400 flex items-center justify-center text-sm"><i class="fa-solid fa-gamepad"></i></div><span class="text-sm font-bold text-slate-200">My Matches</span></div>
+             <div onclick="goTab('room-pass')" class="p-4 bg-[#161b2c] rounded-xl border border-white/5 flex justify-between items-center cursor-pointer hover:bg-[#1e2333] transition-colors shadow-sm">
+                <div class="flex items-center gap-4"><div class="w-8 h-8 rounded-lg bg-blue-500/20 text-blue-400 flex items-center justify-center text-sm"><i class="fa-solid fa-chart-simple"></i></div><span class="text-sm font-bold text-slate-200">My Statistics (Matches)</span></div>
                 <i class="fa-solid fa-chevron-right text-slate-500 text-xs"></i>
              </div>
              
-             <div onclick="goTab('ranking')" class="p-4 bg-black/50 backdrop-blur-sm rounded-xl border border-purple-900/40 flex justify-between items-center cursor-pointer hover:bg-purple-950/50 transition-colors shadow-sm">
+             <div onclick="goTab('ranking')" class="p-4 bg-[#161b2c] rounded-xl border border-white/5 flex justify-between items-center cursor-pointer hover:bg-[#1e2333] transition-colors shadow-sm">
                 <div class="flex items-center gap-4"><div class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center text-sm"><i class="fa-solid fa-trophy"></i></div><span class="text-sm font-bold text-slate-200">Top Players</span></div>
                 <i class="fa-solid fa-chevron-right text-slate-500 text-xs"></i>
              </div>
              
-             <div onclick="openModal('refer-popup')" class="p-4 bg-black/50 backdrop-blur-sm rounded-xl border border-purple-900/40 flex justify-between items-center cursor-pointer hover:bg-purple-950/50 transition-colors shadow-sm">
+             <div onclick="openModal('refer-popup')" class="p-4 bg-[#161b2c] rounded-xl border border-white/5 flex justify-between items-center cursor-pointer hover:bg-[#1e2333] transition-colors shadow-sm">
                 <div class="flex items-center gap-4"><div class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-sm"><i class="fa-solid fa-user-plus"></i></div><span class="text-sm font-bold text-slate-200">Refer & Earn</span></div>
                 <i class="fa-solid fa-chevron-right text-slate-500 text-xs"></i>
              </div>
 
-             <div onclick="openModal('notifications-modal')" class="p-4 bg-black/50 backdrop-blur-sm rounded-xl border border-purple-900/40 flex justify-between items-center cursor-pointer hover:bg-purple-950/50 transition-colors shadow-sm">
+             <div onclick="openModal('notifications-modal')" class="p-4 bg-[#161b2c] rounded-xl border border-white/5 flex justify-between items-center cursor-pointer hover:bg-[#1e2333] transition-colors shadow-sm">
                 <div class="flex items-center gap-4"><div class="w-8 h-8 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center text-sm"><i class="fa-solid fa-bell"></i></div><span class="text-sm font-bold text-slate-200">Notifications</span></div>
                 <i class="fa-solid fa-chevron-right text-slate-500 text-xs"></i>
              </div>
 
-             <div onclick="openModal('complaint-popup')" class="p-4 bg-black/50 backdrop-blur-sm rounded-xl border border-purple-900/40 flex justify-between items-center cursor-pointer hover:bg-purple-950/50 transition-colors shadow-sm">
+             <div onclick="openModal('complaint-popup')" class="p-4 bg-[#161b2c] rounded-xl border border-white/5 flex justify-between items-center cursor-pointer hover:bg-[#1e2333] transition-colors shadow-sm">
                 <div class="flex items-center gap-4"><div class="w-8 h-8 rounded-lg bg-green-500/20 text-green-400 flex items-center justify-center text-sm"><i class="fa-solid fa-headset"></i></div><span class="text-sm font-bold text-slate-200">Contact Us / Helpdesk</span></div>
                 <i class="fa-solid fa-chevron-right text-slate-500 text-xs"></i>
              </div>
              
-             <div onclick="openModal('feedback-popup')" class="p-4 bg-black/50 backdrop-blur-sm rounded-xl border border-purple-900/40 flex justify-between items-center cursor-pointer hover:bg-purple-950/50 transition-colors shadow-sm mt-4">
+             <div onclick="openModal('feedback-popup')" class="p-4 bg-[#161b2c] rounded-xl border border-white/5 flex justify-between items-center cursor-pointer hover:bg-[#1e2333] transition-colors shadow-sm mt-4">
                 <div class="flex items-center gap-4"><div class="w-8 h-8 rounded-lg bg-yellow-500/20 text-yellow-400 flex items-center justify-center text-sm"><i class="fa-solid fa-star"></i></div><span class="text-sm font-bold text-slate-200">Rate App</span></div>
                 <i class="fa-solid fa-chevron-right text-slate-500 text-xs"></i>
              </div>
              
-             <div onclick="doLogout()" class="p-4 mt-6 bg-red-950/30 backdrop-blur-sm rounded-xl border border-red-900/50 flex justify-center items-center cursor-pointer hover:bg-red-900/50 transition-colors shadow-sm">
+             <div onclick="doLogout()" class="p-4 mt-6 bg-red-950/30 rounded-xl border border-red-900/50 flex justify-center items-center cursor-pointer hover:bg-red-900/40 transition-colors shadow-sm">
                 <span class="text-sm font-bold text-red-400 flex items-center gap-2"><i class="fa-solid fa-power-off"></i> Logout Safely</span>
              </div>
            </div>
@@ -417,7 +419,7 @@
     </div>
 
     <!-- BOTTOM NAV -->
-    <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto h-[60px] bg-[#070216]/95 backdrop-blur-md border-t border-purple-900/50 px-2 flex justify-between items-center z-40 shadow-[0_-5px_20px_rgba(0,0,0,0.5)]">
+    <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto h-[60px] bg-[#0b0f19] border-t border-white/10 px-2 flex justify-between items-center z-40 shadow-[0_-5px_20px_rgba(0,0,0,0.5)]">
       <button onclick="goTab('home')" class="flex-1 flex flex-col items-center justify-center gap-1 text-slate-500 hover:text-purple-400 transition-colors">
          <i class="fa-solid fa-house text-[18px]"></i><span class="text-[9px] font-bold mt-0.5">Home</span>
       </button>
@@ -442,7 +444,6 @@
 
   <!-- ================= MODALS ================= -->
 
-  <!-- NOTIFICATIONS MODAL -->
   <div id="notifications-modal" class="modal-box">
     <div class="bg-[#0f0728] border border-purple-600/50 rounded-2xl w-full max-w-sm p-5 relative shadow-2xl">
       <button onclick="closeModal('notifications-modal')" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
@@ -454,23 +455,20 @@
     </div>
   </div>
 
-  <!-- COMPLAINT BOX -->
   <div id="complaint-popup" class="modal-box">
     <div class="bg-[#0f0728] border border-rose-600/50 rounded-2xl w-full max-w-sm p-5 relative shadow-2xl">
       <button onclick="closeModal('complaint-popup')" class="absolute top-4 right-4 text-slate-400"><i class="fa-solid fa-xmark text-lg"></i></button>
       <h3 class="text-base font-black text-white flex items-center gap-2"><i class="fa-solid fa-headset text-rose-400"></i> Helpdesk</h3>
-      <p class="text-[10px] text-slate-400 mt-0.5 mb-4">We will resolve your issue within 24 hours.</p>
-      <div class="space-y-3 text-xs">
+      <div class="mt-4 space-y-3 text-xs">
         <select id="comp-type" class="w-full bg-black/50 border border-purple-900 rounded-xl px-4 py-3.5 text-white outline-none">
            <option>Deposit Issue</option><option>Withdrawal Issue</option><option>Match / Room ID Query</option><option>Report Hacker</option>
         </select>
         <textarea id="comp-msg" rows="4" placeholder="Explain your issue in detail..." class="w-full bg-black/50 border border-purple-900 rounded-xl px-4 py-3.5 text-white outline-none resize-none"></textarea>
-        <button id="comp-btn" onclick="submitComplaint(this)" class="w-full py-3.5 rounded-xl bg-rose-600 text-white font-black text-xs shadow-lg active:scale-95 transition-all">Submit to Support</button>
+        <button id="comp-btn" onclick="submitComplaint()" class="w-full py-3.5 rounded-xl bg-rose-600 text-white font-black text-xs shadow-lg active:scale-95 transition-all">Submit to Support</button>
       </div>
     </div>
   </div>
 
-  <!-- FEEDBACK MODAL -->
   <div id="feedback-popup" class="modal-box">
     <div class="bg-[#0f0728] border border-blue-600/50 rounded-2xl w-full max-w-sm p-5 relative shadow-2xl text-center">
       <button onclick="closeModal('feedback-popup')" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
@@ -479,29 +477,27 @@
         <i class="fa-solid fa-star text-slate-600 cursor-pointer" onclick="setAppRating(1)"></i><i class="fa-solid fa-star text-slate-600 cursor-pointer" onclick="setAppRating(2)"></i><i class="fa-solid fa-star text-slate-600 cursor-pointer" onclick="setAppRating(3)"></i><i class="fa-solid fa-star text-slate-600 cursor-pointer" onclick="setAppRating(4)"></i><i class="fa-solid fa-star text-slate-600 cursor-pointer" onclick="setAppRating(5)"></i>
       </div>
       <div class="mt-4 space-y-3 text-xs text-left">
-        <textarea id="feedback-text" rows="3" placeholder="Apne ideas yahan likhein..." class="w-full bg-black/50 border border-purple-900 rounded-xl px-3 py-2 text-white resize-none"></textarea>
-        <button id="feed-btn" onclick="submitUserFeedback(this)" class="w-full py-2.5 rounded-xl bg-blue-600 text-white font-bold text-xs shadow-lg active:scale-95">Submit Feedback</button>
+        <textarea id="feedback-text" rows="3" placeholder="Apne ideas yahan likhein..." class="w-full bg-black/50 border border-purple-900 rounded-xl px-4 py-3.5 text-white outline-none resize-none"></textarea>
+        <button id="feed-btn" onclick="submitUserFeedback()" class="w-full py-3.5 rounded-xl bg-blue-600 text-white font-black text-xs shadow-lg active:scale-95 transition-all">Submit Feedback</button>
       </div>
     </div>
   </div>
 
-  <!-- MAIN WALLET -->
   <div id="main-wallet-popup" class="modal-box">
-    <div class="bg-[#0f0728] border border-purple-600/50 rounded-2xl w-full max-w-sm p-5 relative shadow-2xl text-center">
+    <div class="bg-[#0f0728] border border-purple-600/50 rounded-2xl w-full max-w-sm p-6 relative shadow-2xl text-center">
       <button onclick="closeModal('main-wallet-popup')" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
       <h3 class="text-sm font-black text-slate-300 uppercase">My Wallet</h3>
-      <div class="mt-4 p-5 bg-black/60 rounded-xl border border-purple-900 shadow-inner">
+      <div class="mt-5 p-6 bg-black/60 rounded-xl border border-purple-900 shadow-inner">
         <p class="text-[10px] text-slate-400 uppercase font-bold">Available Balance</p>
-        <p class="text-4xl font-black text-amber-400 mt-1">₹<span id="wallet-main-bal">0</span></p>
+        <p class="text-4xl font-black text-amber-400 mt-2 tracking-tight">₹<span id="wallet-main-bal">0</span></p>
       </div>
-      <div class="mt-5 space-y-3">
-        <button onclick="closeModal('main-wallet-popup'); openModal('deposit-popup')" class="w-full py-3.5 bg-gradient-to-r from-emerald-600 to-teal-500 rounded-xl font-black text-white text-xs flex justify-center gap-2 active:scale-95"><i class="fa-solid fa-plus-circle text-base"></i> ADD MONEY (Min ₹49)</button>
-        <button onclick="closeModal('main-wallet-popup'); openModal('withdraw-popup')" class="w-full py-3.5 bg-purple-900/60 border border-purple-700/50 rounded-xl font-black text-white text-xs flex justify-center gap-2 active:scale-95"><i class="fa-solid fa-money-bill-transfer text-base"></i> WITHDRAW (Max ₹999)</button>
+      <div class="mt-6 flex flex-col gap-3">
+        <button onclick="closeModal('main-wallet-popup'); openModal('deposit-popup')" class="w-full py-4 bg-gradient-to-r from-emerald-600 to-teal-500 rounded-xl font-black text-white text-xs flex justify-center gap-2 active:scale-95"><i class="fa-solid fa-plus-circle text-base"></i> ADD MONEY (Min ₹49)</button>
+        <button onclick="closeModal('main-wallet-popup'); openModal('withdraw-popup')" class="w-full py-4 bg-purple-900/60 border border-purple-700/50 rounded-xl font-black text-white text-xs flex justify-center gap-2 active:scale-95"><i class="fa-solid fa-money-bill-transfer text-base"></i> WITHDRAW (Max ₹999)</button>
       </div>
     </div>
   </div>
 
-  <!-- DEPOSIT POPUP -->
   <div id="deposit-popup" class="modal-box">
     <div class="bg-[#0f0728] border border-emerald-600/50 rounded-2xl w-full max-w-sm p-4 relative text-center shadow-2xl max-h-[90vh] overflow-y-auto">
       <button onclick="closeModal('deposit-popup')" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
@@ -522,20 +518,19 @@
 
       <div class="mt-4 space-y-3 text-left">
         <input type="number" id="deposit-amt" placeholder="Amount (Min ₹49)" class="w-full bg-black/50 border border-purple-900 rounded-xl px-4 py-3.5 text-xs text-white outline-none" />
-        <input type="text" id="deposit-utr-code" placeholder="Exactly 12-Digit UTR Number" maxlength="12" class="w-full bg-black/50 border border-purple-900 rounded-xl px-4 py-3.5 text-xs text-white font-mono outline-none" />
-        <input type="text" id="deposit-upi-sender" placeholder="Your UPI ID" class="w-full bg-black/50 border border-purple-900 rounded-xl px-4 py-3.5 text-xs text-white outline-none" />
+        <input type="text" id="deposit-utr-code" placeholder="Exactly 12-Digit UTR Number (Mandatory)" maxlength="12" class="w-full bg-black/50 border border-purple-900 rounded-xl px-4 py-3.5 text-xs text-white font-mono outline-none" />
+        <input type="text" id="deposit-upi-sender" placeholder="Your UPI ID (Jaise aapse payment ki)" class="w-full bg-black/50 border border-purple-900 rounded-xl px-4 py-3.5 text-xs text-white outline-none" />
         
         <div class="pt-1">
           <label class="text-[10px] font-bold text-amber-300 uppercase tracking-wider">Screenshot Required *</label>
-          <input type="file" id="deposit-screenshot-file" accept="image/*" onchange="captureOriginalImage(event, 'deposit-img-preview')" class="w-full mt-1.5 bg-black/50 border border-purple-900 rounded-xl px-3 py-2 text-xs text-slate-300 file:bg-emerald-600 file:text-white file:border-0 file:rounded-lg file:px-3 file:py-1.5 file:mr-3 cursor-pointer" />
+          <input type="file" id="deposit-screenshot-file" accept="image/*" onchange="captureOriginalImage(event, 'deposit-img-preview')" class="w-full mt-1.5 bg-black/50 border border-purple-900 rounded-xl px-3 py-2 text-xs text-slate-300 file:bg-emerald-600 file:text-white file:font-bold file:border-0 file:rounded-lg file:px-3 file:py-1.5 file:mr-3 cursor-pointer" />
           <div class="mt-2 bg-black rounded-lg overflow-hidden border border-purple-900 flex justify-center"><img id="deposit-img-preview" src="" class="hidden h-24 object-contain py-1" /></div>
         </div>
-        <button id="dep-submit-btn" onclick="sendDepositUTR(this)" class="w-full mt-2 py-3.5 rounded-xl bg-emerald-600 font-bold text-xs text-white shadow-lg active:scale-95">Submit Deposit</button>
+        <button id="dep-submit-btn" onclick="sendDepositUTR(this)" class="w-full mt-2 py-3.5 rounded-xl bg-emerald-600 font-bold text-xs text-white shadow-lg active:scale-95 transition-all">Submit Deposit</button>
       </div>
     </div>
   </div>
 
-  <!-- WITHDRAWAL -->
   <div id="withdraw-popup" class="modal-box">
     <div class="bg-[#0f0728] border border-purple-600/50 rounded-2xl w-full max-w-sm p-5 relative shadow-2xl">
       <button onclick="closeModal('withdraw-popup')" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
@@ -549,24 +544,6 @@
     </div>
   </div>
 
-  <!-- RESULT PROOF UPLOAD -->
-  <div id="result-proof-modal" class="modal-box">
-    <div class="bg-[#0f0728] border border-cyan-600/50 rounded-3xl w-full max-w-sm p-6 relative shadow-2xl text-center">
-      <button onclick="closeModal('result-proof-modal')" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
-      <h3 class="text-base font-black text-cyan-400 uppercase tracking-wider">Submit Kill Proof</h3>
-      <p class="text-[10px] text-slate-400 mt-1">Upload screenshot showing total kills.</p>
-      <div class="mt-5 text-left space-y-4 text-xs">
-        <input type="number" id="proof-kills-count" placeholder="Total Kills Made" class="w-full bg-black/50 border border-purple-900 rounded-xl px-4 py-3.5 text-white outline-none" />
-        <div>
-           <input type="file" id="proof-img-file" accept="image/*" onchange="captureOriginalImage(event, 'proof-img-preview')" class="w-full bg-black/50 border border-purple-900 rounded-xl px-3 py-2 text-slate-300 file:bg-cyan-600 file:text-white file:font-bold file:border-0 file:rounded-lg file:px-3 file:py-1.5 cursor-pointer" />
-           <div class="mt-2 bg-black rounded-lg overflow-hidden border border-purple-900 flex justify-center"><img id="proof-img-preview" src="" class="hidden h-24 object-contain py-1" /></div>
-        </div>
-        <button id="proof-submit-btn" onclick="submitResultProof(this)" class="w-full py-3.5 bg-cyan-600 hover:bg-cyan-500 text-white font-black rounded-xl uppercase tracking-wider active:scale-95 transition-all">Upload & Claim</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- SPIN WHEEL POPUP -->
   <div id="spin-popup" class="modal-box">
     <div class="bg-[#0f0624] border border-purple-600/60 rounded-3xl w-full max-w-sm p-6 relative shadow-2xl text-center">
       <button onclick="closeModal('spin-popup')" class="absolute top-3 right-3 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
@@ -580,7 +557,6 @@
     </div>
   </div>
 
-  <!-- CHECKIN POPUP -->
   <div id="checkin-popup" class="modal-box">
     <div class="bg-[#0f0624] border border-amber-600/60 rounded-3xl w-full max-w-sm p-6 relative shadow-2xl text-center">
       <button onclick="closeModal('checkin-popup')" class="absolute top-3 right-3 text-slate-400"><i class="fa-solid fa-xmark text-lg"></i></button>
@@ -591,9 +567,24 @@
     </div>
   </div>
 
-  <!-- REFER POPUP -->
+  <div id="result-proof-modal" class="modal-box">
+    <div class="bg-[#0f0728] border border-cyan-600/50 rounded-3xl w-full max-w-sm p-6 relative shadow-2xl text-center">
+      <button onclick="closeModal('result-proof-modal')" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+      <h3 class="text-base font-black text-cyan-400 uppercase tracking-wider">Submit Kill Proof</h3>
+      <p class="text-[10px] text-slate-400 mt-1">Upload screenshot showing total kills.</p>
+      <div class="mt-5 text-left space-y-4 text-xs">
+        <input type="number" id="proof-kills-count" placeholder="Total Kills Made" class="w-full bg-black/50 border border-purple-900 rounded-xl px-4 py-3.5 text-white outline-none" />
+        <div>
+           <input type="file" id="proof-img-file" accept="image/*" onchange="captureOriginalImage(event, 'proof-img-preview')" class="w-full bg-black/50 border border-purple-900 rounded-xl px-3 py-2 text-slate-300 file:bg-cyan-600 file:text-white file:font-bold file:border-0 file:rounded-lg file:px-3 file:py-1.5 cursor-pointer" />
+           <div class="mt-2 bg-black rounded-lg overflow-hidden border border-purple-900 flex justify-center"><img id="proof-img-preview" src="" class="hidden h-24 object-contain py-1" /></div>
+        </div>
+        <button id="proof-submit-btn" onclick="submitResultProof()" class="w-full py-3.5 bg-cyan-600 hover:bg-cyan-500 text-white font-black rounded-xl uppercase tracking-wider active:scale-95 transition-all">Upload & Claim</button>
+      </div>
+    </div>
+  </div>
+
   <div id="refer-popup" class="modal-box">
-    <div class="bg-[#0f0728] border border-white/10 rounded-2xl w-full max-w-sm p-6 relative shadow-2xl text-center">
+    <div class="bg-[#0f0728] border border-purple-600/50 rounded-2xl w-full max-w-sm p-6 relative shadow-2xl text-center">
       <button onclick="closeModal('refer-popup')" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
       <div class="w-16 h-16 rounded-full bg-amber-500/20 border border-amber-500/50 mx-auto flex items-center justify-center text-amber-400 text-3xl mb-3 shadow-[0_0_15px_rgba(245,158,11,0.3)]"><i class="fa-solid fa-coins"></i></div>
       <h3 class="text-lg font-black text-white">Refer & Earn ₹30</h3>
@@ -608,7 +599,6 @@
     </div>
   </div>
 
-  <!-- SLOT PICKER -->
   <div id="slot-modal" class="modal-box">
     <div class="bg-[#0f0728] border border-purple-600/50 rounded-2xl w-full max-w-sm p-4 relative shadow-2xl flex flex-col max-h-[85vh]">
       <button onclick="closeModal('slot-modal')" class="absolute top-3 right-3 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
@@ -638,10 +628,9 @@
     <div class="max-w-3xl mx-auto p-4 sm:p-6 pb-24 space-y-4">
       <div class="flex justify-between items-center border-b border-purple-900 pb-3">
         <div><h2 class="text-base font-black text-amber-300 uppercase tracking-widest">ADMIN DESK</h2><p class="text-[11px] text-slate-400">Esports Operations Control</p></div>
-        <button onclick="closeAdminDesk()" class="px-4 py-1.5 bg-red-600/20 border border-red-500/50 rounded-xl text-red-400 text-xs font-bold hover:bg-red-600 hover:text-white transition-colors">Close</button>
+        <button onclick="closeAdminDesk()" class="px-4 py-1.5 bg-red-600/20 border border-red-500/50 rounded-xl text-red-400 hover:bg-red-600 hover:text-white text-xs font-bold transition-colors">Close</button>
       </div>
 
-      <!-- ANALYTICS LIVE -->
       <div class="grid grid-cols-2 gap-3 text-center">
         <div class="p-4 bg-indigo-950/40 border border-indigo-800/50 rounded-xl shadow-lg"><p class="text-[10px] text-indigo-300 uppercase font-bold tracking-wider mb-1">Total Visitors</p><p class="text-3xl font-black text-white" id="admin-visitor-count">0</p></div>
         <div class="p-4 bg-cyan-950/40 border border-cyan-800/50 rounded-xl shadow-lg"><p class="text-[10px] text-cyan-300 uppercase font-bold tracking-wider mb-1">Registered Users</p><p class="text-3xl font-black text-white" id="admin-reg-count">0</p></div>
@@ -652,7 +641,7 @@
           <h4 class="text-xs font-black uppercase text-purple-400 tracking-wider mb-3">Manage UPI IDs</h4>
           <div class="flex gap-2">
             <input type="text" id="admin-add-upi" placeholder="newupi@ybl" class="flex-1 bg-black/50 border border-purple-800 rounded-lg px-3 py-2 text-xs text-white outline-none" />
-            <button onclick="adminAddUPI()" class="px-4 py-2 bg-emerald-600 rounded-lg text-white font-bold text-xs hover:bg-emerald-500">Add</button>
+            <button onclick="adminAddUPI()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 rounded-lg text-white font-bold text-xs transition-colors">Add</button>
           </div>
           <div id="admin-upi-list" class="mt-3 space-y-1.5 text-xs max-h-24 overflow-y-auto pr-1"></div>
         </div>
@@ -664,7 +653,7 @@
               <input type="password" id="admin-new-pin" placeholder="Enter new PIN" class="w-full bg-black/50 border border-purple-800 rounded-lg px-2.5 py-1.5 text-xs text-white outline-none" />
               <i class="fa-solid fa-eye absolute right-3 top-2.5 text-slate-400 cursor-pointer" onclick="togglePassword('admin-new-pin', this)"></i>
             </div>
-            <button onclick="saveAdminPIN()" class="w-full py-2 bg-amber-600 rounded-lg text-black font-black text-xs hover:bg-amber-500">Save New PIN</button>
+            <button onclick="saveAdminPIN()" class="w-full py-2 bg-amber-600 hover:bg-amber-500 rounded-lg text-black font-black text-xs transition-colors">Save New PIN</button>
           </div>
         </div>
       </div>
@@ -684,7 +673,6 @@
           <input type="number" id="new-match-fee" oninput="updateMatchCalculator()" placeholder="Base Entry Fee (₹)" class="bg-black/50 border border-purple-900 rounded-lg px-3 py-2.5 text-white outline-none focus:border-blue-500" />
           <input type="number" id="new-match-prize" oninput="updateMatchCalculator()" placeholder="Prize Pool (₹)" class="bg-black/50 border border-purple-900 rounded-lg px-3 py-2.5 text-white outline-none focus:border-blue-500" />
           
-          <!-- NEW: PER KILL AMOUNT BOX -->
           <input type="number" id="new-match-perkill" placeholder="Per Kill Amount (₹)" class="col-span-2 bg-black/50 border border-purple-900 rounded-lg px-3 py-2.5 text-white outline-none focus:border-blue-500 transition-colors" />
           
           <input type="datetime-local" id="new-match-datetime" class="col-span-2 bg-black/50 border border-purple-900 rounded-lg px-3 py-2.5 text-white outline-none focus:border-blue-500" />
@@ -696,7 +684,6 @@
         <button onclick="createLiveMatch()" class="w-full mt-3 py-3 bg-blue-600 hover:bg-blue-500 font-black text-xs rounded-lg text-white transition-colors tracking-wider uppercase">Publish to Arena</button>
       </div>
 
-      <!-- PUSH ROOM ID -->
       <div class="p-4 bg-slate-900 rounded-xl border border-purple-900 shadow-lg">
         <h4 class="text-xs font-black text-rose-400 uppercase tracking-wider mb-3">Push Room Credentials</h4>
         <div class="grid grid-cols-3 gap-2 text-xs">
@@ -739,7 +726,7 @@
       
       <div class="p-4 bg-slate-900 rounded-xl border border-purple-900 shadow-lg">
         <div class="flex justify-between items-center mb-3">
-          <h4 class="text-xs font-black text-slate-300 uppercase tracking-wider flex items-center gap-2"><i class="fa-solid fa-users"></i> User Database</h4>
+          <h4 class="text-xs font-black text-cyan-400 uppercase tracking-wider flex items-center gap-2"><i class="fa-solid fa-users"></i> User Database</h4>
           <span class="text-[10px] text-emerald-400 font-bold bg-emerald-900/30 px-2 py-1 rounded" id="admin-total-players-count">0 Players</span>
         </div>
         <div id="admin-players-box" class="space-y-2 text-xs max-h-[300px] overflow-y-auto pr-1"><p class="text-slate-500 italic">Loading...</p></div>
@@ -767,7 +754,6 @@
 
     let currentTimelineFilter = "upcoming"; let currentModeFilter = "ALL";
 
-    // --- AUDIO ---
     let audioCtx = null;
     function playSFX(type='click') {
       try {
@@ -783,39 +769,22 @@
       } catch(e) {}
     }
 
-    // --- SAFE DOM MANIPULATION (CRASH GUARD) ---
-    function safeSetText(id, text) {
-        const el = document.getElementById(id);
-        if (el) el.textContent = text;
-    }
-    function safeSetImg(id, src) {
-        const el = document.getElementById(id);
-        if (el) el.src = src;
-    }
-
-    // --- NAVIGATION & MODALS ---
     function openModal(id) { document.getElementById(id).classList.add('active'); }
     function closeModal(id) { document.getElementById(id).classList.remove('active'); }
-    
     function goTab(name) { 
-      ['home', 'battles', 'room-pass', 'gamers', 'profile', 'ranking'].forEach(t => {
-         const el = document.getElementById('screen-' + t);
-         if(el) el.classList.add('hidden'); 
-      }); 
-      const target = document.getElementById('screen-' + name);
-      if(target) target.classList.remove('hidden'); 
+      ['home', 'battles', 'room-pass', 'gamers', 'profile', 'ranking'].forEach(t => { const el = document.getElementById('screen-' + t); if(el) el.classList.add('hidden'); }); 
+      const target = document.getElementById('screen-' + name); if(target) target.classList.remove('hidden'); 
     }
     
     function goToAuth(type) {
-       const landing = document.getElementById('splash-screen');
-       if(landing) landing.style.display = 'none';
+       const landing = document.getElementById('splash-screen'); if(landing) landing.style.display = 'none';
        document.getElementById('auth-gate-screen').style.display = 'flex';
        toggleAuth(type);
     }
 
     function openImagePreview(src) { document.getElementById('enlarged-img').src = src; openModal('image-preview-modal'); }
 
-    // --- SPIN WHEEL LOGIC ---
+    // SPIN WHEEL
     const wheelSegments = ["₹5", "1 Star", "₹10", "Bad Luck", "₹20", "2 Stars", "₹2", "Booyah"];
     const wheelColors = ["#4f46e5", "#eab308", "#3b82f6", "#ef4444", "#10b981", "#f59e0b", "#a855f7", "#06b6d4"];
     let currRot = 0; let isSpin = false;
@@ -832,8 +801,7 @@
 
     function checkSpinLockStatus() {
       if(!currentUser) return;
-      const lastSpin = currentUser.lastSpinTime || 0; 
-      const now = Date.now(); const oneDay = 24*60*60*1000;
+      const lastSpin = currentUser.lastSpinTime || 0; const now = Date.now(); const oneDay = 24*60*60*1000;
       const btn = document.getElementById('spin-btn'); if(!btn) return;
       
       if (now - lastSpin < oneDay) {
@@ -848,180 +816,111 @@
 
     function spinWheel() {
       if(isSpin || !currentUser) return; 
-      
-      const now = Date.now();
-      const lastSpin = currentUser.lastSpinTime || 0;
+      const now = Date.now(); const lastSpin = currentUser.lastSpinTime || 0;
       if (now - lastSpin < 24*60*60*1000) { alert("Aap already spin kar chuke hain!"); return; }
 
       isSpin = true; playSFX('click');
-      currRot += 1440 + Math.floor(Math.random()*360); 
-      document.getElementById('wheel-canvas').style.transform = `rotate(${currRot}deg)`;
+      currRot += 1440 + Math.floor(Math.random()*360); document.getElementById('wheel-canvas').style.transform = `rotate(${currRot}deg)`;
       
-      // Instantly lock frontend
-      currentUser.lastSpinTime = now;
-      checkSpinLockStatus();
+      currentUser.lastSpinTime = now; checkSpinLockStatus();
 
       setTimeout(() => {
-        isSpin = false; 
-        const seg = Math.floor((360 - (currRot%360))/45)%8; 
-        const won = wheelSegments[seg];
+        isSpin = false; const seg = Math.floor((360 - (currRot%360))/45)%8; const won = wheelSegments[seg];
         
-        if(won.includes('₹')){ 
-            currentUser.balance = (currentUser.balance || 0) + Number(won.replace('₹','')); 
-            alert(`Booyah! You Won ${won}`); 
-        } else if(won.includes('Star')) { 
-            currentUser.stars = (currentUser.stars || 0) + 1; 
-            alert("Awesome! +1 Star"); 
-        } else { 
-            alert("Better luck next time!"); 
-        }
+        if(won.includes('₹')){ currentUser.balance = (currentUser.balance || 0) + Number(won.replace('₹','')); alert(`Booyah! You Won ${won}`); } 
+        else if(won.includes('Star')) { currentUser.stars = (currentUser.stars || 0) + 1; alert("Awesome! +1 Star"); } 
+        else { alert("Better luck next time!"); }
         
-        // Save to Firebase directly to prevent refresh cheat
         localStorage.setItem('apex_user', JSON.stringify(currentUser));
-        if(currentUser.phone) {
-            db.ref('players/' + currentUser.phone).update({
-                balance: currentUser.balance, 
-                stars: currentUser.stars,
-                lastSpinTime: currentUser.lastSpinTime
-            });
-        }
+        if(currentUser.phone) { db.ref('players/' + currentUser.phone).update({balance: currentUser.balance, stars: currentUser.stars, lastSpinTime: currentUser.lastSpinTime}); }
         syncUI();
       }, 4100);
     }
 
-    // --- CHECKIN LOGIC ---
-    const checkinRewards = [
-       { day: 1, val: "₹5", type: "cash", amt: 5 }, { day: 2, val: "₹10", type: "cash", amt: 10 }, 
-       { day: 3, val: "1 ★", type: "star", amt: 1 }, { day: 4, val: "₹15", type: "cash", amt: 15 }, 
-       { day: 5, val: "2 ★", type: "star", amt: 2 }, { day: 6, val: "₹20", type: "cash", amt: 20 }, 
-       { day: 7, val: "₹50", type: "cash", amt: 50 }
-    ];
+    // CHECKIN LOGIC
+    const checkinRewards = [ { day: 1, val: "₹5", type: "cash", amt: 5 }, { day: 2, val: "₹10", type: "cash", amt: 10 }, { day: 3, val: "1 ★", type: "star", amt: 1 }, { day: 4, val: "₹15", type: "cash", amt: 15 }, { day: 5, val: "2 ★", type: "star", amt: 2 }, { day: 6, val: "₹20", type: "cash", amt: 20 }, { day: 7, val: "₹50", type: "cash", amt: 50 } ];
 
     function renderCheckinGrid() {
       const g = document.getElementById('checkin-days-grid'); if(!g) return; let h = ""; const cd = currentUser.checkinDay || 0;
       checkinRewards.forEach(r => {
         const claim = r.day <= cd; const today = r.day === (cd + 1);
-        h += `<div class="p-2 rounded-xl border flex flex-col items-center justify-center ${claim ? 'bg-emerald-950/80 border-emerald-600 text-emerald-300' : today ? 'bg-amber-950/80 border-amber-500 text-amber-300 animate-pulse' : 'bg-black/50 border-purple-900/50 text-slate-500'}">
-          <span class="text-[9px] uppercase font-bold tracking-wider">Day ${r.day}</span>
-          <span class="text-sm font-black my-1 ${claim ? 'text-emerald-400' : today ? 'text-amber-400' : 'text-slate-400'}">${r.val}</span>
-          <span class="text-[8px] font-bold">${claim ? 'Claimed' : today ? 'READY' : 'Locked'}</span>
-        </div>`;
-      });
-      g.innerHTML = h;
+        h += `<div class="p-2 rounded-xl border flex flex-col items-center justify-center ${claim ? 'bg-emerald-950/80 border-emerald-600 text-emerald-300' : today ? 'bg-amber-950/80 border-amber-500 text-amber-300 animate-pulse' : 'bg-black/50 border-purple-900/50 text-slate-500'}"><span class="text-[9px] uppercase font-bold tracking-wider">Day ${r.day}</span><span class="text-sm font-black my-1 ${claim ? 'text-emerald-400' : today ? 'text-amber-400' : 'text-slate-400'}">${r.val}</span><span class="text-[8px] font-bold">${claim ? 'Claimed' : today ? 'READY' : 'Locked'}</span></div>`;
+      }); g.innerHTML = h;
     }
 
     function claimDailyReward() {
       if(!currentUser) return;
       const now = Date.now(); const last = currentUser.lastCheckin || 0; const oneDay = 24*60*60*1000;
-      
       if (now - last < oneDay) { alert("Aaj ka reward claim ho chuka hai! Kal wapas aana."); return; }
       
-      let nextDay = (currentUser.checkinDay || 0) + 1;
-      if (nextDay > 7) nextDay = 1;
-      
+      let nextDay = (currentUser.checkinDay || 0) + 1; if (nextDay > 7) nextDay = 1;
       const reward = checkinRewards[nextDay - 1];
+      
       if (reward.type === "cash") currentUser.balance = (currentUser.balance || 0) + reward.amt;
       else currentUser.stars = (currentUser.stars || 0) + reward.amt;
 
-      currentUser.checkinDay = nextDay; 
-      currentUser.lastCheckin = now;
-      
+      currentUser.checkinDay = nextDay; currentUser.lastCheckin = now;
       localStorage.setItem('apex_user', JSON.stringify(currentUser));
-      if (currentUser.phone) {
-          db.ref('players/' + currentUser.phone).update({
-              balance: currentUser.balance, 
-              stars: currentUser.stars, 
-              checkinDay: nextDay, 
-              lastCheckin: now
-          });
-      }
+      if (currentUser.phone) { db.ref('players/' + currentUser.phone).update({balance: currentUser.balance, stars: currentUser.stars, checkinDay: nextDay, lastCheckin: now}); }
       syncUI(); renderCheckinGrid(); playSFX('click'); alert(`Awesome! Day ${nextDay} ka reward (${reward.val}) wallet me add ho gaya.`);
     }
 
-    // --- PASSWORD VISIBILITY ---
     function togglePassword(inputId, iconEl) {
        const input = document.getElementById(inputId);
        if(input.type === 'password') { input.type = 'text'; iconEl.classList.replace('fa-eye', 'fa-eye-slash'); iconEl.classList.add('text-white'); }
        else { input.type = 'password'; iconEl.classList.replace('fa-eye-slash', 'fa-eye'); iconEl.classList.remove('text-white'); }
     }
 
-    // --- AUTH FLOW ---
     function toggleAuth(type) {
-      document.getElementById('auth-login-box').classList.add('hidden');
-      document.getElementById('auth-register-box').classList.add('hidden');
-      document.getElementById('auth-forgot-box').classList.add('hidden');
+      document.getElementById('auth-login-box').classList.add('hidden'); document.getElementById('auth-register-box').classList.add('hidden'); document.getElementById('auth-forgot-box').classList.add('hidden');
       if(type === 'register') document.getElementById('auth-register-box').classList.remove('hidden');
       else if(type === 'forgot') document.getElementById('auth-forgot-box').classList.remove('hidden');
       else document.getElementById('auth-login-box').classList.remove('hidden');
     }
 
     function sendForgotOTP(btn) {
-       const phone = document.getElementById('forgot-phone').value.trim();
-       if(!phone) { alert("Mobile number daaliye!"); return; }
-       
+       const phone = document.getElementById('forgot-phone').value.trim(); if(!phone) { alert("Mobile number daaliye!"); return; }
        const oText = btn.innerText; btn.innerText = "⏳ Checking..."; btn.disabled = true;
        db.ref('players/' + phone).once('value', snap => {
           btn.innerText = oText; btn.disabled = false;
-          if(snap.exists()) { 
-             document.getElementById('forgot-step-1').classList.add('hidden'); 
-             document.getElementById('forgot-step-2').classList.remove('hidden'); 
-          } else { alert("Account nahi mila is number par."); }
+          if(snap.exists()) { document.getElementById('forgot-step-1').classList.add('hidden'); document.getElementById('forgot-step-2').classList.remove('hidden'); } 
+          else { alert("Account nahi mila is number par."); }
        });
     }
 
     function resetPassword(btn) {
-       const phone = document.getElementById('forgot-phone').value.trim();
-       const otp = document.getElementById('forgot-otp').value.trim();
-       const newPass = document.getElementById('forgot-new-pass').value.trim();
-       
-       if(otp !== "123456") { alert("Galat OTP! Demo code '123456' use karein."); return; }
-       if(!newPass) { alert("Naya Password banaiye!"); return; }
-       
+       const phone = document.getElementById('forgot-phone').value.trim(); const otp = document.getElementById('forgot-otp').value.trim(); const newPass = document.getElementById('forgot-new-pass').value.trim();
+       if(otp !== "123456") { alert("Galat OTP! Demo code '123456' use karein."); return; } if(!newPass) { alert("Naya Password banaiye!"); return; }
        const oText = btn.innerText; btn.innerText = "⏳ Saving..."; btn.disabled = true;
        db.ref('players/' + phone).update({pass: newPass}).then(() => {
-          btn.innerText = oText; btn.disabled = false;
-          alert("Password reset successful! Login karein.");
-          document.getElementById('forgot-step-1').classList.remove('hidden');
-          document.getElementById('forgot-step-2').classList.add('hidden');
-          toggleAuth('login');
+          btn.innerText = oText; btn.disabled = false; alert("Password reset successful! Login karein.");
+          document.getElementById('forgot-step-1').classList.remove('hidden'); document.getElementById('forgot-step-2').classList.add('hidden'); toggleAuth('login');
        }).catch(e => { alert("Error: "+e.message); btn.innerText = oText; btn.disabled = false; });
     }
     
     function doRegister(btn) {
-       const ign = document.getElementById('reg-ign').value.trim(); 
-       const uid = document.getElementById('reg-uid').value.trim(); 
-       const phone = document.getElementById('reg-phone').value.trim(); 
-       const pass = document.getElementById('reg-pass').value.trim();
+       const ign = document.getElementById('reg-ign').value.trim(); const uid = document.getElementById('reg-uid').value.trim(); const phone = document.getElementById('reg-phone').value.trim(); const pass = document.getElementById('reg-pass').value.trim();
        if(!ign || !uid || !phone || !pass) { alert("Please fill all details!"); return; }
-       
        const oText = btn.innerText; btn.innerText = "⏳ Creating..."; btn.disabled = true;
        db.ref('players/' + phone).once('value', snap => {
           btn.innerText = oText; btn.disabled = false;
           if(snap.exists()) { alert("Number already registered! Login karein."); toggleAuth('login'); }
           else {
              currentUser = { ign: ign, uid: uid, phone: phone, pass: pass, balance: 0, stars: 0, matchesPlayed: 0, adminWarnings: 0, isBanned: false, avatar: "", checkinDay: 0, lastCheckin: 0, lastSpinTime: 0 };
-             db.ref('players/' + phone).set(currentUser).then(() => { 
-                localStorage.setItem('apex_user', JSON.stringify(currentUser)); enterApp(true); 
-             });
+             db.ref('players/' + phone).set(currentUser).then(() => { localStorage.setItem('apex_user', JSON.stringify(currentUser)); enterApp(true); });
           }
        });
     }
 
     function doLogin(btn) {
-       const phone = document.getElementById('login-phone').value.trim(); 
-       const pass = document.getElementById('login-pass').value.trim();
+       const phone = document.getElementById('login-phone').value.trim(); const pass = document.getElementById('login-pass').value.trim();
        if(!phone || !pass) { alert("Phone & Password daaliye!"); return; }
-       
        const oText = btn.innerText; btn.innerText = "⏳ Logging in..."; btn.disabled = true;
        db.ref('players/' + phone).once('value', snap => {
           btn.innerText = oText; btn.disabled = false;
           if(snap.exists()) {
              const userObj = snap.val();
-             if(userObj.pass === pass) { 
-                 currentUser = userObj; 
-                 localStorage.setItem('apex_user', JSON.stringify(currentUser)); 
-                 enterApp(true); 
-             } else { alert("Galat Password!"); }
+             if(userObj.pass === pass) { currentUser = userObj; localStorage.setItem('apex_user', JSON.stringify(currentUser)); enterApp(true); } else { alert("Galat Password!"); }
           } else { alert("Account nahi mila. Register karein."); }
        });
     }
@@ -1029,60 +928,39 @@
     function doLogout() { localStorage.removeItem('apex_user'); currentUser = null; location.reload(); }
 
     function enterApp(showKelly = true) {
-       const authGate = document.getElementById('auth-gate-screen');
-       if(authGate) authGate.style.display = 'none';
-       
-       const splash = document.getElementById('splash-screen');
-       if(splash) splash.style.display = 'none';
-       
-       const appWrapper = document.getElementById('main-app-wrapper');
-       if(appWrapper) appWrapper.style.display = 'flex';
+       const authGate = document.getElementById('auth-gate-screen'); if(authGate) authGate.style.display = 'none';
+       const splash = document.getElementById('splash-screen'); if(splash) splash.style.display = 'none';
+       const appWrapper = document.getElementById('main-app-wrapper'); if(appWrapper) appWrapper.style.display = 'flex';
        
        syncUI(); initApp(); goTab('home');
        
        if(showKelly && (!currentUser || !currentUser.isBanned)) {
-          safeSetText('kelly-user-name', currentUser.ign); 
+          const kun = document.getElementById('kelly-user-name'); if(kun) kun.textContent = currentUser.ign; 
           openModal('kelly-welcome-modal');
           let speech = `Welcome to Free Fire Max Arena, ${currentUser.ign}. Be ready.`;
           const c = document.getElementById('kelly-caption-text'); 
-          if(c) {
-              c.textContent = ""; let i=0;
-              let t = setInterval(()=> { if(i<speech.length){ c.textContent+=speech.charAt(i); i++; } else clearInterval(t); },35);
-          }
+          if(c) { c.textContent = ""; let i=0; let t = setInterval(()=> { if(i<speech.length){ c.textContent+=speech.charAt(i); i++; } else clearInterval(t); },35); }
           if ('speechSynthesis' in window) { const u = new SpeechSynthesisUtterance(speech); u.rate=0.9; u.pitch=1.4; window.speechSynthesis.speak(u); }
        }
     }
 
-    // ON LOAD CHECK
     window.addEventListener('DOMContentLoaded', () => {
-      setTimeout(() => { 
-          const splash = document.getElementById('splash-screen');
-          if(splash) splash.classList.add('fade-out'); 
-      }, 2000);
+      setTimeout(() => { const splash = document.getElementById('splash-screen'); if(splash) splash.classList.add('fade-out'); }, 2000);
       try { currentUser = JSON.parse(localStorage.getItem('apex_user')); } catch(e) {}
-      
       if (currentUser && currentUser.phone) { 
-        if (currentUser.isBanned) {
-            const ban = document.getElementById('ban-screen');
-            if(ban) ban.style.display = 'flex';
-        } else enterApp(false); 
+        if (currentUser.isBanned) { const ban = document.getElementById('ban-screen'); if(ban) ban.style.display = 'flex'; } else enterApp(false); 
       } else { 
-        const authGate = document.getElementById('auth-gate-screen');
-        if(authGate) authGate.style.display = 'flex'; 
-        const appWrap = document.getElementById('main-app-wrapper');
-        if(appWrap) appWrap.style.display = 'none'; 
+        const authGate = document.getElementById('auth-gate-screen'); if(authGate) authGate.style.display = 'flex'; 
+        const appWrap = document.getElementById('main-app-wrapper'); if(appWrap) appWrap.style.display = 'none'; 
       }
     });
 
     function initApp() {
         if (!localStorage.getItem('has_visited')) { db.ref('analytics/visitors').transaction(curr => (curr || 0) + 1); localStorage.setItem('has_visited', 'true'); }
         startFakeWithdrawToasts(); checkSpinLockStatus();
-        
         db.ref('settings/upis').once('value').then(s => { 
             systemUPIs = s.val() || ["fftournamenthub@ibl"];
-            const upiSel = document.getElementById('upi-selector');
-            if(upiSel) upiSel.innerHTML = systemUPIs.map(u => `<option value="${u}">${u}</option>`).join(''); 
-            updateWalletQR(); 
+            const upiSel = document.getElementById('upi-selector'); if(upiSel) upiSel.innerHTML = systemUPIs.map(u => `<option value="${u}">${u}</option>`).join(''); updateWalletQR(); 
         });
     }
 
@@ -1093,9 +971,7 @@
           const originalBase64 = event.target.result;
           if(previewElementId === 'deposit-img-preview') depositBase64Image = originalBase64;
           if(previewElementId === 'proof-img-preview') proofBase64Image = originalBase64;
-          safeSetImg(previewElementId, originalBase64);
-          const previewEl = document.getElementById(previewElementId);
-          if(previewEl) previewEl.classList.remove('hidden');
+          const previewEl = document.getElementById(previewElementId); if(previewEl) { previewEl.src = originalBase64; previewEl.classList.remove('hidden'); }
       };
     }
 
@@ -1103,61 +979,49 @@
       const file = e.target.files[0]; if (!file) return;
       const reader = new FileReader(); reader.readAsDataURL(file);
       reader.onload = function(event) {
-         currentUser.avatar = event.target.result; 
-         localStorage.setItem('apex_user', JSON.stringify(currentUser));
-         if(currentUser.phone) db.ref('players/' + currentUser.phone).update({avatar: currentUser.avatar}); 
-         syncUI();
+         currentUser.avatar = event.target.result; localStorage.setItem('apex_user', JSON.stringify(currentUser));
+         if(currentUser.phone) db.ref('players/' + currentUser.phone).update({avatar: currentUser.avatar}); syncUI();
       };
     }
 
     function unbanMe() {
       let code = prompt("Enter Unlock Code:");
       if (code === "UNBAN") { 
-          currentUser.isBanned = false; currentUser.adminWarnings = 0; 
-          localStorage.setItem('apex_user', JSON.stringify(currentUser)); 
-          db.ref('players/' + currentUser.phone).update({isBanned: false}); 
-          alert("Account Recovered!"); location.reload(); 
+          currentUser.isBanned = false; currentUser.adminWarnings = 0; localStorage.setItem('apex_user', JSON.stringify(currentUser)); db.ref('players/' + currentUser.phone).update({isBanned: false}); alert("Account Recovered!"); location.reload(); 
       }
     }
 
     function syncUI() {
       if(!currentUser) return;
-      safeSetText('top-wallet-val', currentUser.balance || 0);
-      safeSetText('wallet-main-bal', currentUser.balance || 0);
-      safeSetText('menu-wallet-val', "₹" + (currentUser.balance || 0));
       
-      safeSetText('player-ign-txt', currentUser.ign);
-      safeSetText('prof-ign-main', currentUser.ign);
-      safeSetText('header-ign-txt', currentUser.ign);
+      const safeSet = (id, val) => { const el = document.getElementById(id); if(el) el.textContent = val; };
       
-      safeSetText('player-uid-txt', currentUser.uid || "----");
-      safeSetText('prof-phone-main', currentUser.phone || "Not Verified");
-      
-      safeSetText('prof-matches-played', currentUser.matchesPlayed || 0);
-      safeSetText('stat-matches', currentUser.matchesPlayed || 0);
-      
-      safeSetText('prof-win-stars', currentUser.stars || 0);
-      safeSetText('stat-stars', currentUser.stars || 0);
-      safeSetText('player-total-stars', (currentUser.stars || 0) + " Stars");
+      safeSet('top-wallet-val', currentUser.balance || 0);
+      safeSet('wallet-main-bal', currentUser.balance || 0);
+      safeSet('menu-wallet-val', "₹" + (currentUser.balance || 0));
+      safeSet('player-ign-txt', currentUser.ign);
+      safeSet('prof-ign-main', currentUser.ign);
+      safeSet('prof-page-ign', currentUser.ign);
+      safeSet('header-ign-txt', currentUser.ign);
+      safeSet('player-uid-txt', currentUser.uid || "----");
+      safeSet('prof-phone-main', currentUser.phone || "Not Verified");
+      safeSet('prof-page-phone', currentUser.phone || "Not Verified");
+      safeSet('prof-matches-played', currentUser.matchesPlayed || 0);
+      safeSet('stat-matches', currentUser.matchesPlayed || 0);
+      safeSet('prof-win-stars', currentUser.stars || 0);
+      safeSet('stat-stars', currentUser.stars || 0);
+      safeSet('player-total-stars', (currentUser.stars || 0) + " Stars");
 
       if (currentUser.avatar && currentUser.avatar !== "") {
-         safeSetImg('header-avatar-img', currentUser.avatar);
-         const hai = document.getElementById('header-avatar-img'); if(hai) hai.classList.remove('hidden');
-         
-         safeSetImg('prof-main-avatar', currentUser.avatar);
-         const pma = document.getElementById('prof-main-avatar'); if(pma) pma.classList.remove('hidden');
-         
-         const ai = document.getElementById('avatar-initial'); if(ai) ai.classList.add('hidden'); 
-         const pi = document.getElementById('prof-initial'); if(pi) pi.classList.add('hidden'); 
+         const ids = ['header-avatar-img', 'prof-main-avatar', 'prof-page-avatar'];
+         ids.forEach(id => { const el = document.getElementById(id); if(el) { el.src = currentUser.avatar; el.classList.remove('hidden'); } });
+         ['avatar-initial', 'prof-initial', 'prof-page-initial'].forEach(id => { const el = document.getElementById(id); if(el) el.classList.add('hidden'); });
       }
       
       let rank = "BRONZE"; if (currentUser.stars >= 5) rank = "GOLD"; if (currentUser.stars >= 10) rank = "DIAMOND"; if (currentUser.stars >= 20) rank = "HEROIC";
-      safeSetText('header-rank-txt', rank); 
-      safeSetText('profile-tier-badge', rank); 
-      safeSetText('prof-tier-main', rank); 
+      safeSet('header-rank-txt', rank); safeSet('profile-tier-badge', rank); safeSet('prof-tier-main', rank); safeSet('prof-page-tier', rank);
     }
 
-    // --- ADMIN SECURITY ---
     let adminTapCount = 0; let adminTapTimer = null;
     function handleAdminSecretTap() {
       adminTapCount++; clearTimeout(adminTapTimer); adminTapTimer = setTimeout(() => { adminTapCount = 0; }, 2000);
@@ -1179,7 +1043,7 @@
 
     function toggleCardFlip(key) { document.getElementById(`flipper-${key}`).classList.toggle('flipped'); }
 
-    // --- TOURNAMENT FILTER LOGIC ---
+    // --- FILTER & RENDER TOURNAMENTS ---
     function filterMatchList(type) {
        currentTimelineFilter = type;
        ['btn-upc', 'btn-ong', 'btn-res'].forEach(id => { const el = document.getElementById(id); if(el) el.classList.remove('active'); });
@@ -1204,8 +1068,9 @@
       const allKeys = Object.keys(allTournaments);
 
       if (allKeys.length === 0) { 
-          if(box) box.innerHTML = `<p class="text-xs text-slate-400 text-center py-8">No tournaments published yet.</p>`; 
-          return; 
+         if(box) box.innerHTML = `<p class="text-xs text-slate-400 text-center py-8">No tournaments published yet.</p>`; 
+         const lbl = document.getElementById('filter-count-label'); if(lbl) lbl.textContent = "0 items";
+         return; 
       }
 
       const filteredKeys = allKeys.filter(k => {
@@ -1226,9 +1091,11 @@
          return matchTime && matchMode;
       });
 
-      if (filteredKeys.length === 0) { 
-          if(box) box.innerHTML = `<div class="p-6 bg-black/50 rounded-2xl border border-purple-900/40 text-center text-xs text-slate-400 shadow-lg">No tournaments match this filter.</div>`; 
-          return; 
+      const lbl = document.getElementById('filter-count-label'); if(lbl) lbl.textContent = `${filteredKeys.length} items`;
+
+      if (filteredKeys.length === 0) {
+         if(box) box.innerHTML = `<div class="p-6 bg-black/50 rounded-2xl border border-purple-900/40 text-center text-xs text-slate-400 shadow-lg">No tournaments match this filter.</div>`;
+         return;
       }
 
       let h = ""; let myJoinedHtml = "";
@@ -1314,7 +1181,6 @@
       if(roomBox) roomBox.innerHTML = myJoinedHtml || `<p class="text-xs text-slate-400 text-center py-8">Aapne abhi koi match join nahi kiya.</p>`;
     }
 
-    // --- TIMERS ---
     setInterval(() => {
       document.querySelectorAll('[id^="timer-"]').forEach(el => {
         const time = Number(el.getAttribute('data-time')); if (!time) return; const diff = time - Date.now();
@@ -1339,7 +1205,7 @@
 
       activeSelectingMatchId = matchId; activeSelectingFee = totalFee; selectedSlotNumber = null;
       document.getElementById('confirm-slot-btn').disabled = true; document.getElementById('rules-agree-check').checked = false;
-      safeSetText('slot-modal-subtitle', `Total Entry (${multiplier} Players): ₹${totalFee}`);
+      const subtitle = document.getElementById('slot-modal-subtitle'); if(subtitle) subtitle.textContent = `Total Entry (${multiplier} Players): ₹${totalFee}`;
       
       const grid = document.getElementById('slots-grid-box'); let html = "";
       if (isCS && isSquad) { 
@@ -1366,7 +1232,8 @@
       return `<div onclick="selectSlot(${i})" id="slot-card-${i}" class="slot-item p-2 rounded-lg bg-black/60 border border-purple-900/40 text-center cursor-pointer active:scale-95 transition-all"><span class="text-[10px] font-bold text-slate-300 block">${label} #${i}</span></div>`;
     }
     function selectSlot(slotNum) {
-      selectedSlotNumber = slotNum; safeSetText('selected-slot-num', `#${slotNum}`);
+      selectedSlotNumber = slotNum; 
+      const ssn = document.getElementById('selected-slot-num'); if(ssn) ssn.textContent = `#${slotNum}`;
       document.querySelectorAll('.slot-item').forEach(el => {
          el.classList.remove('bg-indigo-600', 'border-indigo-400');
          el.querySelector('span').classList.remove('text-white', 'font-black');
@@ -1390,7 +1257,8 @@
       const oText = btn.innerText; btn.innerText = "⏳ Booking..."; btn.disabled = true;
       db.ref(`tournaments/${activeSelectingMatchId}/bookedSlots/${selectedSlotNumber}`).once('value').then(snap => {
         if (snap.exists()) { alert("Yeh slot kisi aur ne book kar liya hai."); btn.innerText = oText; btn.disabled = false; return; }
-        let tName = document.getElementById('cs-team-name').value || "Solo/Random";
+        const tInput = document.getElementById('cs-team-name');
+        let tName = (tInput && tInput.value) ? tInput.value : "Solo/Random";
         currentUser.balance -= activeSelectingFee; currentUser.matchesPlayed += 1; localStorage.setItem('apex_user', JSON.stringify(currentUser));
         db.ref('players/' + currentUser.phone).update({balance: currentUser.balance, matchesPlayed: currentUser.matchesPlayed});
         db.ref(`tournaments/${activeSelectingMatchId}/bookedSlots/${selectedSlotNumber}`).set({ ign: currentUser.ign, phone: currentUser.phone, team: tName }).then(() => {
@@ -1407,9 +1275,10 @@
     
     function sendDepositUTR(btn) {
       const amt = Number(document.getElementById('deposit-amt').value); const utr = document.getElementById('deposit-utr-code').value.trim();
-      const senderUpi = document.getElementById('deposit-upi-sender').value.trim() || "Not Provided";
+      const sInput = document.getElementById('deposit-upi-sender');
+      const senderUpi = (sInput && sInput.value.trim()) ? sInput.value.trim() : "Not Provided";
       if (amt < 49) { alert("Deposit ₹49 se kam nahi ho sakta!"); return; }
-      if (!/^\d{12}$/.test(utr)) { alert("Bhaiya, UTR exactly 12 digits ka numbers hona chahiye!"); return; }
+      if (!/^\d{12}$/.test(utr)) { alert("Bhaiya, UTR exactly 12 digits ka numbers hona chahiye! Sahi daalo."); return; }
       if (!depositBase64Image) { alert("Screenshot attach karna compulsory hai!"); return; }
       
       const oText = btn.innerText; btn.innerText = "⏳ Submitting..."; btn.disabled = true;
@@ -1419,8 +1288,8 @@
         
         db.ref('deposits/' + utr).set({ phone: currentUser.phone, ign: currentUser.ign, amount: amt, utr: utr, senderUpi: senderUpi, screenshot: depositBase64Image, status: "pending", time: Date.now() }).then(() => { 
            alert("Success! Request sent to Admin."); 
-           document.getElementById('deposit-amt').value=""; document.getElementById('deposit-utr-code').value=""; document.getElementById('deposit-upi-sender').value="";
-           btn.innerText = oText; btn.disabled = false; depositBase64Image = null; document.getElementById('deposit-img-preview').classList.add('hidden');
+           document.getElementById('deposit-amt').value=""; document.getElementById('deposit-utr-code').value=""; if(sInput) sInput.value="";
+           btn.innerText = oText; btn.disabled = false; depositBase64Image = null; const p = document.getElementById('deposit-img-preview'); if(p) p.classList.add('hidden');
            closeModal('deposit-popup'); 
         }).catch(e=>{ alert("Error: "+e.message); btn.innerText = oText; btn.disabled = false; });
       });
@@ -1442,18 +1311,17 @@
       }).catch(e=>{ alert("Error: "+e.message); btn.innerText = oText; btn.disabled = false; });
     }
 
-    function submitResultProof() {
-      const btn = document.getElementById('proof-submit-btn');
+    function submitResultProof(btn) {
       const k = document.getElementById('proof-kills-count').value;
       if(!k || !proofBase64Image) { alert("Screenshot aur kills zaroori hai!"); return; }
       const oText = btn.innerText; btn.innerText = "⏳ Uploading..."; btn.disabled = true;
       db.ref(`matchProofs/${activeProofMatchId}/PRF${Date.now()}`).set({ign: currentUser.ign, phone: currentUser.phone, kills: k, screenshot: proofBase64Image, status: "pending"}).then(() => { 
-          alert("Proof Sent!"); document.getElementById('proof-kills-count').value=""; proofBase64Image=null; document.getElementById('proof-img-preview').classList.add('hidden');
+          alert("Proof Sent!"); document.getElementById('proof-kills-count').value=""; proofBase64Image=null; const p = document.getElementById('proof-img-preview'); if(p) p.classList.add('hidden');
           btn.innerText = oText; btn.disabled = false; closeModal('result-proof-modal'); 
       }).catch(e=>{ alert("Error: "+e.message); btn.innerText = oText; btn.disabled = false; });
     }
 
-    // --- COMPLAINTS & FEEDBACK ---
+    // --- COMPLAINTS & FEEDBACK (PERFECT DATABASE HOOKS) ---
     function submitComplaint() {
       const btn = document.getElementById('comp-btn');
       const type = document.getElementById('comp-type').value; const msg = document.getElementById('comp-msg').value.trim();
@@ -1523,9 +1391,9 @@
       let slots = 48; if(mode.includes("CS 4v4 Random")) slots = 8; else if(mode.includes("CS 4v4 Direct Squads")) slots = 2; else if(mode.includes("DUO")) slots = 24; else if(mode.includes("SQUAD")) slots = 12;
       const totalCol = slots * fee * (mode.includes("DUO")?2:(mode.includes("SQUAD")||mode.includes("Direct Squads")?4:1));
       const profit = totalCol - prize;
-      safeSetText('calc-collection', totalCol);
-      safeSetText('calc-profit', "₹" + profit);
-      const cp = document.getElementById('calc-profit'); if(cp) cp.className = profit >= 0 ? "text-emerald-400 text-sm font-bold" : "text-rose-400 text-sm font-bold";
+      const cc = document.getElementById('calc-collection'); if(cc) cc.textContent = totalCol;
+      const cp = document.getElementById('calc-profit'); 
+      if(cp) { cp.textContent = "₹" + profit; cp.className = profit >= 0 ? "text-emerald-400 text-sm font-bold" : "text-rose-400 text-sm font-bold"; }
     }
     
     function createLiveMatch() {
@@ -1535,7 +1403,7 @@
       
       const pkb = document.getElementById('new-match-perkill');
       let perKillAmt = pkb ? pkb.value : 0;
-      if (m.includes("CS")) perKillAmt = 0; 
+      if (m.includes("CS")) perKillAmt = 0; // Prevent per kill for CS
 
       db.ref('tournaments/M'+Date.now()).set({title: title, mode: m, maxSlots: slots, entry: document.getElementById('new-match-fee').value, prize: document.getElementById('new-match-prize').value, perKill: perKillAmt, datetime: document.getElementById('new-match-datetime').value, rules: "Play fair. Hacks/Scripts lead to permanent ban."}).then(() => {
           alert("Match Published to Arena!");
@@ -1592,17 +1460,17 @@
     db.ref('settings/upis').on('value', snap => { 
         systemUPIs = snap.val() || ["fftournamenthub@ibl"]; 
         const au = document.getElementById('admin-upi-list'); if(au) au.innerHTML = systemUPIs.map((u,i)=>`<div class="flex justify-between bg-black/50 p-2.5 border border-purple-900/40 rounded-lg mb-2 shadow-inner"><span>${u}</span><button onclick="removeUPI(${i})" class="text-red-400 hover:text-red-300 font-black"><i class="fa-solid fa-trash"></i></button></div>`).join('');
-        const us = document.getElementById('upi-selector'); if(us) us.innerHTML = systemUPIs.map(u => `<option value="${u}">${u}</option>`).join(''); 
-        updateWalletQR(); 
+        const us = document.getElementById('upi-selector'); if(us) us.innerHTML = systemUPIs.map(u => `<option value="${u}">${u}</option>`).join(''); updateWalletQR(); 
     });
 
+    // ALERTS - 12AM RESET
     db.ref('alerts').on('value', snap => {
        if(!currentUser || !currentUser.phone) return;
        const all = snap.val() || {}; const myAlerts = all[currentUser.phone] || {};
        const keys = Object.keys(myAlerts); let h = ""; let show = false;
        const midnight = new Date(new Date().setHours(0,0,0,0)).getTime();
        keys.forEach(k => {
-           if (Number(k) >= midnight) { 
+           if (Number(k) >= midnight) { // Check if after midnight today
               show = true; const a = myAlerts[k]; const c = a.type === 'error' ? 'text-rose-400 bg-rose-950/40 border-rose-900/50' : 'text-emerald-400 bg-emerald-950/40 border-emerald-900/50';
               h += `<div class="p-3 rounded-xl border ${c} font-mono text-[10px] mb-2 shadow-inner"><i class="fa-solid ${a.type === 'error' ? 'fa-circle-xmark' : 'fa-circle-check'} mr-1.5"></i> ${a.msg}</div>`;
            } else { db.ref('alerts/' + currentUser.phone + '/' + k).remove(); }
@@ -1619,20 +1487,20 @@
       adBox.innerHTML = Object.keys(snap.val()).map(k => `<div class="p-4 bg-black/50 border border-purple-900/40 flex flex-col gap-3 mb-2 rounded-xl shadow-lg"><div><p class="text-white text-sm font-black">${snap.val()[k].title}</p><span class="text-[9px] text-amber-300 font-mono tracking-wider">Key: ${k}</span></div><div class="flex gap-2 w-full"><button onclick="endMatchAndDeclare('${k}')" class="flex-1 py-2.5 bg-emerald-600 rounded-lg text-[10px] font-black text-white shadow uppercase tracking-widest active:scale-95 transition-transform">Result</button> <button onclick="cancelMatchAndMassRefund('${k}')" class="flex-1 py-2.5 bg-amber-600 rounded-lg text-[10px] font-black text-black shadow uppercase tracking-widest active:scale-95 transition-transform">Refund</button></div></div>`).join('');
     });
 
+    // RANKINGS
     db.ref('players').on('value', snap => {
       const users = snap.val() || {}; const regCount = Object.keys(users).length;
-      safeSetText('admin-reg-count', regCount); safeSetText('admin-total-players-count', regCount + " Players");
+      const arc = document.getElementById('admin-reg-count'); if(arc) arc.textContent = regCount;
+      const atpc = document.getElementById('admin-total-players-count'); if(atpc) atpc.textContent = regCount + " Players";
       
       if (currentUser && currentUser.phone && users[currentUser.phone]) {
-         currentUser.balance = users[currentUser.phone].balance || 0; 
-         currentUser.stars = users[currentUser.phone].stars || 0;
-         currentUser.lastSpinTime = users[currentUser.phone].lastSpinTime || 0;
-         currentUser.checkinDay = users[currentUser.phone].checkinDay || 0;
-         currentUser.lastCheckin = users[currentUser.phone].lastCheckin || 0;
-         localStorage.setItem('apex_user', JSON.stringify(currentUser)); syncUI(); checkSpinLockStatus();
+         currentUser.balance = users[currentUser.phone].balance || 0; currentUser.stars = users[currentUser.phone].stars || 0;
+         localStorage.setItem('apex_user', JSON.stringify(currentUser)); syncUI();
       }
       
-      let arr = Object.values(users).filter(u => u.ign); arr.sort((a,b) => (b.stars || 0) - (a.stars || 0));
+      let arr = Object.values(users).filter(u => u.ign);
+      arr.sort((a,b) => (b.stars || 0) - (a.stars || 0));
+      
       const champEl = document.getElementById('champions-list');
       if(champEl) {
         champEl.innerHTML = arr.map((p, i) => {
@@ -1642,10 +1510,10 @@
         }).join('');
       }
       
-      const pb = document.getElementById('admin-players-box');
-      if(pb) {
+      const apb = document.getElementById('admin-players-box');
+      if(apb) {
         let phtml = ""; Object.keys(users).forEach(phone => { const u = users[phone]; phtml += `<div class="p-3 bg-black/50 border border-purple-900/40 rounded-xl flex justify-between items-center mb-2 shadow-inner"><div><p class="font-black text-white text-xs">${u.ign} <span class="text-cyan-400 font-mono text-[9px]">(${phone})</span></p><p class="text-[9px] text-slate-400 font-mono mt-0.5">UID: ${u.uid} • Stars: ${u.stars || 0} ★</p></div><div class="text-right"><span class="text-amber-400 font-black text-sm">₹${u.balance || 0}</span></div></div>`; });
-        pb.innerHTML = phtml || `<p class="text-slate-500 italic text-xs p-2">No registered players yet.</p>`;
+        apb.innerHTML = phtml || `<p class="text-slate-500 italic text-xs p-2">No registered players yet.</p>`;
       }
     });
 
@@ -1654,7 +1522,7 @@
       if(currentUser && currentUser.phone) {
          let myMthDep = 0; const now = new Date();
          Object.values(data).forEach(d => { if(d.phone === currentUser.phone && d.status === 'approved' && d.time) { const dt = new Date(d.time); if(dt.getMonth() === now.getMonth() && dt.getFullYear() === now.getFullYear()) myMthDep += Number(d.amount); } });
-         safeSetText('monthly-deposit', `₹${myMthDep}`);
+         const md = document.getElementById('monthly-deposit'); if(md) md.textContent = `₹${myMthDep}`;
       }
       const adb = document.getElementById('admin-deposits-box');
       if(adb) adb.innerHTML = Object.keys(data).filter(k => data[k].status === 'pending').map(k => `<div class="p-3 border border-amber-900/50 bg-black/50 text-xs text-white rounded-xl mb-3 shadow-lg"><div class="flex justify-between items-center mb-2"><span class="font-bold text-amber-300">${data[k].ign} <span class="text-slate-400 font-mono text-[9px] block mt-0.5">(${data[k].phone})</span></span><span class="font-black text-emerald-400 text-lg">₹${data[k].amount}</span></div><p class="text-[9px] text-slate-400 font-mono mb-1">UPI: <span class="text-white">${data[k].senderUpi || 'N/A'}</span></p><p class="text-[9px] text-slate-400 font-mono mb-3">UTR: <span class="text-white">${data[k].utr}</span></p><div class="w-full bg-black rounded-lg border border-amber-800/50 p-1 mb-3 text-center cursor-pointer" onclick="openImagePreview('${data[k].screenshot}')"><img src="${data[k].screenshot}" class="max-h-24 mx-auto object-contain" /><p class="text-[8px] text-cyan-400 mt-1 uppercase font-bold tracking-widest">Tap to Zoom</p></div><div class="flex gap-2"><button onclick="approveDeposit('${k}', '${data[k].phone}', ${data[k].amount})" class="flex-1 py-2.5 bg-emerald-600 rounded-lg text-white font-black shadow uppercase tracking-wider active:scale-95 transition-transform">Approve</button><button onclick="rejectDeposit('${k}', '${data[k].phone}')" class="flex-1 py-2.5 bg-red-600 rounded-lg text-white font-black shadow uppercase tracking-wider active:scale-95 transition-transform">Reject</button></div></div>`).join('');
@@ -1665,7 +1533,7 @@
       if(currentUser && currentUser.phone) {
          let myMthWith = 0; const now = new Date();
          Object.values(data).forEach(w => { if(w.phone === currentUser.phone && w.status === 'approved' && w.time) { const dt = new Date(w.time); if(dt.getMonth() === now.getMonth() && dt.getFullYear() === now.getFullYear()) myMthWith += Number(w.amount); } });
-         safeSetText('monthly-withdraw', `₹${myMthWith}`);
+         const mw = document.getElementById('monthly-withdraw'); if(mw) mw.textContent = `₹${myMthWith}`;
       }
       const awb = document.getElementById('admin-withdrawals-box');
       if(awb) awb.innerHTML = Object.keys(data).filter(k => data[k].status === 'pending').map(k => `<div class="p-3 border border-emerald-900/50 bg-black/50 text-xs text-white rounded-xl mb-3 shadow-lg"><div class="flex justify-between items-center mb-2"><span class="font-black text-emerald-400 text-lg">₹${data[k].amount}</span><span class="text-[9px] text-slate-300 font-mono">${data[k].phone}</span></div><p class="text-[10px] text-amber-300 mb-3 bg-black/40 p-2 rounded font-mono break-all border border-amber-900/50 font-bold">UPI: ${data[k].upi}</p><div class="flex gap-2"><button onclick="approveWithdrawal('${k}', '${data[k].phone}', ${data[k].amount})" class="flex-1 py-2.5 bg-emerald-600 rounded-lg text-white font-black shadow uppercase tracking-wider active:scale-95 transition-transform">Mark Paid</button><button onclick="rejectWithdrawal('${k}', '${data[k].phone}', ${data[k].amount})" class="flex-1 py-2.5 bg-red-600 rounded-lg text-white font-black shadow uppercase tracking-wider active:scale-95 transition-transform">Refund</button></div></div>`).join('');
@@ -1694,7 +1562,9 @@
       fBox.innerHTML = h || `<p class="text-slate-500 italic text-xs p-2">No feedback yet.</p>`;
     });
 
-    db.ref('analytics/visitors').on('value', snap => { safeSetText('admin-visitor-count', snap.val() || 0); });
+    db.ref('analytics/visitors').on('value', snap => { 
+        const avc = document.getElementById('admin-visitor-count'); if(avc) avc.textContent = snap.val() || 0; 
+    });
   </script>
 </body>
 </html>
