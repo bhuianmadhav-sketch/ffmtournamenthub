@@ -148,10 +148,7 @@
     </div>
   </div>
 
-  <div id="live-toast" class="fake-toast">
-    <i class="fa-solid fa-money-bill-wave text-white"></i> 
-    <span id="toast-msg">Rahul just withdrew ₹250</span>
-  </div>
+  <div id="live-toast" class="fake-toast"><i class="fa-solid fa-money-bill-wave text-white"></i> <span id="toast-msg">Rahul just withdrew ₹250</span></div>
 
   <div id="image-preview-modal" class="modal-box z-[9999]" onclick="closeModal('image-preview-modal')">
     <div class="relative w-full max-w-md p-2 bg-[#060214] rounded-2xl border-2 border-purple-600 shadow-2xl text-center flex flex-col items-center justify-center max-h-screen overflow-auto">
@@ -166,19 +163,12 @@
   <!-- KELLY ROBOT WELCOME -->
   <div id="kelly-welcome-modal" class="modal-box z-[9000]">
     <div class="bg-[#08021c] border-2 border-cyan-400 rounded-3xl w-full max-w-sm p-5 relative shadow-[0_0_40px_rgba(34,211,238,0.45)] text-center overflow-hidden">
-      <div class="flex justify-between items-center text-[10px] font-mono text-cyan-400 mb-2 border-b border-cyan-900 pb-1.5">
-        <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span> SYSTEM: ONLINE</span>
-        <span class="tracking-widest">CYBORG v2.6</span>
-      </div>
+      <div class="flex justify-between items-center text-[10px] font-mono text-cyan-400 mb-2 border-b border-cyan-900 pb-1.5"><span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span> SYSTEM: ONLINE</span><span class="tracking-widest">CYBORG v2.6</span></div>
       <div class="relative w-44 h-52 mx-auto rounded-2xl border-2 border-cyan-400/80 p-1 bg-black/80 shadow-inner overflow-hidden">
         <img id="kelly-img" src="https://images.alphacoders.com/100/1004169.jpg" class="object-cover h-full w-full rounded-xl filter contrast-110" alt="Kelly" />
       </div>
-      <h3 class="text-base font-black text-cyan-300 mt-3 flex items-center justify-center gap-1.5">
-        <i class="fa-solid fa-microchip text-cyan-400 animate-spin"></i> WARRIOR: <span id="kelly-user-name" class="text-amber-300">Player</span>
-      </h3>
-      <div class="mt-2.5 p-3 rounded-xl bg-black/90 border border-cyan-500/40 text-left min-h-[75px] shadow-inner">
-        <p class="text-xs text-cyan-200 font-mono leading-relaxed" id="kelly-caption-text">Connecting...</p>
-      </div>
+      <h3 class="text-base font-black text-cyan-300 mt-3 flex items-center justify-center gap-1.5"><i class="fa-solid fa-microchip text-cyan-400 animate-spin"></i> WARRIOR: <span id="kelly-user-name" class="text-amber-300">Player</span></h3>
+      <div class="mt-2.5 p-3 rounded-xl bg-black/90 border border-cyan-500/40 text-left min-h-[75px] shadow-inner"><p class="text-xs text-cyan-200 font-mono leading-relaxed" id="kelly-caption-text">Connecting...</p></div>
       <button onclick="closeModal('kelly-welcome-modal')" class="w-full mt-3.5 py-3 bg-gradient-to-r from-cyan-500 via-indigo-600 to-purple-600 text-white font-black text-xs rounded-xl shadow-lg active:scale-95 transition-all">ENTER ARENA</button>
     </div>
   </div>
@@ -186,33 +176,29 @@
   <!-- ================= MAIN APP WRAPPER ================= -->
   <div id="main-app-wrapper" class="app-wrapper bg-transparent">
     
-    <!-- HEADER -->
-    <header class="fixed top-0 left-0 right-0 max-w-md mx-auto h-16 bg-[#070216]/95 backdrop-blur-md px-4 flex justify-between items-center border-b border-purple-900/50 z-40 shadow-md">
-      <div class="flex items-center gap-2.5">
-        <div onclick="handleAdminSecretTap()" class="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 via-indigo-600 to-purple-500 flex items-center justify-center text-white shadow-lg cursor-pointer active:scale-90">
-          <i class="fa-solid fa-gamepad text-lg animate-pulse"></i>
+    <header class="fixed top-0 left-0 right-0 max-w-md mx-auto h-16 bg-[#0b0f19] px-4 flex justify-between items-center z-40 border-b border-white/5 shadow-md">
+      <div class="flex items-center gap-2">
+        <div class="w-9 h-9 bg-black border border-red-500 rounded-full flex items-center justify-center glow-box cursor-pointer" onclick="handleAdminSecretTap()">
+          <i class="fa-solid fa-fire text-red-500 text-sm"></i>
         </div>
         <div>
-          <h1 class="text-sm font-black tracking-wider uppercase text-transparent bg-clip-text bg-gradient-to-r from-purple-300 via-pink-300 to-indigo-200">FF TOURNAMENT HUB</h1>
-          <div class="flex items-center gap-1.5 text-[9px] text-purple-400 font-semibold tracking-wider">
-            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span><span>RANK: <strong id="header-rank-txt" class="text-amber-300">BRONZE</strong></span>
-          </div>
+          <h1 class="text-[10px] font-bold text-slate-400 uppercase">Welcome Back,</h1>
+          <p class="text-sm font-black text-emerald-400 tracking-widest uppercase" id="header-ign-txt">PLAYER</p>
         </div>
       </div>
-      <div class="flex items-center gap-3">
-        <!-- BELL ICON NOTIFICATION -->
-        <div class="relative cursor-pointer p-1" onclick="openModal('notifications-modal')">
-          <i class="fa-solid fa-bell text-slate-300 text-xl hover:text-amber-400 transition-colors"></i>
+      <div class="flex items-center gap-4">
+        <i class="fa-solid fa-headset text-slate-300 text-lg cursor-pointer hover:text-white" onclick="openModal('complaint-popup')"></i>
+        <div class="relative cursor-pointer" onclick="openModal('notifications-modal')">
+          <i class="fa-solid fa-bell text-slate-300 text-lg hover:text-amber-400 transition-colors"></i>
           <span id="bell-badge" class="bell-badge"></span>
         </div>
-        <button onclick="playSFX('click'); openModal('main-wallet-popup')" class="bg-purple-950/80 border border-purple-700/60 rounded-xl px-3 py-1.5 flex items-center gap-1.5 text-xs font-bold text-amber-300 shadow active:scale-95">
-          <i class="fa-solid fa-wallet text-amber-400"></i><span>₹<span id="top-wallet-val">0</span></span>
-        </button>
+        <div class="bg-gradient-to-r from-orange-600 to-amber-500 rounded-lg px-3 py-1.5 flex items-center gap-1.5 font-black text-white text-xs shadow-md cursor-pointer active:scale-95" onclick="openModal('main-wallet-popup')">
+          <i class="fa-solid fa-wallet text-[10px]"></i> ₹<span id="top-wallet-val">0</span>
+        </div>
       </div>
     </header>
 
     <div class="app-scroll-container px-4 space-y-4">
-      <!-- MAIN TABS -->
       <main id="main-content-area" class="pb-10">
         
         <!-- ================= HOME SCREEN ================= -->
@@ -233,39 +219,35 @@
             </div>
           </div>
 
-          <!-- REWARDS ROW -->
-          <div class="grid grid-cols-2 gap-2.5">
-            <div onclick="playSFX('click'); openModal('spin-popup'); setTimeout(drawSpinWheel, 250);" class="p-3 bg-gradient-to-r from-purple-900/40 to-indigo-950/60 border border-purple-700/50 rounded-2xl flex items-center gap-2.5 cursor-pointer active:scale-95 shadow-md">
-              <div class="w-9 h-9 rounded-xl bg-purple-600/30 border border-purple-400/40 flex items-center justify-center text-purple-300 text-lg"><i class="fa-solid fa-dharmachakra animate-spin" style="animation-duration: 6s;"></i></div>
-              <div><h4 class="text-xs font-black text-purple-200 uppercase">Lucky Spin</h4><p class="text-[9px] text-amber-300 font-bold" id="spin-badge-status">Free Spin 24H</p></div>
+          <div class="grid grid-cols-4 gap-2 text-center">
+            <div onclick="goTab('profile')" class="flex flex-col items-center gap-1.5 cursor-pointer">
+              <div class="w-12 h-12 rounded-xl bg-blue-600/20 text-blue-400 text-xl flex items-center justify-center border border-blue-500/30 transition-transform active:scale-90"><i class="fa-solid fa-user"></i></div>
+              <span class="text-[9px] font-bold text-slate-300">My Profile</span>
             </div>
-            <div onclick="playSFX('click'); openModal('checkin-popup'); renderCheckinGrid();" class="p-3 bg-gradient-to-r from-amber-900/30 to-purple-950/60 border border-amber-600/40 rounded-2xl flex items-center gap-2.5 cursor-pointer active:scale-95 shadow-md">
-              <div class="w-9 h-9 rounded-xl bg-amber-600/30 border border-amber-400/40 flex items-center justify-center text-amber-300 text-lg"><i class="fa-solid fa-calendar-check"></i></div>
-              <div><h4 class="text-xs font-black text-amber-200 uppercase">Daily Check-In</h4><p class="text-[9px] text-emerald-400 font-bold">Claim 7 Days</p></div>
+            <div onclick="openModal('main-wallet-popup')" class="flex flex-col items-center gap-1.5 cursor-pointer">
+              <div class="w-12 h-12 rounded-xl bg-emerald-600/20 text-emerald-400 text-xl flex items-center justify-center border border-emerald-500/30 transition-transform active:scale-90"><i class="fa-solid fa-wallet"></i></div>
+              <span class="text-[9px] font-bold text-slate-300">My Wallet</span>
+            </div>
+            <div onclick="goTab('ranking')" class="flex flex-col items-center gap-1.5 cursor-pointer">
+              <div class="w-12 h-12 rounded-xl bg-amber-600/20 text-amber-400 text-xl flex items-center justify-center border border-amber-500/30 transition-transform active:scale-90"><i class="fa-solid fa-trophy"></i></div>
+              <span class="text-[9px] font-bold text-slate-300">Top Player</span>
+            </div>
+            <div onclick="openModal('refer-popup')" class="flex flex-col items-center gap-1.5 cursor-pointer">
+              <div class="w-12 h-12 rounded-xl bg-rose-600/20 text-rose-400 text-xl flex items-center justify-center border border-rose-500/30 transition-transform active:scale-90"><i class="fa-solid fa-user-plus"></i></div>
+              <span class="text-[9px] font-bold text-slate-300">Refer & Earn</span>
             </div>
           </div>
 
-          <!-- GAME CATEGORIES -->
           <div>
-            <h3 class="text-sm font-black text-white uppercase tracking-wider mb-3 border-l-4 border-amber-500 pl-2">Available Modes <span class="bg-red-600 text-white px-1.5 py-0.5 text-[8px] rounded ml-1 animate-pulse">LIVE</span></h3>
-            <div class="grid grid-cols-2 gap-3">
-              <div onclick="goTab('battles'); setModeFilter('FULL_MAP')" class="relative rounded-xl overflow-hidden h-36 cursor-pointer border border-amber-500/50 shadow-lg group bg-gradient-to-tr from-amber-900 to-black">
-                <span class="absolute top-0 left-0 bg-amber-500 text-black font-black text-[9px] px-2 py-0.5 z-10 rounded-br-lg shadow">ALL SIZES</span>
-                <img src="60271.png" onerror="this.style.display='none'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90" alt="Full Map" />
-                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
-                <div class="absolute bottom-2 left-2 right-2 flex justify-between items-end">
-                   <h4 class="font-black text-white text-sm drop-shadow-md">FULL MAP</h4>
-                   <span class="bg-white/20 backdrop-blur-sm text-white text-[9px] border border-white/40 font-black px-2 py-1 rounded shadow">▶ JOIN</span>
-                </div>
-              </div>
-              <div onclick="goTab('battles'); setModeFilter('CS')" class="relative rounded-xl overflow-hidden h-36 cursor-pointer border border-cyan-500/50 shadow-lg group bg-gradient-to-tr from-cyan-900 to-black">
-                <img src="60272.png" onerror="this.style.display='none'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90" alt="Clash Squad" />
-                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
-                <div class="absolute bottom-2 left-2 right-2 flex justify-between items-end">
-                   <h4 class="font-black text-white text-sm drop-shadow-md leading-tight">CLASH<br>SQUAD</h4>
-                   <span class="bg-white/20 backdrop-blur-sm text-white text-[9px] border border-white/40 font-black px-2 py-1 rounded shadow">▶ JOIN</span>
-                </div>
-              </div>
+            <div class="flex justify-between items-center bg-[#161b2c] p-3 rounded-t-xl border-b border-white/5">
+              <span class="text-xs font-bold text-white flex items-center gap-2"><i class="fa-solid fa-circle-question text-slate-400"></i> How to Use Our App</span>
+            </div>
+            <div class="relative rounded-b-xl overflow-hidden h-36 bg-slate-900 border border-white/5 border-t-0 shadow-lg">
+               <img src="https://images.alphacoders.com/100/1004169.jpg" class="w-full h-full object-cover opacity-50" />
+               <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-4">
+                 <h3 class="text-xl font-black text-white italic glow-text tracking-widest uppercase">PLAYT24 ESPORTS</h3>
+                 <p class="text-xs text-amber-300 font-bold bg-black/60 px-3 py-1 mt-2 rounded-lg border border-amber-500/30">Daily Tournaments & Checkins</p>
+               </div>
             </div>
           </div>
 
@@ -289,7 +271,7 @@
         </section>
 
         <!-- ================= BATTLES (TOURNAMENTS) SCREEN ================= -->
-        <section id="screen-battles" class="hidden space-y-4">
+        <section id="screen-battles" class="hidden space-y-4 px-4">
           <div class="flex items-center gap-3 border-b border-purple-900/50 pb-3">
              <i class="fa-solid fa-arrow-left text-white text-lg cursor-pointer hover:text-amber-400" onclick="goTab('home')"></i>
              <h2 class="text-base font-black text-white tracking-wider">Tournaments</h2>
@@ -351,8 +333,9 @@
 
         <!-- ================= PROFILE / MENU SCREEN ================= -->
         <section id="screen-profile" class="hidden space-y-3 pb-10">
-           <!-- User Info Card -->
+           <!-- User Info Card with Edit Profile Button -->
            <div class="p-5 bg-gradient-to-br from-black/80 to-purple-950/40 rounded-2xl border border-purple-800/50 shadow-xl flex items-center justify-between mb-4 relative overflow-hidden backdrop-blur-sm">
+             <button onclick="openEditProfile()" class="absolute top-4 right-4 text-slate-400 hover:text-white z-20"><i class="fa-solid fa-pen-to-square"></i></button>
              <div class="flex items-center gap-4 relative z-10">
                 <div class="relative w-16 h-16 rounded-full border-2 border-amber-400 bg-black flex items-center justify-center font-black text-white text-2xl overflow-hidden shadow-[0_0_15px_rgba(251,191,36,0.3)] cursor-pointer group" onclick="document.getElementById('profile-img-upload').click()">
                    <img id="prof-page-avatar" src="" class="hidden w-full h-full object-cover" />
@@ -365,13 +348,23 @@
                       <span class="px-2 py-0.5 bg-amber-500/20 border border-amber-500 rounded text-[9px] font-black text-amber-400" id="prof-page-tier">BRONZE</span>
                    </div>
                    <p class="text-[10px] text-slate-400 mt-1.5 font-mono" id="prof-page-phone">9999999999</p>
+                   <p class="text-[10px] text-amber-300 mt-1 italic" id="prof-page-bio">No bio added</p>
                 </div>
              </div>
              <input type="file" id="profile-img-upload" accept="image/*" onchange="uploadProfileImage(event)" class="hidden" />
            </div>
 
+           <!-- Monthly Stats -->
+           <div class="mt-4 p-3 bg-black/40 rounded-xl border border-purple-900/40 relative z-10">
+              <h4 class="text-[10px] font-black text-purple-300 uppercase mb-2 flex items-center gap-1"><i class="fa-solid fa-chart-pie"></i> Monthly Analytics</h4>
+              <div class="grid grid-cols-2 gap-2 text-center">
+                <div><p class="text-[9px] text-slate-400">Total Deposit</p><p class="text-sm font-black text-emerald-400" id="monthly-deposit">₹0</p></div>
+                <div><p class="text-[9px] text-slate-400">Total Withdraw</p><p class="text-sm font-black text-amber-400" id="monthly-withdraw">₹0</p></div>
+              </div>
+           </div>
+
            <!-- Menu Options -->
-           <div class="space-y-2">
+           <div class="space-y-2 mt-4">
              <div onclick="openModal('main-wallet-popup')" class="p-4 bg-black/50 backdrop-blur-sm rounded-xl border border-purple-900/40 flex justify-between items-center cursor-pointer hover:bg-purple-950/50 transition-colors shadow-sm">
                 <div class="flex items-center gap-4"><div class="w-8 h-8 rounded-lg bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-sm"><i class="fa-solid fa-wallet"></i></div><span class="text-sm font-bold text-slate-200">My Wallet</span></div>
                 <div class="flex items-center gap-3"><span class="text-xs font-black text-amber-400 font-mono" id="menu-wallet-val">₹0</span><i class="fa-solid fa-chevron-right text-slate-500 text-xs"></i></div>
@@ -442,6 +435,21 @@
 
   <!-- ================= MODALS ================= -->
 
+  <!-- EDIT PROFILE MODAL -->
+  <div id="edit-profile-modal" class="modal-box">
+    <div class="bg-[#0f0728] border border-purple-600/50 rounded-2xl w-full max-w-sm p-5 relative shadow-2xl">
+      <button onclick="closeModal('edit-profile-modal')" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+      <h3 class="text-base font-black text-white flex items-center gap-2"><i class="fa-solid fa-user-pen text-amber-400"></i> Edit Profile</h3>
+      <div class="mt-4 space-y-3 text-xs">
+        <div><label class="text-[9px] text-slate-400 uppercase font-bold pl-1">In-Game Name</label><input type="text" id="edit-ign" class="w-full mt-1 bg-black/50 border border-purple-900 rounded-xl px-4 py-3 text-white outline-none" /></div>
+        <div><label class="text-[9px] text-slate-400 uppercase font-bold pl-1">Free Fire UID</label><input type="number" id="edit-uid" class="w-full mt-1 bg-black/50 border border-purple-900 rounded-xl px-4 py-3 text-white outline-none" /></div>
+        <div><label class="text-[9px] text-slate-400 uppercase font-bold pl-1">Mobile Number</label><input type="tel" id="edit-phone" class="w-full mt-1 bg-black/50 border border-purple-900 rounded-xl px-4 py-3 text-white outline-none" /></div>
+        <div><label class="text-[9px] text-slate-400 uppercase font-bold pl-1">Bio</label><textarea id="edit-bio" rows="2" class="w-full mt-1 bg-black/50 border border-purple-900 rounded-xl px-4 py-3 text-white outline-none resize-none"></textarea></div>
+        <button id="save-profile-btn" onclick="saveProfileDetails(this)" class="w-full py-3.5 mt-2 rounded-xl bg-emerald-600 text-white font-black text-xs shadow-lg active:scale-95 transition-all">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
   <!-- NOTIFICATIONS MODAL -->
   <div id="notifications-modal" class="modal-box">
     <div class="bg-[#0f0728] border border-purple-600/50 rounded-2xl w-full max-w-sm p-5 relative shadow-2xl">
@@ -465,7 +473,7 @@
            <option>Deposit Issue</option><option>Withdrawal Issue</option><option>Match / Room ID Query</option><option>Report Hacker</option>
         </select>
         <textarea id="comp-msg" rows="4" placeholder="Explain your issue in detail..." class="w-full bg-black/50 border border-purple-900 rounded-xl px-4 py-3.5 text-white outline-none resize-none"></textarea>
-        <button id="comp-btn" onclick="submitComplaint(this)" class="w-full py-3.5 rounded-xl bg-rose-600 text-white font-black text-xs shadow-lg active:scale-95 transition-all">Submit to Support</button>
+        <button id="comp-btn" onclick="submitComplaint()" class="w-full py-3.5 rounded-xl bg-rose-600 text-white font-black text-xs shadow-lg active:scale-95 transition-all">Submit to Support</button>
       </div>
     </div>
   </div>
@@ -479,8 +487,8 @@
         <i class="fa-solid fa-star text-slate-600 cursor-pointer" onclick="setAppRating(1)"></i><i class="fa-solid fa-star text-slate-600 cursor-pointer" onclick="setAppRating(2)"></i><i class="fa-solid fa-star text-slate-600 cursor-pointer" onclick="setAppRating(3)"></i><i class="fa-solid fa-star text-slate-600 cursor-pointer" onclick="setAppRating(4)"></i><i class="fa-solid fa-star text-slate-600 cursor-pointer" onclick="setAppRating(5)"></i>
       </div>
       <div class="mt-4 space-y-3 text-xs text-left">
-        <textarea id="feedback-text" rows="3" placeholder="Apne ideas yahan likhein..." class="w-full bg-black/50 border border-purple-900 rounded-xl px-3 py-2 text-white resize-none"></textarea>
-        <button id="feed-btn" onclick="submitUserFeedback(this)" class="w-full py-2.5 rounded-xl bg-blue-600 text-white font-bold text-xs shadow-lg active:scale-95">Submit Feedback</button>
+        <textarea id="feedback-text" rows="3" placeholder="Apne ideas yahan likhein..." class="w-full bg-black/50 border border-purple-900 rounded-xl px-4 py-3.5 text-white outline-none resize-none"></textarea>
+        <button id="feed-btn" onclick="submitUserFeedback(this)" class="w-full py-3.5 rounded-xl bg-blue-600 text-white font-bold text-xs shadow-lg active:scale-95 transition-all">Submit Feedback</button>
       </div>
     </div>
   </div>
@@ -522,15 +530,15 @@
 
       <div class="mt-4 space-y-3 text-left">
         <input type="number" id="deposit-amt" placeholder="Amount (Min ₹49)" class="w-full bg-black/50 border border-purple-900 rounded-xl px-4 py-3.5 text-xs text-white outline-none" />
-        <input type="text" id="deposit-utr-code" placeholder="Exactly 12-Digit UTR Number" maxlength="12" class="w-full bg-black/50 border border-purple-900 rounded-xl px-4 py-3.5 text-xs text-white font-mono outline-none" />
-        <input type="text" id="deposit-upi-sender" placeholder="Your UPI ID" class="w-full bg-black/50 border border-purple-900 rounded-xl px-4 py-3.5 text-xs text-white outline-none" />
+        <input type="text" id="deposit-utr-code" placeholder="Exactly 12-Digit UTR Number (Mandatory)" maxlength="12" class="w-full bg-black/50 border border-purple-900 rounded-xl px-4 py-3.5 text-xs text-white font-mono outline-none" />
+        <input type="text" id="deposit-upi-sender" placeholder="Your UPI ID (Jaise aapse payment ki)" class="w-full bg-black/50 border border-purple-900 rounded-xl px-4 py-3.5 text-xs text-white outline-none" />
         
         <div class="pt-1">
           <label class="text-[10px] font-bold text-amber-300 uppercase tracking-wider">Screenshot Required *</label>
-          <input type="file" id="deposit-screenshot-file" accept="image/*" onchange="captureOriginalImage(event, 'deposit-img-preview')" class="w-full mt-1.5 bg-black/50 border border-purple-900 rounded-xl px-3 py-2 text-xs text-slate-300 file:bg-emerald-600 file:text-white file:border-0 file:rounded-lg file:px-3 file:py-1.5 file:mr-3 cursor-pointer" />
+          <input type="file" id="deposit-screenshot-file" accept="image/*" onchange="captureOriginalImage(event, 'deposit-img-preview')" class="w-full mt-1.5 bg-black/50 border border-purple-900 rounded-xl px-3 py-2 text-xs text-slate-300 file:bg-emerald-600 file:hover:bg-emerald-500 file:text-white file:font-bold file:border-0 file:rounded-lg file:px-3 file:py-1.5 file:mr-3 cursor-pointer" />
           <div class="mt-2 bg-black rounded-lg overflow-hidden border border-purple-900 flex justify-center"><img id="deposit-img-preview" src="" class="hidden h-24 object-contain py-1" /></div>
         </div>
-        <button id="dep-submit-btn" onclick="sendDepositUTR(this)" class="w-full mt-2 py-3.5 rounded-xl bg-emerald-600 font-bold text-xs text-white shadow-lg active:scale-95">Submit Deposit</button>
+        <button id="dep-submit-btn" onclick="sendDepositUTR(this)" class="w-full mt-2 py-3.5 rounded-xl bg-emerald-600 font-bold text-xs text-white shadow-lg active:scale-95 transition-all">Submit Deposit</button>
       </div>
     </div>
   </div>
@@ -641,7 +649,6 @@
         <button onclick="closeAdminDesk()" class="px-4 py-1.5 bg-red-600/20 border border-red-500/50 rounded-xl text-red-400 text-xs font-bold hover:bg-red-600 hover:text-white transition-colors">Close</button>
       </div>
 
-      <!-- ANALYTICS LIVE -->
       <div class="grid grid-cols-2 gap-3 text-center">
         <div class="p-4 bg-indigo-950/40 border border-indigo-800/50 rounded-xl shadow-lg"><p class="text-[10px] text-indigo-300 uppercase font-bold tracking-wider mb-1">Total Visitors</p><p class="text-3xl font-black text-white" id="admin-visitor-count">0</p></div>
         <div class="p-4 bg-cyan-950/40 border border-cyan-800/50 rounded-xl shadow-lg"><p class="text-[10px] text-cyan-300 uppercase font-bold tracking-wider mb-1">Registered Users</p><p class="text-3xl font-black text-white" id="admin-reg-count">0</p></div>
@@ -669,7 +676,6 @@
         </div>
       </div>
 
-      <!-- MATCH CREATOR WITH PER KILL AMOUNT -->
       <div class="p-4 bg-slate-900 rounded-xl border border-purple-900 shadow-lg">
         <h4 class="text-xs font-black text-blue-400 uppercase tracking-wider mb-3">Publish Match (Auto Calc)</h4>
         <div class="grid grid-cols-2 gap-3 text-xs">
@@ -684,7 +690,6 @@
           <input type="number" id="new-match-fee" oninput="updateMatchCalculator()" placeholder="Base Entry Fee (₹)" class="bg-black/50 border border-purple-900 rounded-lg px-3 py-2.5 text-white outline-none focus:border-blue-500" />
           <input type="number" id="new-match-prize" oninput="updateMatchCalculator()" placeholder="Prize Pool (₹)" class="bg-black/50 border border-purple-900 rounded-lg px-3 py-2.5 text-white outline-none focus:border-blue-500" />
           
-          <!-- NEW: PER KILL AMOUNT BOX -->
           <input type="number" id="new-match-perkill" placeholder="Per Kill Amount (₹)" class="col-span-2 bg-black/50 border border-purple-900 rounded-lg px-3 py-2.5 text-white outline-none focus:border-blue-500 transition-colors" />
           
           <input type="datetime-local" id="new-match-datetime" class="col-span-2 bg-black/50 border border-purple-900 rounded-lg px-3 py-2.5 text-white outline-none focus:border-blue-500" />
@@ -739,7 +744,7 @@
       
       <div class="p-4 bg-slate-900 rounded-xl border border-purple-900 shadow-lg">
         <div class="flex justify-between items-center mb-3">
-          <h4 class="text-xs font-black text-slate-300 uppercase tracking-wider flex items-center gap-2"><i class="fa-solid fa-users"></i> User Database</h4>
+          <h4 class="text-xs font-black text-cyan-400 uppercase tracking-wider flex items-center gap-2"><i class="fa-solid fa-users"></i> User Database</h4>
           <span class="text-[10px] text-emerald-400 font-bold bg-emerald-900/30 px-2 py-1 rounded" id="admin-total-players-count">0 Players</span>
         </div>
         <div id="admin-players-box" class="space-y-2 text-xs max-h-[300px] overflow-y-auto pr-1"><p class="text-slate-500 italic">Loading...</p></div>
@@ -917,14 +922,13 @@
       if (now - last < oneDay) { alert("Aaj ka reward claim ho chuka hai! Kal wapas aana."); return; }
       
       let nextDay = (currentUser.checkinDay || 0) + 1;
-      if (nextDay > 7) nextDay = 1;
+      if (nextDay > 7) nextDay = 1; // Reset to day 1 after week completes
       
       const reward = checkinRewards[nextDay - 1];
       if (reward.type === "cash") currentUser.balance = (currentUser.balance || 0) + reward.amt;
       else currentUser.stars = (currentUser.stars || 0) + reward.amt;
 
-      currentUser.checkinDay = nextDay; 
-      currentUser.lastCheckin = now;
+      currentUser.checkinDay = nextDay; currentUser.lastCheckin = now;
       
       localStorage.setItem('apex_user', JSON.stringify(currentUser));
       if (currentUser.phone) {
@@ -938,11 +942,11 @@
       syncUI(); renderCheckinGrid(); playSFX('click'); alert(`Awesome! Day ${nextDay} ka reward (${reward.val}) wallet me add ho gaya.`);
     }
 
-    // --- PASSWORD VISIBILITY ---
+    // --- PASSWORD VISIBILITY TOGGLE ---
     function togglePassword(inputId, iconEl) {
        const input = document.getElementById(inputId);
-       if(input.type === 'password') { input.type = 'text'; iconEl.classList.replace('fa-eye', 'fa-eye-slash'); iconEl.classList.add('text-white'); }
-       else { input.type = 'password'; iconEl.classList.replace('fa-eye-slash', 'fa-eye'); iconEl.classList.remove('text-white'); }
+       if(input.type === 'password') { input.type = 'text'; iconEl.classList.replace('fa-eye', 'fa-eye-slash'); }
+       else { input.type = 'password'; iconEl.classList.replace('fa-eye-slash', 'fa-eye'); }
     }
 
     // --- AUTH FLOW ---
@@ -950,6 +954,7 @@
       document.getElementById('auth-login-box').classList.add('hidden');
       document.getElementById('auth-register-box').classList.add('hidden');
       document.getElementById('auth-forgot-box').classList.add('hidden');
+      
       if(type === 'register') document.getElementById('auth-register-box').classList.remove('hidden');
       else if(type === 'forgot') document.getElementById('auth-forgot-box').classList.remove('hidden');
       else document.getElementById('auth-login-box').classList.remove('hidden');
@@ -999,7 +1004,7 @@
           btn.innerText = oText; btn.disabled = false;
           if(snap.exists()) { alert("Number already registered! Login karein."); toggleAuth('login'); }
           else {
-             currentUser = { ign: ign, uid: uid, phone: phone, pass: pass, balance: 0, stars: 0, matchesPlayed: 0, adminWarnings: 0, isBanned: false, avatar: "", checkinDay: 0, lastCheckin: 0, lastSpinTime: 0 };
+             currentUser = { ign: ign, uid: uid, phone: phone, pass: pass, balance: 0, stars: 0, matchesPlayed: 0, adminWarnings: 0, isBanned: false, avatar: "", checkinDay: 0, lastCheckin: 0, lastSpinTime: 0, bio: "" };
              db.ref('players/' + phone).set(currentUser).then(() => { 
                 localStorage.setItem('apex_user', JSON.stringify(currentUser)); enterApp(true); 
              });
@@ -1120,6 +1125,64 @@
       }
     }
 
+    // --- PROFILE UPDATE LOGIC ---
+    function openEditProfile() {
+        if(!currentUser) return;
+        document.getElementById('edit-ign').value = currentUser.ign || "";
+        document.getElementById('edit-uid').value = currentUser.uid || "";
+        document.getElementById('edit-phone').value = currentUser.phone || "";
+        document.getElementById('edit-bio').value = currentUser.bio || "";
+        openModal('edit-profile-modal');
+    }
+
+    function saveProfileDetails(btn) {
+        if(!currentUser) return;
+        const newIgn = document.getElementById('edit-ign').value.trim();
+        const newUid = document.getElementById('edit-uid').value.trim();
+        const newPhone = document.getElementById('edit-phone').value.trim();
+        const newBio = document.getElementById('edit-bio').value.trim();
+
+        if(!newIgn || !newUid || !newPhone) { alert("Name, UID and Phone are required!"); return; }
+
+        const oText = btn.innerText; btn.innerText = "⏳ Saving..."; btn.disabled = true;
+
+        const oldPhone = currentUser.phone;
+
+        if (newPhone !== oldPhone) {
+            db.ref('players/' + newPhone).once('value', snap => {
+                if (snap.exists()) {
+                    alert("This Mobile Number is already linked to another account!");
+                    btn.innerText = oText; btn.disabled = false;
+                } else {
+                    let updatedUser = { ...currentUser, ign: newIgn, uid: newUid, phone: newPhone, bio: newBio };
+                    db.ref('players/' + newPhone).set(updatedUser).then(() => {
+                        db.ref('players/' + oldPhone).remove(); 
+                        finishProfileUpdate(updatedUser, btn, oText);
+                    }).catch(e => { alert("Error: "+e.message); btn.innerText = oText; btn.disabled = false; });
+                }
+            });
+        } else {
+            let updatedUser = { ...currentUser, ign: newIgn, uid: newUid, bio: newBio };
+            db.ref('players/' + oldPhone).update({ ign: newIgn, uid: newUid, bio: newBio }).then(() => {
+                finishProfileUpdate(updatedUser, btn, oText);
+            }).catch(e => { alert("Error: "+e.message); btn.innerText = oText; btn.disabled = false; });
+        }
+    }
+
+    function finishProfileUpdate(updatedUser, btn, oText) {
+        currentUser = updatedUser;
+        localStorage.setItem('apex_user', JSON.stringify(currentUser));
+        syncUI();
+        closeModal('edit-profile-modal');
+        btn.innerText = oText; btn.disabled = false;
+        
+        db.ref('alerts/' + currentUser.phone + '/' + Date.now()).set({
+            msg: `Profile updated successfully!`, 
+            type: 'success'
+        });
+        alert("Profile Updated Successfully!");
+    }
+
     function syncUI() {
       if(!currentUser) return;
       safeSetText('top-wallet-val', currentUser.balance || 0);
@@ -1129,9 +1192,13 @@
       safeSetText('player-ign-txt', currentUser.ign);
       safeSetText('prof-ign-main', currentUser.ign);
       safeSetText('header-ign-txt', currentUser.ign);
+      safeSetText('prof-page-ign', currentUser.ign);
       
       safeSetText('player-uid-txt', currentUser.uid || "----");
       safeSetText('prof-phone-main', currentUser.phone || "Not Verified");
+      safeSetText('prof-page-phone', currentUser.phone || "Not Verified");
+      
+      safeSetText('prof-page-bio', currentUser.bio || "No bio added yet.");
       
       safeSetText('prof-matches-played', currentUser.matchesPlayed || 0);
       safeSetText('stat-matches', currentUser.matchesPlayed || 0);
@@ -1141,20 +1208,16 @@
       safeSetText('player-total-stars', (currentUser.stars || 0) + " Stars");
 
       if (currentUser.avatar && currentUser.avatar !== "") {
-         safeSetImg('header-avatar-img', currentUser.avatar);
-         const hai = document.getElementById('header-avatar-img'); if(hai) hai.classList.remove('hidden');
-         
-         safeSetImg('prof-main-avatar', currentUser.avatar);
-         const pma = document.getElementById('prof-main-avatar'); if(pma) pma.classList.remove('hidden');
-         
-         const ai = document.getElementById('avatar-initial'); if(ai) ai.classList.add('hidden'); 
-         const pi = document.getElementById('prof-initial'); if(pi) pi.classList.add('hidden'); 
+         const ids = ['header-avatar-img', 'prof-main-avatar', 'prof-page-avatar'];
+         ids.forEach(id => { const el = document.getElementById(id); if(el) { el.src = currentUser.avatar; el.classList.remove('hidden'); } });
+         ['avatar-initial', 'prof-initial', 'prof-page-initial'].forEach(id => { const el = document.getElementById(id); if(el) el.classList.add('hidden'); });
       }
       
       let rank = "BRONZE"; if (currentUser.stars >= 5) rank = "GOLD"; if (currentUser.stars >= 10) rank = "DIAMOND"; if (currentUser.stars >= 20) rank = "HEROIC";
       safeSetText('header-rank-txt', rank); 
       safeSetText('profile-tier-badge', rank); 
       safeSetText('prof-tier-main', rank); 
+      safeSetText('prof-page-tier', rank); 
     }
 
     // --- ADMIN SECURITY ---
@@ -1247,7 +1310,7 @@
            btn = `<button disabled class="w-full mt-3 py-3 bg-black/60 text-slate-500 text-xs font-black rounded-xl border border-purple-900/30 uppercase tracking-wider">Closed</button>`; 
         } else if(isJoined) {
           btn = `<button disabled class="w-full mt-3 py-3 bg-emerald-950/50 text-emerald-400 text-xs font-black rounded-xl border border-emerald-900 uppercase tracking-wider">Joined (Slot #${mySlot})</button>`;
-          myJoinedHtml += `<div class="p-4 bg-black/50 border border-purple-900/50 rounded-2xl mb-3 shadow-lg"><div class="flex justify-between items-start"><div><h4 class="font-black text-white text-sm tracking-wide">${m.title}</h4><p class="text-[10px] text-cyan-400 font-bold uppercase mt-1">${m.mode} ${myTeam !== "Solo" ? `• Team: ${myTeam}`:''}</p></div><span class="px-3 py-1 bg-black/60 border border-purple-800 rounded-lg text-[10px] text-amber-400 font-black shadow">SLOT #${mySlot}</span></div><div class="p-3 bg-black/60 rounded-xl border border-purple-900/30 text-xs mt-3 text-center"><p class="font-mono text-emerald-400 font-bold text-sm tracking-wider">${m.roomId ? `ID: ${m.roomId}<br>PASS: ${m.roomPass}` : 'Credentials will appear 15 mins before match'}</p></div></div>`;
+          myJoinedHtml += `<div class="p-4 bg-black/50 border border-purple-900/50 rounded-2xl mb-3 shadow-lg"><div class="flex justify-between items-start"><div><h4 class="font-bold text-white text-sm tracking-wide">${m.title}</h4><p class="text-[10px] text-cyan-400 font-bold uppercase mt-1">${m.mode} ${myTeam !== "Solo" ? `• Team: ${myTeam}`:''}</p></div><span class="px-3 py-1 bg-black/60 border border-purple-800 rounded-lg text-[10px] text-amber-400 font-black shadow">SLOT #${mySlot}</span></div><div class="p-3 bg-black/60 rounded-xl border border-purple-900/30 text-xs mt-3 text-center"><p class="font-mono text-emerald-400 font-bold text-sm tracking-wider">${m.roomId ? `ID: ${m.roomId}<br>PASS: ${m.roomPass}` : 'Credentials will appear 15 mins before match'}</p></div></div>`;
         } else if (filled >= max) { 
            btn = `<button disabled class="w-full mt-3 py-3 bg-red-950/50 text-red-400 text-xs font-black rounded-xl border border-red-900 uppercase tracking-wider">Full</button>`; 
         } else { 
@@ -1314,7 +1377,6 @@
       if(roomBox) roomBox.innerHTML = myJoinedHtml || `<p class="text-xs text-slate-400 text-center py-8">Aapne abhi koi match join nahi kiya.</p>`;
     }
 
-    // --- TIMERS ---
     setInterval(() => {
       document.querySelectorAll('[id^="timer-"]').forEach(el => {
         const time = Number(el.getAttribute('data-time')); if (!time) return; const diff = time - Date.now();
@@ -1390,7 +1452,8 @@
       const oText = btn.innerText; btn.innerText = "⏳ Booking..."; btn.disabled = true;
       db.ref(`tournaments/${activeSelectingMatchId}/bookedSlots/${selectedSlotNumber}`).once('value').then(snap => {
         if (snap.exists()) { alert("Yeh slot kisi aur ne book kar liya hai."); btn.innerText = oText; btn.disabled = false; return; }
-        let tName = document.getElementById('cs-team-name').value || "Solo/Random";
+        const tInput = document.getElementById('cs-team-name');
+        let tName = (tInput && tInput.value) ? tInput.value : "Solo/Random";
         currentUser.balance -= activeSelectingFee; currentUser.matchesPlayed += 1; localStorage.setItem('apex_user', JSON.stringify(currentUser));
         db.ref('players/' + currentUser.phone).update({balance: currentUser.balance, matchesPlayed: currentUser.matchesPlayed});
         db.ref(`tournaments/${activeSelectingMatchId}/bookedSlots/${selectedSlotNumber}`).set({ ign: currentUser.ign, phone: currentUser.phone, team: tName }).then(() => {
@@ -1407,7 +1470,8 @@
     
     function sendDepositUTR(btn) {
       const amt = Number(document.getElementById('deposit-amt').value); const utr = document.getElementById('deposit-utr-code').value.trim();
-      const senderUpi = document.getElementById('deposit-upi-sender').value.trim() || "Not Provided";
+      const sInput = document.getElementById('deposit-upi-sender');
+      const senderUpi = (sInput && sInput.value.trim()) ? sInput.value.trim() : "Not Provided";
       if (amt < 49) { alert("Deposit ₹49 se kam nahi ho sakta!"); return; }
       if (!/^\d{12}$/.test(utr)) { alert("Bhaiya, UTR exactly 12 digits ka numbers hona chahiye!"); return; }
       if (!depositBase64Image) { alert("Screenshot attach karna compulsory hai!"); return; }
@@ -1419,8 +1483,8 @@
         
         db.ref('deposits/' + utr).set({ phone: currentUser.phone, ign: currentUser.ign, amount: amt, utr: utr, senderUpi: senderUpi, screenshot: depositBase64Image, status: "pending", time: Date.now() }).then(() => { 
            alert("Success! Request sent to Admin."); 
-           document.getElementById('deposit-amt').value=""; document.getElementById('deposit-utr-code').value=""; document.getElementById('deposit-upi-sender').value="";
-           btn.innerText = oText; btn.disabled = false; depositBase64Image = null; document.getElementById('deposit-img-preview').classList.add('hidden');
+           document.getElementById('deposit-amt').value=""; document.getElementById('deposit-utr-code').value=""; if(sInput) sInput.value="";
+           btn.innerText = oText; btn.disabled = false; depositBase64Image = null; const p = document.getElementById('deposit-img-preview'); if(p) p.classList.add('hidden');
            closeModal('deposit-popup'); 
         }).catch(e=>{ alert("Error: "+e.message); btn.innerText = oText; btn.disabled = false; });
       });
@@ -1442,13 +1506,12 @@
       }).catch(e=>{ alert("Error: "+e.message); btn.innerText = oText; btn.disabled = false; });
     }
 
-    function submitResultProof() {
-      const btn = document.getElementById('proof-submit-btn');
+    function submitResultProof(btn) {
       const k = document.getElementById('proof-kills-count').value;
       if(!k || !proofBase64Image) { alert("Screenshot aur kills zaroori hai!"); return; }
       const oText = btn.innerText; btn.innerText = "⏳ Uploading..."; btn.disabled = true;
       db.ref(`matchProofs/${activeProofMatchId}/PRF${Date.now()}`).set({ign: currentUser.ign, phone: currentUser.phone, kills: k, screenshot: proofBase64Image, status: "pending"}).then(() => { 
-          alert("Proof Sent!"); document.getElementById('proof-kills-count').value=""; proofBase64Image=null; document.getElementById('proof-img-preview').classList.add('hidden');
+          alert("Proof Sent!"); document.getElementById('proof-kills-count').value=""; proofBase64Image=null; const p = document.getElementById('proof-img-preview'); if(p) p.classList.add('hidden');
           btn.innerText = oText; btn.disabled = false; closeModal('result-proof-modal'); 
       }).catch(e=>{ alert("Error: "+e.message); btn.innerText = oText; btn.disabled = false; });
     }
@@ -1524,8 +1587,8 @@
       const totalCol = slots * fee * (mode.includes("DUO")?2:(mode.includes("SQUAD")||mode.includes("Direct Squads")?4:1));
       const profit = totalCol - prize;
       safeSetText('calc-collection', totalCol);
-      safeSetText('calc-profit', "₹" + profit);
-      const cp = document.getElementById('calc-profit'); if(cp) cp.className = profit >= 0 ? "text-emerald-400 text-sm font-bold" : "text-rose-400 text-sm font-bold";
+      const cp = document.getElementById('calc-profit'); 
+      if(cp) { cp.textContent = "₹" + profit; cp.className = profit >= 0 ? "text-emerald-400 text-sm font-bold" : "text-rose-400 text-sm font-bold"; }
     }
     
     function createLiveMatch() {
@@ -1592,8 +1655,7 @@
     db.ref('settings/upis').on('value', snap => { 
         systemUPIs = snap.val() || ["fftournamenthub@ibl"]; 
         const au = document.getElementById('admin-upi-list'); if(au) au.innerHTML = systemUPIs.map((u,i)=>`<div class="flex justify-between bg-black/50 p-2.5 border border-purple-900/40 rounded-lg mb-2 shadow-inner"><span>${u}</span><button onclick="removeUPI(${i})" class="text-red-400 hover:text-red-300 font-black"><i class="fa-solid fa-trash"></i></button></div>`).join('');
-        const us = document.getElementById('upi-selector'); if(us) us.innerHTML = systemUPIs.map(u => `<option value="${u}">${u}</option>`).join(''); 
-        updateWalletQR(); 
+        const us = document.getElementById('upi-selector'); if(us) us.innerHTML = systemUPIs.map(u => `<option value="${u}">${u}</option>`).join(''); updateWalletQR(); 
     });
 
     db.ref('alerts').on('value', snap => {
@@ -1629,10 +1691,13 @@
          currentUser.lastSpinTime = users[currentUser.phone].lastSpinTime || 0;
          currentUser.checkinDay = users[currentUser.phone].checkinDay || 0;
          currentUser.lastCheckin = users[currentUser.phone].lastCheckin || 0;
+         currentUser.bio = users[currentUser.phone].bio || "";
          localStorage.setItem('apex_user', JSON.stringify(currentUser)); syncUI(); checkSpinLockStatus();
       }
       
-      let arr = Object.values(users).filter(u => u.ign); arr.sort((a,b) => (b.stars || 0) - (a.stars || 0));
+      let arr = Object.values(users).filter(u => u.ign);
+      arr.sort((a,b) => (b.stars || 0) - (a.stars || 0));
+      
       const champEl = document.getElementById('champions-list');
       if(champEl) {
         champEl.innerHTML = arr.map((p, i) => {
@@ -1642,10 +1707,13 @@
         }).join('');
       }
       
-      const pb = document.getElementById('admin-players-box');
-      if(pb) {
-        let phtml = ""; Object.keys(users).forEach(phone => { const u = users[phone]; phtml += `<div class="p-3 bg-black/50 border border-purple-900/40 rounded-xl flex justify-between items-center mb-2 shadow-inner"><div><p class="font-black text-white text-xs">${u.ign} <span class="text-cyan-400 font-mono text-[9px]">(${phone})</span></p><p class="text-[9px] text-slate-400 font-mono mt-0.5">UID: ${u.uid} • Stars: ${u.stars || 0} ★</p></div><div class="text-right"><span class="text-amber-400 font-black text-sm">₹${u.balance || 0}</span></div></div>`; });
-        pb.innerHTML = phtml || `<p class="text-slate-500 italic text-xs p-2">No registered players yet.</p>`;
+      const apb = document.getElementById('admin-players-box');
+      if(apb) {
+        let phtml = ""; Object.keys(users).forEach(phone => { 
+            const u = users[phone]; 
+            phtml += `<div class="p-3 bg-black/50 border border-purple-900/40 rounded-xl flex justify-between items-center mb-2 shadow-inner"><div><p class="font-black text-white text-xs">${u.ign} <span class="text-cyan-400 font-mono text-[9px]">(${phone})</span></p><p class="text-[9px] text-slate-400 font-mono mt-0.5">UID: ${u.uid} • Stars: ${u.stars || 0} ★</p><p class="text-[9px] text-amber-300 font-mono mt-0.5 max-w-[150px] truncate">Bio: ${u.bio || 'N/A'}</p></div><div class="text-right"><span class="text-amber-400 font-black text-sm">₹${u.balance || 0}</span></div></div>`; 
+        });
+        apb.innerHTML = phtml || `<p class="text-slate-500 italic text-xs p-2">No registered players yet.</p>`;
       }
     });
 
