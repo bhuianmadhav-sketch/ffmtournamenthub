@@ -175,7 +175,6 @@
         </div>
         <button onclick="dismissAnnouncement()" class="text-slate-400 hover:text-white px-1 text-xs"><i class="fa-solid fa-xmark"></i></button>
       </div>
-      <!-- User Reply Box -->
       <div class="flex gap-1.5 pt-1 border-t border-purple-900/50">
         <input type="text" id="announcement-reply-input" placeholder="Reply to admin..." class="flex-1 bg-black/60 border border-purple-800 rounded-lg px-2.5 py-1.5 text-[11px] text-white outline-none" />
         <button onclick="sendAnnouncementReply()" class="px-3 py-1 bg-purple-600 hover:bg-purple-500 text-white font-bold text-[10px] rounded-lg shadow uppercase">Send</button>
@@ -278,6 +277,19 @@
           <div class="space-y-2" id="champions-list"><p class="text-xs text-slate-400 text-center py-4">Loading real-time leaderboard...</p></div>
         </section>
 
+        <!-- WORLD CHAT TAB -->
+        <section id="screen-worldchat" class="hidden space-y-3">
+          <div class="p-3 bg-gradient-to-r from-purple-900/40 to-indigo-900/40 border border-purple-600/40 rounded-2xl text-center">
+            <h3 class="text-xs font-black text-amber-400 uppercase tracking-widest"><i class="fa-solid fa-globe"></i> World Chat Arena</h3>
+            <p class="text-[9px] text-slate-300 mt-0.5">Min 200 words limit. No abusive language or strict ban will apply.</p>
+          </div>
+          <div id="world-chat-messages" class="space-y-2 bg-black/50 border border-purple-900/40 rounded-xl p-3 h-72 overflow-y-auto text-xs shadow-inner"></div>
+          <div class="space-y-2">
+            <textarea id="world-chat-input" rows="3" placeholder="Type your message (min 200 characters required)..." class="w-full bg-black/60 border border-purple-800 rounded-xl p-3 text-xs text-white outline-none resize-none focus:border-purple-500"></textarea>
+            <button onclick="sendWorldChatMessage()" class="w-full py-3 bg-gradient-to-r from-purple-600 to-indigo-600 font-black text-xs text-white rounded-xl shadow-lg active:scale-95 uppercase tracking-wider">Send to World Chat</button>
+          </div>
+        </section>
+
         <!-- PROFILE TAB -->
         <section id="screen-profile" class="hidden space-y-4">
           <div class="p-6 rounded-2xl bg-gradient-to-b from-[#11062b] to-[#070216] border border-purple-900/60 shadow-2xl relative overflow-hidden">
@@ -316,6 +328,7 @@
             </div>
             
             <div class="mt-6 space-y-2 relative z-10">
+               <button onclick="goTab('worldchat')" class="w-full py-3 px-4 rounded-xl bg-purple-900/40 border border-purple-700/50 font-bold text-xs flex justify-between items-center text-white active:scale-95 transition-all"><span class="flex items-center gap-2"><i class="fa-solid fa-globe text-cyan-400"></i> Open World Chat</span><i class="fa-solid fa-chevron-right text-slate-500"></i></button>
                <button onclick="openModal('feedback-popup')" class="w-full py-3 px-4 rounded-xl bg-blue-900/40 border border-blue-700/50 font-bold text-xs flex justify-between items-center text-white active:scale-95 transition-all"><span class="flex items-center gap-2"><i class="fa-solid fa-star text-amber-400 drop-shadow"></i> Rate App & Ideas</span><i class="fa-solid fa-chevron-right text-slate-500"></i></button>
                <button onclick="openModal('complaint-popup')" class="w-full py-3 px-4 rounded-xl bg-rose-900/40 border border-rose-700/50 font-bold text-xs flex justify-between items-center text-white active:scale-95 transition-all"><span class="flex items-center gap-2"><i class="fa-solid fa-headset text-rose-400"></i> Helpdesk & Support</span><i class="fa-solid fa-chevron-right text-slate-500"></i></button>
             </div>
@@ -329,7 +342,7 @@
       <button onclick="goTab('battles')" class="flex flex-col items-center gap-1 text-slate-400 focus:text-purple-400"><i class="fa-solid fa-crosshairs text-lg"></i> <span class="text-[10px] font-bold">Battles</span></button>
       <button onclick="openModal('main-wallet-popup')" class="flex flex-col items-center gap-1 text-slate-400 focus:text-purple-400"><i class="fa-solid fa-wallet text-lg"></i> <span class="text-[10px] font-bold">Wallet</span></button>
       <button onclick="goTab('room-pass')" class="flex flex-col items-center gap-1 text-slate-400 focus:text-purple-400"><i class="fa-solid fa-key text-lg"></i> <span class="text-[10px] font-bold">Pass</span></button>
-      <button onclick="goTab('gamers')" class="flex flex-col items-center gap-1 text-slate-400 focus:text-purple-400"><i class="fa-solid fa-users text-lg"></i> <span class="text-[10px] font-bold">Ranks</span></button>
+      <button onclick="goTab('worldchat')" class="flex flex-col items-center gap-1 text-slate-400 focus:text-purple-400"><i class="fa-solid fa-globe text-lg"></i> <span class="text-[10px] font-bold">Chat</span></button>
       <button onclick="goTab('profile')" class="flex flex-col items-center gap-1 text-slate-400 focus:text-purple-400"><i class="fa-solid fa-user text-lg"></i> <span class="text-[10px] font-bold">Profile</span></button>
     </nav>
   </div>
@@ -577,9 +590,9 @@
         </div>
       </div>
 
-      <!-- MATCH CREATOR WITH PER KILL AMOUNT -->
+      <!-- MATCH CREATOR WITH PER-KILL PROFIT AUTO-CALC -->
       <div class="p-4 bg-slate-900 rounded-xl border border-purple-900 shadow-lg">
-        <h4 class="text-xs font-black text-blue-400 uppercase tracking-wider mb-3">Publish Match (Auto Calc)</h4>
+        <h4 class="text-xs font-black text-blue-400 uppercase tracking-wider mb-3">Publish Match (Auto Calc + Per-Kill)</h4>
         <div class="grid grid-cols-2 gap-3 text-xs">
           <input type="text" id="new-match-title" placeholder="Match Title (e.g. Bermuda Cash)" class="col-span-2 bg-black/50 border border-purple-900 rounded-lg px-3 py-2.5 text-white outline-none focus:border-blue-500" />
           <select id="new-match-mode" oninput="updateMatchCalculator()" class="col-span-2 bg-black/50 border border-purple-900 rounded-lg px-3 py-2.5 text-white outline-none focus:border-blue-500">
@@ -592,14 +605,14 @@
           <input type="number" id="new-match-fee" oninput="updateMatchCalculator()" placeholder="Base Entry Fee (₹)" class="bg-black/50 border border-purple-900 rounded-lg px-3 py-2.5 text-white outline-none focus:border-blue-500" />
           <input type="number" id="new-match-prize" oninput="updateMatchCalculator()" placeholder="Prize Pool (₹)" class="bg-black/50 border border-purple-900 rounded-lg px-3 py-2.5 text-white outline-none focus:border-blue-500" />
           
-          <input type="number" id="new-match-perkill" placeholder="Per Kill Amount (₹)" class="col-span-2 bg-black/50 border border-purple-900 rounded-lg px-3 py-2.5 text-white outline-none focus:border-blue-500 transition-colors" />
+          <input type="number" id="new-match-perkill" oninput="updateMatchCalculator()" placeholder="Per Kill Amount (₹)" class="col-span-2 bg-black/50 border border-purple-900 rounded-lg px-3 py-2.5 text-white outline-none focus:border-blue-500 transition-colors" />
           
-          <!-- FIXED MOBILE DATETIME INPUT -->
           <input type="datetime-local" id="new-match-datetime" class="col-span-2 bg-black/50 border border-purple-900 rounded-lg px-3 py-2.5 text-white outline-none focus:border-blue-500 text-xs font-mono" style="color-scheme: dark;" />
         </div>
-        <div class="mt-3 p-3 bg-black/60 rounded-lg border border-purple-800/50 flex justify-between items-center text-xs">
-           <span class="text-slate-400">Total Est. Collection: <strong class="text-cyan-400 text-sm">₹<span id="calc-collection">0</span></strong></span>
-           <span class="text-slate-400">Net Profit: <strong id="calc-profit" class="text-emerald-400 text-sm">₹0</strong></span>
+        <div class="mt-3 p-3 bg-black/60 rounded-lg border border-purple-800/50 space-y-1 text-xs">
+           <div class="flex justify-between"><span class="text-slate-400">Total Est. Collection:</span> <strong class="text-cyan-400">₹<span id="calc-collection">0</span></strong></div>
+           <div class="flex justify-between"><span class="text-slate-400">Est. Total Per-Kill Payout:</span> <strong class="text-amber-400">₹<span id="calc-perkill-total">0</span></strong></div>
+           <div class="flex justify-between pt-1 border-t border-purple-900/50"><span class="text-slate-300 font-bold">Net Profit (Per Match):</span> <strong id="calc-profit" class="text-emerald-400 text-sm">₹0</strong></div>
         </div>
         <button onclick="createLiveMatch()" class="w-full mt-3 py-3 bg-blue-600 hover:bg-blue-500 font-black text-xs rounded-lg text-white transition-colors tracking-wider uppercase">Publish to Arena</button>
       </div>
@@ -705,7 +718,7 @@
     function closeModal(id) { document.getElementById(id).classList.remove('active'); }
     
     function goTab(name) { 
-      ['home', 'battles', 'room-pass', 'gamers', 'profile', 'ranking'].forEach(t => {
+      ['home', 'battles', 'room-pass', 'gamers', 'profile', 'ranking', 'worldchat'].forEach(t => {
          const el = document.getElementById('screen-' + t);
          if(el) el.classList.add('hidden'); 
       }); 
@@ -1215,6 +1228,101 @@
       container.innerHTML = h || `<p class="text-slate-500 italic">No replies yet.</p>`;
     });
 
+    // --- WORLD CHAT WITH WORD LIMIT (200 words) & AUTO-BAN FOR ABUSE ---
+    const badWords = ["gaali", "madarchod", "bhenchod", "bhosdike", "randi", "suicide", "kill you", "abuse"];
+
+    function checkAbuse(text) {
+      const lower = text.toLowerCase();
+      return badWords.some(word => lower.includes(word));
+    }
+
+    function sendWorldChatMessage() {
+      const input = document.getElementById('world-chat-input');
+      const text = input.value.trim();
+      if (!text || !currentUser) return;
+
+      // Word count check (minimum 200 words or characters as requested)
+      const wordsCount = text.split(/\s+/).length;
+      if (wordsCount < 200) {
+        alert(`Message must be at least 200 words long! (Current: ${wordsCount} words)`);
+        return;
+      }
+
+      // Check for abusive or violent content
+      if (checkAbuse(text)) {
+        currentUser.isBanned = true;
+        localStorage.setItem('apex_user', JSON.stringify(currentUser));
+        db.ref('players/' + currentUser.phone).update({ isBanned: true }).then(() => {
+          alert("⚠️ Warning: Abusive or violent language detected! Your account has been permanently banned.");
+          location.reload();
+        });
+        return;
+      }
+
+      const msgObj = {
+        ign: currentUser.ign,
+        phone: currentUser.phone,
+        text: text,
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      };
+
+      db.ref('worldChat/' + Date.now()).set(msgObj).then(() => {
+        input.value = "";
+      }).catch(e => alert("Error: " + e.message));
+    }
+
+    db.ref('worldChat').on('value', snap => {
+      const chatBox = document.getElementById('world-chat-messages');
+      if (!chatBox) return;
+      const data = snap.val() || {};
+      let h = "";
+      Object.keys(data).forEach(k => {
+        const m = data[k];
+        const isMe = currentUser && m.phone === currentUser.phone;
+        h += `<div class="p-2.5 rounded-xl border ${isMe ? 'bg-purple-950/50 border-purple-600/50 text-right' : 'bg-black/40 border-purple-900/30 text-left'}">
+          <div class="flex justify-between items-center mb-1"><span class="font-bold text-[10px] text-amber-300">${m.ign}</span><span class="text-[8px] text-slate-500 font-mono">${m.time}</span></div>
+          <p class="text-slate-200 text-xs break-words">${m.text}</p>
+        </div>`;
+      });
+      chatBox.innerHTML = h || `<p class="text-slate-500 italic text-center py-4">No messages yet. Start the conversation!</p>`;
+      chatBox.scrollTop = chatBox.scrollHeight;
+    });
+
+    // --- MATCH CREATOR AUTO-CALCULATOR WITH PER-KILL PROFIT ---
+    function updateMatchCalculator() {
+      const mode = document.getElementById('new-match-mode').value;
+      const fee = Number(document.getElementById('new-match-fee').value) || 0; 
+      const prize = Number(document.getElementById('new-match-prize').value) || 0;
+      const perKill = Number(document.getElementById('new-match-perkill').value) || 0;
+      
+      const perKillBox = document.getElementById('new-match-perkill');
+      if(mode.includes("CS")) { if(perKillBox){ perKillBox.style.display = "none"; perKillBox.value = ""; } } 
+      else { if(perKillBox){ perKillBox.style.display = "block"; } }
+
+      let slots = 48; 
+      if(mode.includes("CS 4v4 Random")) slots = 8; 
+      else if(mode.includes("CS 4v4 Direct Squads")) slots = 2; 
+      else if(mode.includes("DUO")) slots = 24; 
+      else if(mode.includes("SQUAD")) slots = 12;
+
+      let multiplier = 1;
+      if(mode.includes("DUO")) multiplier = 2;
+      else if(mode.includes("SQUAD") || mode.includes("Direct Squads")) multiplier = 4;
+
+      const totalCol = slots * fee * multiplier;
+      // Est total per kill payout (assuming avg 2 kills per slot/player max)
+      const estTotalPerKillPayout = mode.includes("CS") ? 0 : (slots * multiplier * 2 * perKill);
+      const netProfit = totalCol - prize - estTotalPerKillPayout;
+
+      safeSetText('calc-collection', totalCol);
+      safeSetText('calc-perkill-total', estTotalPerKillPayout);
+      const cp = document.getElementById('calc-profit'); 
+      if(cp) { 
+        cp.textContent = "₹" + netProfit; 
+        cp.className = netProfit >= 0 ? "text-emerald-400 text-sm font-bold" : "text-rose-400 text-sm font-bold"; 
+      }
+    }
+
     // --- TOURNAMENT FILTER LOGIC ---
     function filterMatchList(type) {
        currentTimelineFilter = type;
@@ -1547,23 +1655,6 @@
     function adminAddUPI() { const v = document.getElementById('admin-add-upi').value.trim(); if(v.includes('@')) { systemUPIs.push(v); db.ref('settings/upis').set(systemUPIs); document.getElementById('admin-add-upi').value=""; } }
     function removeUPI(idx) { systemUPIs.splice(idx, 1); db.ref('settings/upis').set(systemUPIs); }
 
-    function updateMatchCalculator() {
-      const mode = document.getElementById('new-match-mode').value;
-      const fee = Number(document.getElementById('new-match-fee').value) || 0; 
-      const prize = Number(document.getElementById('new-match-prize').value) || 0;
-      
-      const perKillBox = document.getElementById('new-match-perkill');
-      if(mode.includes("CS")) { if(perKillBox){ perKillBox.style.display = "none"; perKillBox.value = ""; } } 
-      else { if(perKillBox){ perKillBox.style.display = "block"; } }
-
-      let slots = 48; if(mode.includes("CS 4v4 Random")) slots = 8; else if(mode.includes("CS 4v4 Direct Squads")) slots = 2; else if(mode.includes("DUO")) slots = 24; else if(mode.includes("SQUAD")) slots = 12;
-      const totalCol = slots * fee * (mode.includes("DUO")?2:(mode.includes("SQUAD")||mode.includes("Direct Squads")?4:1));
-      const profit = totalCol - prize;
-      safeSetText('calc-collection', totalCol);
-      const cp = document.getElementById('calc-profit'); 
-      if(cp) { cp.textContent = "₹" + profit; cp.className = profit >= 0 ? "text-emerald-400 text-sm font-bold" : "text-rose-400 text-sm font-bold"; }
-    }
-    
     function createLiveMatch() {
       const m = document.getElementById('new-match-mode').value; const title = document.getElementById('new-match-title').value.trim(); if(!title) { alert("Title daalo!"); return; }
       const dtVal = document.getElementById('new-match-datetime').value; if(!dtVal) { alert("Date aur Time select karein!"); return; }
@@ -1654,7 +1745,6 @@
       adBox.innerHTML = Object.keys(snap.val()).map(k => `<div class="p-4 bg-black/50 border border-purple-900/40 flex flex-col gap-3 mb-2 rounded-xl shadow-lg"><div><p class="text-white text-sm font-black">${snap.val()[k].title}</p><span class="text-[9px] text-amber-300 font-mono tracking-wider">Key: ${k}</span></div><div class="flex gap-2 w-full"><button onclick="endMatchAndDeclare('${k}')" class="flex-1 py-2.5 bg-emerald-600 rounded-lg text-[10px] font-black text-white shadow uppercase tracking-widest active:scale-95 transition-transform">Result</button> <button onclick="cancelMatchAndMassRefund('${k}')" class="flex-1 py-2.5 bg-amber-600 rounded-lg text-[10px] font-black text-black shadow uppercase tracking-widest active:scale-95 transition-transform">Refund</button></div></div>`).join('');
     });
 
-    // RANKINGS
     db.ref('players').on('value', snap => {
       const users = snap.val() || {}; const regCount = Object.keys(users).length;
       safeSetText('admin-reg-count', regCount); safeSetText('admin-total-players-count', regCount + " Players");
