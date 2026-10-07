@@ -165,6 +165,17 @@
     </div>
   </div>
 
+  <!-- GLOBAL ANNOUNCEMENT BANNER (24 HOURS ACTIVE) -->
+  <div id="global-announcement-banner" class="fixed top-16 left-0 right-0 max-w-md mx-auto z-30 px-4 pt-2 hidden">
+    <div id="announcement-content" class="bg-gradient-to-r from-purple-950 via-indigo-950 to-purple-950 border border-purple-500/60 rounded-xl p-3 shadow-xl flex items-center justify-between gap-2">
+      <div class="flex items-center gap-2.5 overflow-hidden">
+        <div class="w-8 h-8 rounded-lg bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 flex-shrink-0"><i class="fa-solid fa-bullhorn animate-bounce"></i></div>
+        <p class="text-xs text-amber-200 font-bold truncate" id="announcement-text-msg">New Update Live!</p>
+      </div>
+      <button onclick="dismissAnnouncement()" class="text-slate-400 hover:text-white px-2 text-xs"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+  </div>
+
   <!-- ================= MAIN APP WRAPPER ================= -->
   <div id="main-app-wrapper" class="app-wrapper bg-transparent">
     
@@ -544,6 +555,15 @@
         </div>
       </div>
 
+      <!-- BROADCAST 24-HOUR NOTIFICATION TO PLAYERS -->
+      <div class="p-4 bg-slate-900 rounded-xl border border-purple-900 shadow-lg">
+        <h4 class="text-xs font-black text-purple-400 uppercase tracking-wider mb-3">Send 24-Hour Player Announcement</h4>
+        <div class="space-y-2 text-xs">
+          <textarea id="admin-broadcast-msg" rows="2" placeholder="Type notification message to show on players screen for 24 hours..." class="w-full bg-black/50 border border-purple-900 rounded-lg px-3 py-2 text-white outline-none resize-none"></textarea>
+          <button onclick="sendGlobalBroadcast()" class="w-full py-2.5 bg-purple-600 hover:bg-purple-500 rounded-lg text-white font-black uppercase tracking-wider transition-colors">Broadcast to All Players</button>
+        </div>
+      </div>
+
       <!-- MATCH CREATOR WITH PER KILL AMOUNT -->
       <div class="p-4 bg-slate-900 rounded-xl border border-purple-900 shadow-lg">
         <h4 class="text-xs font-black text-blue-400 uppercase tracking-wider mb-3">Publish Match (Auto Calc)</h4>
@@ -561,7 +581,8 @@
           
           <input type="number" id="new-match-perkill" placeholder="Per Kill Amount (₹)" class="col-span-2 bg-black/50 border border-purple-900 rounded-lg px-3 py-2.5 text-white outline-none focus:border-blue-500 transition-colors" />
           
-          <input type="datetime-local" id="new-match-datetime" class="col-span-2 bg-black/50 border border-purple-900 rounded-lg px-3 py-2.5 text-white outline-none focus:border-blue-500" />
+          <!-- FIXED DATETIME INPUT STYLE FOR MOBILE BROWSERS -->
+          <input type="datetime-local" id="new-match-datetime" class="col-span-2 bg-black/50 border border-purple-900 rounded-lg px-3 py-2.5 text-white outline-none focus:border-blue-500 text-xs font-mono" />
         </div>
         <div class="mt-3 p-3 bg-black/60 rounded-lg border border-purple-800/50 flex justify-between items-center text-xs">
            <span class="text-slate-400">Total Est. Collection: <strong class="text-cyan-400 text-sm">₹<span id="calc-collection">0</span></strong></span>
@@ -1109,6 +1130,49 @@
 
     function toggleCardFlip(key) { document.getElementById(`flipper-${key}`).classList.toggle('flipped'); }
 
+    // --- 24-HOUR GLOBAL ANNOUNCEMENT SYSTEM ---
+    function sendGlobalBroadcast() {
+      const msg = document.getElementById('admin-broadcast-msg').value.trim();
+      if (!msg) { alert("Message type karein!"); return; }
+      const broadcastData = { text: msg, time: Date.now() };
+      db.ref('settings/announcement').set(broadcastData).then(() => {
+        alert("Announcement broadcasted successfully for 24 hours!");
+        document.getElementById('admin-broadcast-msg').value = "";
+      }).catch(e => alert("Error: " + e.message));
+    }
+
+    function dismissAnnouncement() {
+      const banner = document.getElementById('global-announcement-banner');
+      if(banner) banner.classList.add('hidden');
+      if(window.currentAnnouncementKey) {
+        localStorage.setItem('dismissed_announcement_' + window.currentAnnouncementKey, 'true');
+      }
+    }
+
+    db.ref('settings/announcement').on('value', snap => {
+      const ann = snap.val();
+      const banner = document.getElementById('global-announcement-banner');
+      const textEl = document.getElementById('announcement-text-msg');
+      if (!ann || !banner || !textEl) return;
+
+      const now = Date.now();
+      const twentyFourHours = 24 * 60 * 60 * 1000;
+
+      // Check if within 24 hours
+      if ((now - ann.time) < twentyFourHours) {
+        window.currentAnnouncementKey = ann.time;
+        const dismissed = localStorage.getItem('dismissed_announcement_' + ann.time);
+        if (!dismissed) {
+          textEl.textContent = ann.text;
+          banner.classList.remove('hidden');
+        } else {
+          banner.classList.add('hidden');
+        }
+      } else {
+        banner.classList.add('hidden');
+      }
+    });
+
     // --- TOURNAMENT FILTER LOGIC ---
     function filterMatchList(type) {
        currentTimelineFilter = type;
@@ -1351,7 +1415,7 @@
         db.ref('deposits/' + utr).set({ phone: currentUser.phone, ign: currentUser.ign, amount: amt, utr: utr, senderUpi: senderUpi, screenshot: depositBase64Image, status: "pending", time: Date.now() }).then(() => { 
            alert("Success! Request sent to Admin."); 
            document.getElementById('deposit-amt').value=""; document.getElementById('deposit-utr-code').value=""; if(sInput) sInput.value="";
-           btn.innerText = oText; btn.disabled = false; depositBase64Image = null; document.getElementById('deposit-img-preview').classList.add('hidden');
+           btn.innerText = oText; btn.disabled = false; depositBase64Image = null; const p = document.getElementById('deposit-img-preview'); if(p) p.classList.add('hidden');
            closeModal('deposit-popup'); 
         }).catch(e=>{ alert("Error: "+e.message); btn.innerText = oText; btn.disabled = false; });
       });
@@ -1378,7 +1442,7 @@
       if(!k || !proofBase64Image) { alert("Screenshot aur kills zaroori hai!"); return; }
       const oText = btn.innerText; btn.innerText = "⏳ Uploading..."; btn.disabled = true;
       db.ref(`matchProofs/${activeProofMatchId}/PRF${Date.now()}`).set({ign: currentUser.ign, phone: currentUser.phone, kills: k, screenshot: proofBase64Image, status: "pending"}).then(() => { 
-          alert("Proof Sent!"); document.getElementById('proof-kills-count').value=""; proofBase64Image=null; document.getElementById('proof-img-preview').classList.add('hidden');
+          alert("Proof Sent!"); document.getElementById('proof-kills-count').value=""; proofBase64Image=null; const p = document.getElementById('proof-img-preview'); if(p) p.classList.add('hidden');
           btn.innerText = oText; btn.disabled = false; closeModal('result-proof-modal'); 
       }).catch(e=>{ alert("Error: "+e.message); btn.innerText = oText; btn.disabled = false; });
     }
@@ -1460,6 +1524,7 @@
     
     function createLiveMatch() {
       const m = document.getElementById('new-match-mode').value; const title = document.getElementById('new-match-title').value.trim(); if(!title) { alert("Title daalo!"); return; }
+      const dtVal = document.getElementById('new-match-datetime').value; if(!dtVal) { alert("Date aur Time select karein!"); return; }
       
       let slots = 48; if(m.includes("CS 4v4 Random")) slots = 8; else if(m.includes("CS 4v4 Direct Squads")) slots = 2; else if(m.includes("DUO")) slots = 24; else if(m.includes("SQUAD")) slots = 12;
       
@@ -1467,7 +1532,7 @@
       let perKillAmt = pkb ? pkb.value : 0;
       if (m.includes("CS")) perKillAmt = 0; 
 
-      db.ref('tournaments/M'+Date.now()).set({title: title, mode: m, maxSlots: slots, entry: document.getElementById('new-match-fee').value, prize: document.getElementById('new-match-prize').value, perKill: perKillAmt, datetime: document.getElementById('new-match-datetime').value, rules: "Play fair. Hacks/Scripts lead to permanent ban."}).then(() => {
+      db.ref('tournaments/M'+Date.now()).set({title: title, mode: m, maxSlots: slots, entry: document.getElementById('new-match-fee').value, prize: document.getElementById('new-match-prize').value, perKill: perKillAmt, datetime: dtVal, rules: "Play fair. Hacks/Scripts lead to permanent ban."}).then(() => {
           alert("Match Published to Arena!");
           document.getElementById('new-match-title').value = "";
       });
