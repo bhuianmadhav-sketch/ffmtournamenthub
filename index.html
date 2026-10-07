@@ -315,6 +315,9 @@
                <div class="mt-1.5 flex items-center justify-center gap-2"><span class="px-2 py-0.5 bg-amber-500/20 border border-amber-500 rounded text-[10px] font-black text-amber-300 shadow-[0_0_10px_rgba(245,158,11,0.5)]" id="prof-tier-main">BRONZE</span></div>
                <p class="text-xs text-slate-400 font-mono mt-2 bg-black/40 px-3 py-1 rounded-lg">Phone: <span id="prof-phone-main" class="text-cyan-300">Not Verified</span></p>
                <p class="text-[10px] text-amber-300 mt-2 italic px-4 text-center max-w-[250px]" id="prof-page-bio">No bio added yet.</p>
+
+               <!-- Social Links Display -->
+               <div id="prof-social-links" class="flex gap-3 mt-3"></div>
             </div>
 
             <div class="mt-4 p-3 bg-black/40 rounded-xl border border-purple-900/40 relative z-10">
@@ -360,6 +363,8 @@
         <div><label class="text-[9px] text-slate-400 uppercase font-bold pl-1">In-Game Name</label><input type="text" id="edit-ign" class="w-full mt-1 bg-black/50 border border-purple-900 rounded-xl px-4 py-3 text-white outline-none" /></div>
         <div><label class="text-[9px] text-slate-400 uppercase font-bold pl-1">Free Fire UID</label><input type="number" id="edit-uid" class="w-full mt-1 bg-black/50 border border-purple-900 rounded-xl px-4 py-3 text-white outline-none" /></div>
         <div><label class="text-[9px] text-slate-400 uppercase font-bold pl-1">Mobile Number</label><input type="tel" id="edit-phone" class="w-full mt-1 bg-black/50 border border-purple-900 rounded-xl px-4 py-3 text-white outline-none" /></div>
+        <div><label class="text-[9px] text-slate-400 uppercase font-bold pl-1">YouTube Channel Link</label><input type="url" id="edit-yt" placeholder="https://youtube.com/@channel" class="w-full mt-1 bg-black/50 border border-purple-900 rounded-xl px-4 py-3 text-white outline-none" /></div>
+        <div><label class="text-[9px] text-slate-400 uppercase font-bold pl-1">Instagram Profile Link</label><input type="url" id="edit-insta" placeholder="https://instagram.com/username" class="w-full mt-1 bg-black/50 border border-purple-900 rounded-xl px-4 py-3 text-white outline-none" /></div>
         <div><label class="text-[9px] text-slate-400 uppercase font-bold pl-1">Bio</label><textarea id="edit-bio" rows="2" class="w-full mt-1 bg-black/50 border border-purple-900 rounded-xl px-4 py-3 text-white outline-none resize-none"></textarea></div>
         <button id="save-profile-btn" onclick="saveProfileDetails(this)" class="w-full py-3.5 mt-2 rounded-xl bg-emerald-600 text-white font-black text-xs shadow-lg active:scale-95 transition-all">Save Changes</button>
       </div>
@@ -590,6 +595,14 @@
               <p class="text-slate-500 italic">No replies yet.</p>
             </div>
           </div>
+        </div>
+      </div>
+
+      <!-- LIVE WORLD CHAT MONITORING FOR ADMIN -->
+      <div class="p-4 bg-slate-900 rounded-xl border border-purple-900 shadow-lg">
+        <h4 class="text-xs font-black text-amber-400 uppercase tracking-wider mb-3"><i class="fa-solid fa-globe"></i> Live World Chat Monitoring</h4>
+        <div id="admin-world-chat-box" class="space-y-2 max-h-48 overflow-y-auto pr-1 text-xs bg-black/50 p-3 rounded-xl border border-purple-950">
+          <p class="text-slate-500 italic">Loading chat...</p>
         </div>
       </div>
 
@@ -921,7 +934,7 @@
           btn.innerText = oText; btn.disabled = false;
           if(snap.exists()) { alert("Number already registered! Login karein."); toggleAuth('login'); }
           else {
-             currentUser = { ign: ign, uid: uid, phone: phone, pass: pass, balance: 0, stars: 0, matchesPlayed: 0, adminWarnings: 0, isBanned: false, avatar: "", checkinDay: 0, lastCheckin: 0, lastSpinTime: 0, bio: "" };
+             currentUser = { ign: ign, uid: uid, phone: phone, pass: pass, balance: 0, stars: 0, matchesPlayed: 0, adminWarnings: 0, isBanned: false, avatar: "", checkinDay: 0, lastCheckin: 0, lastSpinTime: 0, bio: "", youtube: "", instagram: "" };
              db.ref('players/' + phone).set(currentUser).then(() => { 
                 localStorage.setItem('apex_user', JSON.stringify(currentUser)); enterApp(true); 
              });
@@ -1042,13 +1055,15 @@
       }
     }
 
-    // --- PROFILE UPDATE LOGIC ---
+    // --- PROFILE UPDATE LOGIC WITH YT & INSTA LINKS ---
     function openEditProfile() {
         if(!currentUser) return;
         document.getElementById('edit-ign').value = currentUser.ign || "";
         document.getElementById('edit-uid').value = currentUser.uid || "";
         document.getElementById('edit-phone').value = currentUser.phone || "";
         document.getElementById('edit-bio').value = currentUser.bio || "";
+        document.getElementById('edit-yt').value = currentUser.youtube || "";
+        document.getElementById('edit-insta').value = currentUser.instagram || "";
         openModal('edit-profile-modal');
     }
 
@@ -1058,6 +1073,8 @@
         const newUid = document.getElementById('edit-uid').value.trim();
         const newPhone = document.getElementById('edit-phone').value.trim();
         const newBio = document.getElementById('edit-bio').value.trim();
+        const newYt = document.getElementById('edit-yt').value.trim();
+        const newInsta = document.getElementById('edit-insta').value.trim();
 
         if(!newIgn || !newUid || !newPhone) { alert("Name, UID and Phone are required!"); return; }
 
@@ -1071,7 +1088,7 @@
                     alert("This Mobile Number is already linked to another account!");
                     btn.innerText = oText; btn.disabled = false;
                 } else {
-                    let updatedUser = { ...currentUser, ign: newIgn, uid: newUid, phone: newPhone, bio: newBio };
+                    let updatedUser = { ...currentUser, ign: newIgn, uid: newUid, phone: newPhone, bio: newBio, youtube: newYt, instagram: newInsta };
                     db.ref('players/' + newPhone).set(updatedUser).then(() => {
                         db.ref('players/' + oldPhone).remove(); 
                         finishProfileUpdate(updatedUser, btn, oText);
@@ -1079,8 +1096,8 @@
                 }
             });
         } else {
-            let updatedUser = { ...currentUser, ign: newIgn, uid: newUid, bio: newBio };
-            db.ref('players/' + oldPhone).update({ ign: newIgn, uid: newUid, bio: newBio }).then(() => {
+            let updatedUser = { ...currentUser, ign: newIgn, uid: newUid, bio: newBio, youtube: newYt, instagram: newInsta };
+            db.ref('players/' + oldPhone).update({ ign: newIgn, uid: newUid, bio: newBio, youtube: newYt, instagram: newInsta }).then(() => {
                 finishProfileUpdate(updatedUser, btn, oText);
             }).catch(e => { alert("Error: "+e.message); btn.innerText = oText; btn.disabled = false; });
         }
@@ -1116,6 +1133,15 @@
       safeSetText('prof-page-phone', currentUser.phone || "Not Verified");
       
       safeSetText('prof-page-bio', currentUser.bio || "No bio added yet.");
+      
+      // Render social links
+      const socBox = document.getElementById('prof-social-links');
+      if (socBox) {
+        let socHtml = "";
+        if (currentUser.youtube) socHtml += `<a href="${currentUser.youtube}" target="_blank" class="w-8 h-8 rounded-full bg-red-600/20 border border-red-500 text-red-400 flex items-center justify-center text-xs"><i class="fa-brands fa-youtube"></i></a>`;
+        if (currentUser.instagram) socHtml += `<a href="${currentUser.instagram}" target="_blank" class="w-8 h-8 rounded-full bg-pink-600/20 border border-pink-500 text-pink-400 flex items-center justify-center text-xs"><i class="fa-brands fa-instagram"></i></a>`;
+        socBox.innerHTML = socHtml;
+      }
       
       safeSetText('prof-matches-played', currentUser.matchesPlayed || 0);
       safeSetText('stat-matches', currentUser.matchesPlayed || 0);
@@ -1280,21 +1306,40 @@
       }).catch(e => alert("Error: " + e.message));
     }
 
+    // Realtime World Chat listener for both Players and Admin Panel
     db.ref('worldChat').on('value', snap => {
       const chatBox = document.getElementById('world-chat-messages');
-      if (!chatBox) return;
+      const adminChatBox = document.getElementById('admin-world-chat-box');
       const data = snap.val() || {};
       let h = "";
+      let adminH = "";
+
       Object.keys(data).forEach(k => {
         const m = data[k];
         const isMe = currentUser && m.phone === currentUser.phone;
-        h += `<div class="p-2.5 rounded-xl border ${isMe ? 'bg-purple-950/50 border-purple-600/50 text-right' : 'bg-black/40 border-purple-900/30 text-left'}">
-          <div class="flex justify-between items-center mb-1"><span class="font-bold text-[10px] text-amber-300">${m.ign}</span><span class="text-[8px] text-slate-500 font-mono">${m.time}</span></div>
-          <p class="text-slate-200 text-xs break-words">${m.text}</p>
-        </div>`;
+        
+        // Player View
+        if (chatBox) {
+          h += `<div class="p-2.5 rounded-xl border ${isMe ? 'bg-purple-950/50 border-purple-600/50 text-right' : 'bg-black/40 border-purple-900/30 text-left'}">
+            <div class="flex justify-between items-center mb-1"><span class="font-bold text-[10px] text-amber-300">${m.ign}</span><span class="text-[8px] text-slate-500 font-mono">${m.time}</span></div>
+            <p class="text-slate-200 text-xs break-words">${m.text}</p>
+          </div>`;
+        }
+
+        // Admin View
+        if (adminChatBox) {
+          adminH += `<div class="p-2 bg-black/60 border border-purple-900/50 rounded-lg flex justify-between items-start"><div><p class="font-bold text-amber-300 text-[11px]">${m.ign} <span class="text-[9px] text-slate-400 font-mono">(${m.phone})</span></p><p class="text-slate-200 mt-0.5 text-xs">${m.text}</p></div><span class="text-[9px] text-slate-500 font-mono">${m.time}</span></div>`;
+        }
       });
-      chatBox.innerHTML = h || `<p class="text-slate-500 italic text-center py-4">No messages yet. Start the conversation!</p>`;
-      chatBox.scrollTop = chatBox.scrollHeight;
+
+      if (chatBox) {
+        chatBox.innerHTML = h || `<p class="text-slate-500 italic text-center py-4">No messages yet. Start the conversation!</p>`;
+        chatBox.scrollTop = chatBox.scrollHeight;
+      }
+
+      if (adminChatBox) {
+        adminChatBox.innerHTML = adminH || `<p class="text-slate-500 italic text-xs">No live messages in world chat.</p>`;
+      }
     });
 
     // --- MATCH CREATOR AUTO-CALCULATOR WITH PER-KILL PROFIT ---
@@ -1764,6 +1809,8 @@
          currentUser.checkinDay = users[currentUser.phone].checkinDay || 0;
          currentUser.lastCheckin = users[currentUser.phone].lastCheckin || 0;
          currentUser.bio = users[currentUser.phone].bio || "";
+         currentUser.youtube = users[currentUser.phone].youtube || "";
+         currentUser.instagram = users[currentUser.phone].instagram || "";
          localStorage.setItem('apex_user', JSON.stringify(currentUser)); syncUI(); checkSpinLockStatus();
       }
       
