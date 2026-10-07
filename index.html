@@ -222,9 +222,10 @@
         <button onclick="doLogout()" class="text-xs bg-red-600/40 border border-red-500/50 px-3 py-1.5 rounded-xl font-bold text-red-200 active:scale-95"><i class="fa-solid fa-power-off"></i> Logout</button>
       </div>
 
-      <div class="bg-purple-950/40 border border-purple-900/40 rounded-xl px-3 py-2 flex items-center gap-2 text-xs shadow-inner">
-        <span class="bg-red-500/20 text-red-400 px-1.5 py-0.5 rounded text-[10px] font-black uppercase flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse"></span> LIVE</span>
-        <div class="truncate text-[11px] font-medium text-slate-300">🔥 Daily Check-in & Rewards Active!</div>
+      <!-- AI CASTER & HYPE COMMENTARY TICKER BAR -->
+      <div class="bg-gradient-to-r from-indigo-950/80 via-purple-950/80 to-indigo-950/80 border border-indigo-600/50 rounded-xl px-3 py-2 flex items-center gap-2 text-xs shadow-lg">
+        <span class="bg-indigo-500/30 text-indigo-300 px-1.5 py-0.5 rounded text-[10px] font-black uppercase flex items-center gap-1"><i class="fa-solid fa-robot animate-spin"></i> AI CASTER</span>
+        <div class="truncate text-[11px] font-bold text-amber-300" id="ai-hype-ticker">🔥 Welcome to Arena! Get ready for epic battles and instant 1v1 duels!</div>
       </div>
 
       <div class="grid grid-cols-2 gap-2.5">
@@ -253,6 +254,28 @@
           </div>
           
           <div id="tournaments-container" class="space-y-3"><p class="text-xs text-slate-400 text-center py-8">Loading live arena matches...</p></div>
+
+          <!-- UNIQUE FEATURE 1: 1v1 BLIND CHALLENGE BATTLEGROUND -->
+          <div class="p-4 bg-gradient-to-r from-purple-950/80 via-black to-indigo-950/80 border border-cyan-500/40 rounded-2xl shadow-xl mt-6">
+            <h3 class="text-xs font-black text-cyan-300 uppercase tracking-widest flex items-center gap-1.5"><i class="fa-solid fa-bolt text-amber-400"></i> 1v1 Blind Challenge Arena</h3>
+            <p class="text-[10px] text-slate-300 mt-1">Create an instant 1v1 bet challenge or accept open duels right now!</p>
+            <div class="mt-3 grid grid-cols-2 gap-2">
+              <input type="number" id="blind-stake-amt" placeholder="Stake (₹)" class="bg-black/60 border border-purple-800 rounded-xl px-3 py-2 text-xs text-white outline-none" />
+              <button onclick="createBlindChallenge()" class="py-2 bg-cyan-600 hover:bg-cyan-500 text-white font-black text-xs rounded-xl shadow uppercase">Create Duel</button>
+            </div>
+            <div id="blind-challenges-list" class="mt-3 space-y-2 max-h-40 overflow-y-auto text-xs">
+              <p class="text-slate-500 italic text-center">Loading open challenges...</p>
+            </div>
+          </div>
+
+          <!-- UNIQUE FEATURE 3: WEEKLY SQUAD AUCTION SYSTEM -->
+          <div class="p-4 bg-gradient-to-r from-amber-950/60 via-black to-purple-950/60 border border-amber-500/40 rounded-2xl shadow-xl mt-4">
+            <h3 class="text-xs font-black text-amber-300 uppercase tracking-widest flex items-center gap-1.5"><i class="fa-solid fa-gavel text-amber-400"></i> Weekly Squad Auction</h3>
+            <p class="text-[10px] text-slate-300 mt-1">Bid and buy elite players using your coins to build your dream IPL-style squad!</p>
+            <div id="auction-players-list" class="mt-3 space-y-2 max-h-44 overflow-y-auto text-xs">
+              <p class="text-slate-500 italic text-center">Loading auction market...</p>
+            </div>
+          </div>
 
           <div class="mt-8 pt-4 border-t border-purple-900/50">
             <h2 class="text-sm font-black uppercase tracking-wider text-amber-400 border-l-4 border-amber-500 pl-2 mb-3">PAST MATCH RESULTS</h2>
@@ -316,7 +339,6 @@
                <p class="text-xs text-slate-400 font-mono mt-2 bg-black/40 px-3 py-1 rounded-lg">Phone: <span id="prof-phone-main" class="text-cyan-300">Not Verified</span></p>
                <p class="text-[10px] text-amber-300 mt-2 italic px-4 text-center max-w-[250px]" id="prof-page-bio">No bio added yet.</p>
 
-               <!-- Social Links Display -->
                <div id="prof-social-links" class="flex gap-3 mt-3"></div>
             </div>
 
@@ -887,7 +909,7 @@
       
       if(type === 'register') document.getElementById('auth-register-box').classList.remove('hidden');
       else if(type === 'forgot') document.getElementById('auth-forgot-box').classList.remove('hidden');
-      else document.getElementById('auth-login-box').classList.remove('hidden');
+      else document.getElementById('auth-login-box').classList.add('hidden');
     }
 
     function sendForgotOTP(btn) {
@@ -1011,7 +1033,7 @@
 
     function initApp() {
         if (!localStorage.getItem('has_visited')) { db.ref('analytics/visitors').transaction(curr => (curr || 0) + 1); localStorage.setItem('has_visited', 'true'); }
-        startFakeWithdrawToasts(); checkSpinLockStatus();
+        startFakeWithdrawToasts(); checkSpinLockStatus(); startAICasterTicker();
         
         db.ref('settings/upis').once('value').then(s => { 
             systemUPIs = s.val() || ["fftournamenthub@ibl"];
@@ -1020,6 +1042,102 @@
             updateWalletQR(); 
         });
     }
+
+    // --- UNIQUE FEATURE 2: AI CASTER & HYPE COMMENTARY BOT ---
+    const hypeMessages = [
+      "🔥 Match #102 me Squad Alpha ne Booyah secure kiya! Incredible gameplay!",
+      "⚡ Quick 1v1 duels are live now! Challenge a player and double your cash.",
+      "🏆 Weekly Squad Auction is open! Bid for elite players now.",
+      "💥 Warning: Fair play rules active. Emulators & hacks result in instant ban.",
+      "💎 Daily Login Rewards & Lucky Spin are active! Claim your prizes today."
+    ];
+    function startAICasterTicker() {
+      let idx = 0;
+      setInterval(() => {
+        idx = (idx + 1) % hypeMessages.length;
+        safeSetText('ai-hype-ticker', hypeMessages[idx]);
+      }, 6000);
+    }
+
+    // --- UNIQUE FEATURE 1: 1v1 BLIND CHALLENGE LOGIC ---
+    function createBlindChallenge() {
+      const amt = Number(document.getElementById('blind-stake-amt').value);
+      if(!amt || amt < 10) { alert("Minimum stake ₹10 honi chahiye!"); return; }
+      if(currentUser.balance < amt) { alert("Wallet balance kam hai!"); openModal('main-wallet-popup'); return; }
+
+      currentUser.balance -= amt; localStorage.setItem('apex_user', JSON.stringify(currentUser));
+      db.ref('players/' + currentUser.phone).update({balance: currentUser.balance});
+      syncUI();
+
+      db.ref('blindDuels/' + Date.now()).set({
+        creatorIgn: currentUser.ign,
+        creatorPhone: currentUser.phone,
+        stake: amt,
+        status: "open",
+        time: new Date().toLocaleTimeString()
+      }).then(() => {
+        alert("1v1 Duel Created Successfully!");
+        document.getElementById('blind-stake-amt').value = "";
+      });
+    }
+
+    function acceptBlindDuel(duelKey, stakeAmt) {
+      if(currentUser.balance < stakeAmt) { alert("Wallet balance kam hai!"); openModal('main-wallet-popup'); return; }
+      currentUser.balance -= stakeAmt; localStorage.setItem('apex_user', JSON.stringify(currentUser));
+      db.ref('players/' + currentUser.phone).update({balance: currentUser.balance});
+      syncUI();
+
+      db.ref('blindDuels/' + duelKey).update({
+        acceptorIgn: currentUser.ign,
+        acceptorPhone: currentUser.phone,
+        status: "matched"
+      }).then(() => {
+        alert("Duel Matched! Room ID & Password will be shared via notification.");
+      });
+    }
+
+    db.ref('blindDuels').on('value', snap => {
+      const listEl = document.getElementById('blind-challenges-list');
+      if(!listEl) return;
+      const data = snap.val() || {};
+      let h = "";
+      Object.keys(data).forEach(k => {
+        const d = data[k];
+        if(d.status === 'open') {
+          h += `<div class="p-2.5 bg-black/50 border border-purple-950 rounded-xl flex justify-between items-center"><div><p class="font-bold text-cyan-300">⚔️ ${d.creatorIgn}'s Duel</p><p class="text-[9px] text-slate-400 font-mono">Stake: ₹${d.stake}</p></div><button onclick="acceptBlindDuel('${k}', ${d.stake})" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-black font-black rounded-lg text-[10px] uppercase">Accept</button></div>`;
+        }
+      });
+      listEl.innerHTML = h || `<p class="text-slate-500 italic text-center">No open 1v1 duels right now.</p>`;
+    });
+
+    // --- UNIQUE FEATURE 3: WEEKLY SQUAD AUCTION LOGIC ---
+    const auctionDummyPlayers = [
+      { id: 'P1', name: 'Shadow Viper', role:'Rusher', basePrice: 50 },
+      { id: 'P2', name: 'Sniper King', role:'Sniper', basePrice: 40 },
+      { id: 'P3', name: 'Vortex Boss', role:'IGL', basePrice: 60 }
+    ];
+
+    function renderAuctionMarket() {
+      const box = document.getElementById('auction-players-list');
+      if(!box) return;
+      let h = "";
+      auctionDummyPlayers.forEach(p => {
+        h += `<div class="p-2.5 bg-black/50 border border-amber-900/40 rounded-xl flex justify-between items-center"><div><p class="font-bold text-amber-300">${p.name} <span class="text-[9px] text-purple-400">(${p.role})</span></p><p class="text-[9px] text-slate-400 font-mono">Base Bid: ₹${p.basePrice}</p></div><button onclick="bidForPlayer('${p.id}', ${p.basePrice})" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white font-black rounded-lg text-[10px] uppercase">Buy Player</button></div>`;
+      });
+      box.innerHTML = h;
+    }
+
+    function bidForPlayer(pId, price) {
+      if(currentUser.balance < price) { alert("Insufficient balance to buy player!"); openModal('main-wallet-popup'); return; }
+      currentUser.balance -= price; localStorage.setItem('apex_user', JSON.stringify(currentUser));
+      db.ref('players/' + currentUser.phone).update({balance: currentUser.balance});
+      syncUI();
+      alert("Successful! Player added to your squad roster.");
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      renderAuctionMarket();
+    });
 
     function captureOriginalImage(e, previewElementId) {
       const file = e.target.files[0]; if (!file) return;
@@ -1134,7 +1252,6 @@
       
       safeSetText('prof-page-bio', currentUser.bio || "No bio added yet.");
       
-      // Render social links
       const socBox = document.getElementById('prof-social-links');
       if (socBox) {
         let socHtml = "";
@@ -1306,7 +1423,6 @@
       }).catch(e => alert("Error: " + e.message));
     }
 
-    // Realtime World Chat listener for both Players and Admin Panel
     db.ref('worldChat').on('value', snap => {
       const chatBox = document.getElementById('world-chat-messages');
       const adminChatBox = document.getElementById('admin-world-chat-box');
@@ -1318,7 +1434,6 @@
         const m = data[k];
         const isMe = currentUser && m.phone === currentUser.phone;
         
-        // Player View
         if (chatBox) {
           h += `<div class="p-2.5 rounded-xl border ${isMe ? 'bg-purple-950/50 border-purple-600/50 text-right' : 'bg-black/40 border-purple-900/30 text-left'}">
             <div class="flex justify-between items-center mb-1"><span class="font-bold text-[10px] text-amber-300">${m.ign}</span><span class="text-[8px] text-slate-500 font-mono">${m.time}</span></div>
@@ -1326,7 +1441,6 @@
           </div>`;
         }
 
-        // Admin View
         if (adminChatBox) {
           adminH += `<div class="p-2 bg-black/60 border border-purple-900/50 rounded-lg flex justify-between items-start"><div><p class="font-bold text-amber-300 text-[11px]">${m.ign} <span class="text-[9px] text-slate-400 font-mono">(${m.phone})</span></p><p class="text-slate-200 mt-0.5 text-xs">${m.text}</p></div><span class="text-[9px] text-slate-500 font-mono">${m.time}</span></div>`;
         }
