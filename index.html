@@ -176,7 +176,7 @@
         <button onclick="dismissAnnouncement()" class="text-slate-400 hover:text-white px-1 text-xs"><i class="fa-solid fa-xmark"></i></button>
       </div>
       <div class="flex gap-1.5 pt-1 border-t border-purple-900/50">
-        <input type="text" id="announcement-reply-input" placeholder="Reply to admin..." class="flex-1 bg-black/60 border border-purple-800 rounded-lg px-2.5 py-1.5 text-[11px] text-white outline-none" />
+        <input type="text" id="announcement-reply-input" maxlength="200" placeholder="Reply to admin (max 200 chars)..." class="flex-1 bg-black/60 border border-purple-800 rounded-lg px-2.5 py-1.5 text-[11px] text-white outline-none" />
         <button onclick="sendAnnouncementReply()" class="px-3 py-1 bg-purple-600 hover:bg-purple-500 text-white font-bold text-[10px] rounded-lg shadow uppercase">Send</button>
       </div>
     </div>
@@ -277,15 +277,18 @@
           <div class="space-y-2" id="champions-list"><p class="text-xs text-slate-400 text-center py-4">Loading real-time leaderboard...</p></div>
         </section>
 
-        <!-- WORLD CHAT TAB -->
+        <!-- WORLD CHAT TAB (MAX 200 CHARACTERS LIMIT) -->
         <section id="screen-worldchat" class="hidden space-y-3">
           <div class="p-3 bg-gradient-to-r from-purple-900/40 to-indigo-900/40 border border-purple-600/40 rounded-2xl text-center">
             <h3 class="text-xs font-black text-amber-400 uppercase tracking-widest"><i class="fa-solid fa-globe"></i> World Chat Arena</h3>
-            <p class="text-[9px] text-slate-300 mt-0.5">Min 200 words limit. No abusive language or strict ban will apply.</p>
+            <p class="text-[9px] text-slate-300 mt-0.5">Max 200 characters limit. Avoid abusive words or auto-ban will apply.</p>
           </div>
           <div id="world-chat-messages" class="space-y-2 bg-black/50 border border-purple-900/40 rounded-xl p-3 h-72 overflow-y-auto text-xs shadow-inner"></div>
           <div class="space-y-2">
-            <textarea id="world-chat-input" rows="3" placeholder="Type your message (min 200 characters required)..." class="w-full bg-black/60 border border-purple-800 rounded-xl p-3 text-xs text-white outline-none resize-none focus:border-purple-500"></textarea>
+            <div class="relative">
+              <textarea id="world-chat-input" rows="3" maxlength="200" oninput="updateCharCount()" placeholder="Type your message (max 200 chars)..." class="w-full bg-black/60 border border-purple-800 rounded-xl p-3 text-xs text-white outline-none resize-none focus:border-purple-500"></textarea>
+              <span id="char-counter" class="absolute bottom-2 right-3 text-[9px] text-slate-400 font-mono">0/200</span>
+            </div>
             <button onclick="sendWorldChatMessage()" class="w-full py-3 bg-gradient-to-r from-purple-600 to-indigo-600 font-black text-xs text-white rounded-xl shadow-lg active:scale-95 uppercase tracking-wider">Send to World Chat</button>
           </div>
         </section>
@@ -1228,7 +1231,7 @@
       container.innerHTML = h || `<p class="text-slate-500 italic">No replies yet.</p>`;
     });
 
-    // --- WORLD CHAT WITH WORD LIMIT (200 words) & AUTO-BAN FOR ABUSE ---
+    // --- WORLD CHAT WITH MAX 200 CHARACTERS LIMIT & AUTO-BAN FOR ABUSE ---
     const badWords = ["gaali", "madarchod", "bhenchod", "bhosdike", "randi", "suicide", "kill you", "abuse"];
 
     function checkAbuse(text) {
@@ -1236,19 +1239,24 @@
       return badWords.some(word => lower.includes(word));
     }
 
+    function updateCharCount() {
+      const input = document.getElementById('world-chat-input');
+      const counter = document.getElementById('char-counter');
+      if(input && counter) {
+        counter.textContent = input.value.length + "/200";
+      }
+    }
+
     function sendWorldChatMessage() {
       const input = document.getElementById('world-chat-input');
       const text = input.value.trim();
       if (!text || !currentUser) return;
 
-      // Word count check (minimum 200 words or characters as requested)
-      const wordsCount = text.split(/\s+/).length;
-      if (wordsCount < 200) {
-        alert(`Message must be at least 200 words long! (Current: ${wordsCount} words)`);
+      if (text.length > 200) {
+        alert("Message cannot exceed 200 characters!");
         return;
       }
 
-      // Check for abusive or violent content
       if (checkAbuse(text)) {
         currentUser.isBanned = true;
         localStorage.setItem('apex_user', JSON.stringify(currentUser));
@@ -1268,6 +1276,7 @@
 
       db.ref('worldChat/' + Date.now()).set(msgObj).then(() => {
         input.value = "";
+        updateCharCount();
       }).catch(e => alert("Error: " + e.message));
     }
 
@@ -1310,7 +1319,6 @@
       else if(mode.includes("SQUAD") || mode.includes("Direct Squads")) multiplier = 4;
 
       const totalCol = slots * fee * multiplier;
-      // Est total per kill payout (assuming avg 2 kills per slot/player max)
       const estTotalPerKillPayout = mode.includes("CS") ? 0 : (slots * multiplier * 2 * perKill);
       const netProfit = totalCol - prize - estTotalPerKillPayout;
 
