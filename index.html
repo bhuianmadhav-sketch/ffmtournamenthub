@@ -268,12 +268,30 @@
             </div>
           </div>
 
-          <!-- UNIQUE FEATURE 3: WEEKLY SQUAD AUCTION SYSTEM -->
-          <div class="p-4 bg-gradient-to-r from-amber-950/60 via-black to-purple-950/60 border border-amber-500/40 rounded-2xl shadow-xl mt-4">
-            <h3 class="text-xs font-black text-amber-300 uppercase tracking-widest flex items-center gap-1.5"><i class="fa-solid fa-gavel text-amber-400"></i> Weekly Squad Auction</h3>
-            <p class="text-[10px] text-slate-300 mt-1">Bid and buy elite players using your coins to build your dream IPL-style squad!</p>
-            <div id="auction-players-list" class="mt-3 space-y-2 max-h-44 overflow-y-auto text-xs">
-              <p class="text-slate-500 italic text-center">Loading auction market...</p>
+          <!-- UNIQUE FEATURE 3: WEEKLY SQUAD AUCTION WITH FLIP CARD INFO -->
+          <div class="card-flip-container w-full mt-4">
+            <div id="auction-card-flipper" class="card-flipper w-full h-full">
+              <!-- FRONT CARD -->
+              <div class="card-front p-4 bg-gradient-to-r from-amber-950/80 via-black to-purple-950/80 border border-amber-500/40 rounded-2xl shadow-xl">
+                <div class="flex justify-between items-center mb-2">
+                  <h3 class="text-xs font-black text-amber-300 uppercase tracking-widest flex items-center gap-1.5"><i class="fa-solid fa-gavel text-amber-400"></i> Weekly Squad Auction</h3>
+                  <button onclick="toggleAuctionFlip()" class="text-[9px] text-amber-400 bg-amber-500/20 px-2 py-1 rounded border border-amber-500/40 font-bold"><i class="fa-solid fa-circle-info"></i> How it works</button>
+                </div>
+                <p class="text-[10px] text-slate-300 mb-3">Bid and buy elite players using your wallet balance to build your dream squad!</p>
+                <div id="auction-players-list" class="space-y-2 max-h-44 overflow-y-auto text-xs">
+                  <p class="text-slate-500 italic text-center">Loading auction market...</p>
+                </div>
+              </div>
+              <!-- BACK CARD (HOW IT WORKS) -->
+              <div class="card-back p-4 bg-black border border-amber-500/50 rounded-2xl shadow-xl flex flex-col justify-between">
+                <div>
+                  <div class="flex justify-between items-center border-b border-amber-900/50 pb-2 mb-2">
+                    <h4 class="text-xs font-black text-amber-400 uppercase">Auction Rules</h4>
+                    <button onclick="toggleAuctionFlip()" class="text-[10px] text-white bg-white/10 px-2 py-1 rounded font-bold">↶ Back</button>
+                  </div>
+                  <p class="text-[11px] text-slate-300 leading-relaxed">1. Choose any pro player from the market list.<br>2. Tap 'Buy Player' to pay the base price from your wallet.<br>3. The player is permanently added to your squad roster for upcoming mega tournaments!<br>4. Admin earns platform commission on every player transfer.</p>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -291,12 +309,12 @@
           </div>
         </section>
 
-        <!-- GAMERS TAB -->
+        <!-- GAMERS TAB (DISCOVER PLAYERS) -->
         <section id="screen-gamers" class="hidden space-y-3">
           <div class="p-4 bg-gradient-to-r from-amber-600/20 to-purple-900/40 border border-amber-500/30 rounded-2xl text-center mb-3">
-            <h3 class="text-sm font-black text-amber-400 uppercase">Next Champion Tum Ban Sakte Ho!</h3><p class="text-[10px] text-slate-300 mt-1">Jyada matches khelo, stars jeeto aur leaderboard par apna naam chamkao.</p>
+            <h3 class="text-sm font-black text-amber-400 uppercase">Explore All Arena Gamers</h3><p class="text-[10px] text-slate-300 mt-1">Check out other players' profiles, social channels, and battle stats.</p>
           </div>
-          <div class="flex justify-between items-center"><h2 class="text-sm font-black uppercase tracking-wider text-slate-200 border-l-4 border-emerald-500 pl-2">Apex Champions</h2></div>
+          <div class="flex justify-between items-center"><h2 class="text-sm font-black uppercase tracking-wider text-slate-200 border-l-4 border-emerald-500 pl-2">Registered Gamers</h2></div>
           <div class="space-y-2" id="champions-list"><p class="text-xs text-slate-400 text-center py-4">Loading real-time leaderboard...</p></div>
         </section>
 
@@ -370,7 +388,7 @@
       <button onclick="goTab('battles')" class="flex flex-col items-center gap-1 text-slate-400 focus:text-purple-400"><i class="fa-solid fa-crosshairs text-lg"></i> <span class="text-[10px] font-bold">Battles</span></button>
       <button onclick="openModal('main-wallet-popup')" class="flex flex-col items-center gap-1 text-slate-400 focus:text-purple-400"><i class="fa-solid fa-wallet text-lg"></i> <span class="text-[10px] font-bold">Wallet</span></button>
       <button onclick="goTab('room-pass')" class="flex flex-col items-center gap-1 text-slate-400 focus:text-purple-400"><i class="fa-solid fa-key text-lg"></i> <span class="text-[10px] font-bold">Pass</span></button>
-      <button onclick="goTab('worldchat')" class="flex flex-col items-center gap-1 text-slate-400 focus:text-purple-400"><i class="fa-solid fa-globe text-lg"></i> <span class="text-[10px] font-bold">Chat</span></button>
+      <button onclick="goTab('gamers')" class="flex flex-col items-center gap-1 text-slate-400 focus:text-purple-400"><i class="fa-solid fa-users text-lg"></i> <span class="text-[10px] font-bold">Gamers</span></button>
       <button onclick="goTab('profile')" class="flex flex-col items-center gap-1 text-slate-400 focus:text-purple-400"><i class="fa-solid fa-user text-lg"></i> <span class="text-[10px] font-bold">Profile</span></button>
     </nav>
   </div>
@@ -909,7 +927,7 @@
       
       if(type === 'register') document.getElementById('auth-register-box').classList.remove('hidden');
       else if(type === 'forgot') document.getElementById('auth-forgot-box').classList.remove('hidden');
-      else document.getElementById('auth-login-box').classList.add('hidden');
+      else document.getElementById('auth-login-box').classList.remove('hidden');
     }
 
     function sendForgotOTP(btn) {
@@ -1043,7 +1061,7 @@
         });
     }
 
-    // --- UNIQUE FEATURE 2: AI CASTER & HYPE COMMENTARY BOT ---
+    // --- AI CASTER & HYPE COMMENTARY TICKER BOT ---
     const hypeMessages = [
       "🔥 Match #102 me Squad Alpha ne Booyah secure kiya! Incredible gameplay!",
       "⚡ Quick 1v1 duels are live now! Challenge a player and double your cash.",
@@ -1059,7 +1077,7 @@
       }, 6000);
     }
 
-    // --- UNIQUE FEATURE 1: 1v1 BLIND CHALLENGE LOGIC ---
+    // --- UNIQUE FEATURE 1: 1v1 BLIND CHALLENGE (FIXED SELF-ACCEPT BUG) ---
     function createBlindChallenge() {
       const amt = Number(document.getElementById('blind-stake-amt').value);
       if(!amt || amt < 10) { alert("Minimum stake ₹10 honi chahiye!"); return; }
@@ -1081,8 +1099,13 @@
       });
     }
 
-    function acceptBlindDuel(duelKey, stakeAmt) {
+    function acceptBlindDuel(duelKey, stakeAmt, creatorPhone) {
+      if(currentUser.phone === creatorPhone) {
+        alert("Bhai, aap apna khud ka challenge accept nahi kar sakte!");
+        return;
+      }
       if(currentUser.balance < stakeAmt) { alert("Wallet balance kam hai!"); openModal('main-wallet-popup'); return; }
+      
       currentUser.balance -= stakeAmt; localStorage.setItem('apex_user', JSON.stringify(currentUser));
       db.ref('players/' + currentUser.phone).update({balance: currentUser.balance});
       syncUI();
@@ -1104,18 +1127,22 @@
       Object.keys(data).forEach(k => {
         const d = data[k];
         if(d.status === 'open') {
-          h += `<div class="p-2.5 bg-black/50 border border-purple-950 rounded-xl flex justify-between items-center"><div><p class="font-bold text-cyan-300">⚔️ ${d.creatorIgn}'s Duel</p><p class="text-[9px] text-slate-400 font-mono">Stake: ₹${d.stake}</p></div><button onclick="acceptBlindDuel('${k}', ${d.stake})" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-black font-black rounded-lg text-[10px] uppercase">Accept</button></div>`;
+          h += `<div class="p-2.5 bg-black/50 border border-purple-950 rounded-xl flex justify-between items-center"><div><p class="font-bold text-cyan-300">⚔️ ${d.creatorIgn}'s Duel</p><p class="text-[9px] text-slate-400 font-mono">Stake: ₹${d.stake}</p></div><button onclick="acceptBlindDuel('${k}', ${d.stake}, '${d.creatorPhone}')" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-black font-black rounded-lg text-[10px] uppercase">Accept</button></div>`;
         }
       });
       listEl.innerHTML = h || `<p class="text-slate-500 italic text-center">No open 1v1 duels right now.</p>`;
     });
 
-    // --- UNIQUE FEATURE 3: WEEKLY SQUAD AUCTION LOGIC ---
+    // --- UNIQUE FEATURE 3: WEEKLY SQUAD AUCTION LOGIC WITH FLIP CARD ---
     const auctionDummyPlayers = [
       { id: 'P1', name: 'Shadow Viper', role:'Rusher', basePrice: 50 },
       { id: 'P2', name: 'Sniper King', role:'Sniper', basePrice: 40 },
       { id: 'P3', name: 'Vortex Boss', role:'IGL', basePrice: 60 }
     ];
+
+    function toggleAuctionFlip() {
+      document.getElementById('auction-card-flipper').classList.toggle('flipped');
+    }
 
     function renderAuctionMarket() {
       const box = document.getElementById('auction-players-list');
