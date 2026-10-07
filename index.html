@@ -269,7 +269,7 @@
             </div>
           </div>
 
-          <!-- UNIQUE FEATURE 3: WEEKLY SQUAD AUCTION (REAL ADMIN CHOSEN PLAYERS) -->
+          <!-- UNIQUE FEATURE 3: WEEKLY SQUAD AUCTION MARKET -->
           <div class="card-flip-container w-full mt-4">
             <div id="auction-card-flipper" class="card-flipper w-full h-full">
               <!-- FRONT CARD -->
@@ -293,6 +293,19 @@
                   <p class="text-[11px] text-slate-300 leading-relaxed">1. Admin selects featured real players for auction.<br>2. Team captains bid and buy players using wallet balance.<br>3. 20% commission goes to admin, and players join your roster.</p>
                 </div>
               </div>
+            </div>
+          </div>
+
+          <!-- GUILD WAR SECTION -->
+          <div class="p-4 bg-gradient-to-r from-purple-950/70 via-black to-blue-950/70 border border-blue-500/40 rounded-2xl shadow-xl mt-4">
+            <h3 class="text-xs font-black text-blue-300 uppercase tracking-widest flex items-center gap-1.5"><i class="fa-solid fa-shield-cat text-amber-400"></i> Guild War Arena</h3>
+            <p class="text-[10px] text-slate-300 mt-1">Register your guild and battle against rival clans for top leaderboard results.</p>
+            <div class="mt-3 grid grid-cols-2 gap-2">
+              <input type="text" id="guild-name-input" placeholder="Guild Name" class="bg-black/60 border border-purple-800 rounded-xl px-3 py-2 text-xs text-white outline-none" />
+              <button onclick="registerGuild()" class="py-2 bg-blue-600 hover:bg-blue-500 text-white font-black text-xs rounded-xl shadow uppercase">Register Guild</button>
+            </div>
+            <div id="guilds-list-box" class="mt-3 space-y-2 max-h-40 overflow-y-auto text-xs">
+              <p class="text-slate-500 italic text-center">Loading registered guilds...</p>
             </div>
           </div>
 
@@ -347,7 +360,7 @@
                <div class="relative mb-3 cursor-pointer group" onclick="document.getElementById('profile-img-upload').click()">
                   <div class="w-24 h-24 rounded-full border-4 border-amber-400 bg-black flex items-center justify-center text-3xl font-black text-white shadow-[0_0_20px_#fbbf24] overflow-hidden">
                      <img id="prof-main-avatar" src="" class="hidden w-full h-full object-cover" />
-                     <span id="avatar-initial">U</span>
+                     <span id="prof-initial">U</span>
                   </div>
                   <div class="absolute inset-0 bg-black/50 rounded-full flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"><i class="fa-solid fa-camera text-white"></i><span class="text-[8px] text-white font-bold">Edit</span></div>
                </div>
@@ -472,7 +485,7 @@
       
       <!-- STRICT AI & FAKE SCREENSHOT WARNING -->
       <div class="mt-2 p-2 bg-red-950/60 border border-red-600/60 rounded-xl text-[10px] text-red-300 font-bold text-center">
-        ⚠️ STILT NOTICE: Uploading fake, edited, or AI-generated screenshots will lead to permanent account ban and forfeiture of funds!
+        ⚠️ STRICT NOTICE: Uploading fake, edited, or AI-generated screenshots will lead to permanent account ban and forfeiture of funds!
       </div>
 
       <div class="mt-3 text-left">
@@ -1100,14 +1113,11 @@
     // --- STRICT SCREENSHOT & AI DETECTION CHECKER ---
     function verifyAndCaptureImage(e, previewElementId) {
       const file = e.target.files[0]; if (!file) return;
-      
-      // Basic AI / Edited Image Heuristic Check
       if (file.size < 15000) {
         alert("⚠️ AI Detector Warning: This image is too small or looks artificially compressed/generated. Please upload an original screenshot!");
         e.target.value = "";
         return;
       }
-
       const reader = new FileReader(); reader.readAsDataURL(file);
       reader.onload = function (event) {
           const originalBase64 = event.target.result;
@@ -1119,7 +1129,7 @@
       };
     }
 
-    // --- UNIQUE FEATURE 1: 1v1 BLIND CHALLENGE WITH 10% ADMIN FEE ---
+    // --- UNIQUE FEATURE 1: 1v1 BLIND CHALLENGE (WITH 10% ADMIN WINNING CUT) ---
     function updateDuelWinningCalc() {
       const stake = Number(document.getElementById('blind-stake-amt').value) || 0;
       const totalPool = stake * 2;
@@ -1184,6 +1194,35 @@
         }
       });
       listEl.innerHTML = h || `<p class="text-slate-500 italic text-center">No open 1v1 duels right now.</p>`;
+    });
+
+    // --- GUILD WAR SYSTEM ---
+    function registerGuild() {
+      const gName = document.getElementById('guild-name-input').value.trim();
+      if(!gName) { alert("Guild name daaliye!"); return; }
+
+      db.ref('guilds/' + Date.now()).set({
+        guildName: gName,
+        leader: currentUser.ign,
+        phone: currentUser.phone,
+        wins: 0,
+        matches: 0
+      }).then(() => {
+        alert("Guild Registered Successfully!");
+        document.getElementById('guild-name-input').value = "";
+      });
+    }
+
+    db.ref('guilds').on('value', snap => {
+      const gBox = document.getElementById('guilds-list-box');
+      if(!gBox) return;
+      const data = snap.val() || {};
+      let h = "";
+      Object.keys(data).forEach(k => {
+        const g = data[k];
+        h += `<div class="p-2.5 bg-black/50 border border-blue-900/40 rounded-xl flex justify-between items-center"><div><p class="font-bold text-blue-300">🛡️ ${g.guildName} <span class="text-[9px] text-slate-400">(Leader: ${g.leader})</span></p><p class="text-[9px] text-amber-300 font-mono">Wins: ${g.wins} | Matches: ${g.matches}</p></div><button onclick="alert('Guild Challenge Sent!')" class="px-2.5 py-1 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg text-[9px] uppercase">Challenge</button></div>`;
+      });
+      gBox.innerHTML = h || `<p class="text-slate-500 italic text-center">No guilds registered yet.</p>`;
     });
 
     // --- ADMIN AUCTION MANAGER & REAL MARKET ---
