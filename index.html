@@ -165,14 +165,21 @@
     </div>
   </div>
 
-  <!-- GLOBAL ANNOUNCEMENT BANNER (24 HOURS ACTIVE) -->
+  <!-- PERSISTENT LIVE 24-HOUR ANNOUNCEMENT BANNER WITH REPLY FEATURE -->
   <div id="global-announcement-banner" class="fixed top-16 left-0 right-0 max-w-md mx-auto z-30 px-4 pt-2 hidden">
-    <div id="announcement-content" class="bg-gradient-to-r from-purple-950 via-indigo-950 to-purple-950 border border-purple-500/60 rounded-xl p-3 shadow-xl flex items-center justify-between gap-2">
-      <div class="flex items-center gap-2.5 overflow-hidden">
-        <div class="w-8 h-8 rounded-lg bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 flex-shrink-0"><i class="fa-solid fa-bullhorn animate-bounce"></i></div>
-        <p class="text-xs text-amber-200 font-bold truncate" id="announcement-text-msg">New Update Live!</p>
+    <div class="bg-gradient-to-r from-purple-950 via-indigo-950 to-purple-950 border border-purple-500/60 rounded-xl p-3 shadow-xl flex flex-col gap-2">
+      <div class="flex items-center justify-between gap-2">
+        <div class="flex items-center gap-2 overflow-hidden">
+          <div class="w-7 h-7 rounded-lg bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 flex-shrink-0"><i class="fa-solid fa-bullhorn animate-bounce"></i></div>
+          <p class="text-xs text-amber-200 font-bold truncate" id="announcement-text-msg">New Update Live!</p>
+        </div>
+        <button onclick="dismissAnnouncement()" class="text-slate-400 hover:text-white px-1 text-xs"><i class="fa-solid fa-xmark"></i></button>
       </div>
-      <button onclick="dismissAnnouncement()" class="text-slate-400 hover:text-white px-2 text-xs"><i class="fa-solid fa-xmark"></i></button>
+      <!-- User Reply Box -->
+      <div class="flex gap-1.5 pt-1 border-t border-purple-900/50">
+        <input type="text" id="announcement-reply-input" placeholder="Reply to admin..." class="flex-1 bg-black/60 border border-purple-800 rounded-lg px-2.5 py-1.5 text-[11px] text-white outline-none" />
+        <button onclick="sendAnnouncementReply()" class="px-3 py-1 bg-purple-600 hover:bg-purple-500 text-white font-bold text-[10px] rounded-lg shadow uppercase">Send</button>
+      </div>
     </div>
   </div>
 
@@ -555,12 +562,18 @@
         </div>
       </div>
 
-      <!-- BROADCAST 24-HOUR NOTIFICATION TO PLAYERS -->
+      <!-- BROADCAST 24-HOUR NOTIFICATION TO PLAYERS WITH LIVE REPLIES -->
       <div class="p-4 bg-slate-900 rounded-xl border border-purple-900 shadow-lg">
-        <h4 class="text-xs font-black text-purple-400 uppercase tracking-wider mb-3">Send 24-Hour Player Announcement</h4>
+        <h4 class="text-xs font-black text-purple-400 uppercase tracking-wider mb-3">Send 24-Hour Announcement & Live Replies</h4>
         <div class="space-y-2 text-xs">
           <textarea id="admin-broadcast-msg" rows="2" placeholder="Type notification message to show on players screen for 24 hours..." class="w-full bg-black/50 border border-purple-900 rounded-lg px-3 py-2 text-white outline-none resize-none"></textarea>
           <button onclick="sendGlobalBroadcast()" class="w-full py-2.5 bg-purple-600 hover:bg-purple-500 rounded-lg text-white font-black uppercase tracking-wider transition-colors">Broadcast to All Players</button>
+          <div class="mt-3 pt-3 border-t border-purple-900/50">
+            <h5 class="text-[11px] font-bold text-cyan-300 mb-2">Live Player Replies:</h5>
+            <div id="admin-replies-container" class="space-y-1.5 max-h-40 overflow-y-auto pr-1 text-[11px]">
+              <p class="text-slate-500 italic">No replies yet.</p>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -581,8 +594,8 @@
           
           <input type="number" id="new-match-perkill" placeholder="Per Kill Amount (₹)" class="col-span-2 bg-black/50 border border-purple-900 rounded-lg px-3 py-2.5 text-white outline-none focus:border-blue-500 transition-colors" />
           
-          <!-- FIXED DATETIME INPUT STYLE FOR MOBILE BROWSERS -->
-          <input type="datetime-local" id="new-match-datetime" class="col-span-2 bg-black/50 border border-purple-900 rounded-lg px-3 py-2.5 text-white outline-none focus:border-blue-500 text-xs font-mono" />
+          <!-- FIXED MOBILE DATETIME INPUT -->
+          <input type="datetime-local" id="new-match-datetime" class="col-span-2 bg-black/50 border border-purple-900 rounded-lg px-3 py-2.5 text-white outline-none focus:border-blue-500 text-xs font-mono" style="color-scheme: dark;" />
         </div>
         <div class="mt-3 p-3 bg-black/60 rounded-lg border border-purple-800/50 flex justify-between items-center text-xs">
            <span class="text-slate-400">Total Est. Collection: <strong class="text-cyan-400 text-sm">₹<span id="calc-collection">0</span></strong></span>
@@ -1130,7 +1143,7 @@
 
     function toggleCardFlip(key) { document.getElementById(`flipper-${key}`).classList.toggle('flipped'); }
 
-    // --- 24-HOUR GLOBAL ANNOUNCEMENT SYSTEM ---
+    // --- 24-HOUR PERSISTENT GLOBAL ANNOUNCEMENT & LIVE REPLIES ---
     function sendGlobalBroadcast() {
       const msg = document.getElementById('admin-broadcast-msg').value.trim();
       if (!msg) { alert("Message type karein!"); return; }
@@ -1149,6 +1162,24 @@
       }
     }
 
+    function sendAnnouncementReply() {
+      const replyInput = document.getElementById('announcement-reply-input');
+      const text = replyInput.value.trim();
+      if (!text || !currentUser) return;
+
+      const replyObj = {
+        ign: currentUser.ign,
+        phone: currentUser.phone,
+        text: text,
+        time: new Date().toLocaleString()
+      };
+
+      db.ref('announcementReplies/' + Date.now()).set(replyObj).then(() => {
+        alert("Reply sent to admin successfully!");
+        replyInput.value = "";
+      }).catch(e => alert("Error: " + e.message));
+    }
+
     db.ref('settings/announcement').on('value', snap => {
       const ann = snap.val();
       const banner = document.getElementById('global-announcement-banner');
@@ -1158,7 +1189,6 @@
       const now = Date.now();
       const twentyFourHours = 24 * 60 * 60 * 1000;
 
-      // Check if within 24 hours
       if ((now - ann.time) < twentyFourHours) {
         window.currentAnnouncementKey = ann.time;
         const dismissed = localStorage.getItem('dismissed_announcement_' + ann.time);
@@ -1171,6 +1201,18 @@
       } else {
         banner.classList.add('hidden');
       }
+    });
+
+    db.ref('announcementReplies').on('value', snap => {
+      const container = document.getElementById('admin-replies-container');
+      if (!container) return;
+      const data = snap.val() || {};
+      let h = "";
+      Object.keys(data).reverse().forEach(k => {
+        const r = data[k];
+        h += `<div class="p-2 bg-black/50 border border-purple-900/40 rounded-lg"><p class="font-bold text-amber-300">${r.ign} <span class="text-[9px] text-slate-400 font-mono">(${r.phone})</span></p><p class="text-slate-200 mt-0.5">${r.text}</p><span class="text-[8px] text-slate-500 font-mono block text-right mt-1">${r.time}</span></div>`;
+      });
+      container.innerHTML = h || `<p class="text-slate-500 italic">No replies yet.</p>`;
     });
 
     // --- TOURNAMENT FILTER LOGIC ---
